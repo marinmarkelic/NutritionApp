@@ -7,16 +7,19 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		9C9B56812AFA7F9000A4B2BC /* NutririonAppApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C9B56802AFA7F9000A4B2BC /* NutririonAppApp.swift */; };
-		9C9B56832AFA7F9000A4B2BC /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C9B56822AFA7F9000A4B2BC /* ContentView.swift */; };
+		9C6015702B24870F005A62C7 /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = 9C60156F2B24870F005A62C7 /* ComposableArchitecture */; };
+		9C6015722B24872B005A62C7 /* HomeReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C6015712B24872B005A62C7 /* HomeReducer.swift */; };
+		9C6015782B24874A005A62C7 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C6015772B24874A005A62C7 /* HomeView.swift */; };
+		9C9B56812AFA7F9000A4B2BC /* NutririonApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C9B56802AFA7F9000A4B2BC /* NutririonApp.swift */; };
 		9C9B56852AFA7F9200A4B2BC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9C9B56842AFA7F9200A4B2BC /* Assets.xcassets */; };
 		9C9B56882AFA7F9200A4B2BC /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9C9B56872AFA7F9200A4B2BC /* Preview Assets.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		9C6015712B24872B005A62C7 /* HomeReducer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeReducer.swift; sourceTree = "<group>"; };
+		9C6015772B24874A005A62C7 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		9C9B567D2AFA7F9000A4B2BC /* NutririonApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NutririonApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		9C9B56802AFA7F9000A4B2BC /* NutririonAppApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NutririonAppApp.swift; sourceTree = "<group>"; };
-		9C9B56822AFA7F9000A4B2BC /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		9C9B56802AFA7F9000A4B2BC /* NutririonApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NutririonApp.swift; sourceTree = "<group>"; };
 		9C9B56842AFA7F9200A4B2BC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9C9B56872AFA7F9200A4B2BC /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -26,12 +29,22 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9C6015702B24870F005A62C7 /* ComposableArchitecture in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		9C60156D2B24868E005A62C7 /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				9C6015712B24872B005A62C7 /* HomeReducer.swift */,
+				9C6015772B24874A005A62C7 /* HomeView.swift */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
 		9C9B56742AFA7F9000A4B2BC = {
 			isa = PBXGroup;
 			children = (
@@ -51,8 +64,8 @@
 		9C9B567F2AFA7F9000A4B2BC /* NutririonApp */ = {
 			isa = PBXGroup;
 			children = (
-				9C9B56802AFA7F9000A4B2BC /* NutririonAppApp.swift */,
-				9C9B56822AFA7F9000A4B2BC /* ContentView.swift */,
+				9C9B56802AFA7F9000A4B2BC /* NutririonApp.swift */,
+				9C60156D2B24868E005A62C7 /* Home */,
 				9C9B56842AFA7F9200A4B2BC /* Assets.xcassets */,
 				9C9B56862AFA7F9200A4B2BC /* Preview Content */,
 			);
@@ -83,6 +96,9 @@
 			dependencies = (
 			);
 			name = NutririonApp;
+			packageProductDependencies = (
+				9C60156F2B24870F005A62C7 /* ComposableArchitecture */,
+			);
 			productName = NutririonApp;
 			productReference = 9C9B567D2AFA7F9000A4B2BC /* NutririonApp.app */;
 			productType = "com.apple.product-type.application";
@@ -111,6 +127,9 @@
 				Base,
 			);
 			mainGroup = 9C9B56742AFA7F9000A4B2BC;
+			packageReferences = (
+				9C60156E2B24870F005A62C7 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */,
+			);
 			productRefGroup = 9C9B567E2AFA7F9000A4B2BC /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -137,8 +156,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9C9B56832AFA7F9000A4B2BC /* ContentView.swift in Sources */,
-				9C9B56812AFA7F9000A4B2BC /* NutririonAppApp.swift in Sources */,
+				9C6015722B24872B005A62C7 /* HomeReducer.swift in Sources */,
+				9C6015782B24874A005A62C7 /* HomeView.swift in Sources */,
+				9C9B56812AFA7F9000A4B2BC /* NutririonApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -272,6 +292,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"NutririonApp/Preview Content\"";
+				DEVELOPMENT_TEAM = AWWVAQ2M2R;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -279,6 +300,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -300,6 +322,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"NutririonApp/Preview Content\"";
+				DEVELOPMENT_TEAM = AWWVAQ2M2R;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -307,6 +330,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -342,6 +366,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		9C60156E2B24870F005A62C7 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pointfreeco/swift-composable-architecture";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.5.3;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		9C60156F2B24870F005A62C7 /* ComposableArchitecture */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 9C60156E2B24870F005A62C7 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */;
+			productName = ComposableArchitecture;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 9C9B56752AFA7F9000A4B2BC /* Project object */;
 }
