@@ -5,11 +5,15 @@ import ComposableArchitecture
 struct Home {
 
     struct State: Equatable {
+
         var numberOfMeals: Int
+
     }
 
     enum Action {
+
         case onAppear
+
     }
 
     var body: some Reducer<State, Action> {
