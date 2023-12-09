@@ -5,23 +5,7 @@ struct Search {
 
     @Dependency(\.nutritionClient) var client
 
-    struct SearchState: Equatable {
-
-        static let defaultValue = SearchState(nutritionalItems: NutritionalItemsInformation(items: []))
-
-        var nutritionalItems: NutritionalItemsInformation
-
-    }
-
-    enum SearchAction {
-
-        case onAppear
-        case search(String)
-        case searchResponse(Result<NutritionalItemsInformation, Error>)
-
-    }
-
-    var body: some Reducer<SearchState, SearchAction> {
+    var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
             case .onAppear:

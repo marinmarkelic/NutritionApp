@@ -13,6 +13,10 @@
 		9C60157B2B249886005A62C7 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C60157A2B249886005A62C7 /* SearchView.swift */; };
 		9C60157D2B2499E3005A62C7 /* SearchReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C60157C2B2499E3005A62C7 /* SearchReducer.swift */; };
 		9C6015802B249BD9005A62C7 /* NutritionClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C60157F2B249BD9005A62C7 /* NutritionClient.swift */; };
+		9C6015822B24CE0B005A62C7 /* SearchState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C6015812B24CE0B005A62C7 /* SearchState.swift */; };
+		9C6015842B24CE24005A62C7 /* SearchAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C6015832B24CE24005A62C7 /* SearchAction.swift */; };
+		9C6015862B24CE56005A62C7 /* HomeState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C6015852B24CE56005A62C7 /* HomeState.swift */; };
+		9C6015882B24CE5E005A62C7 /* HomeAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C6015872B24CE5E005A62C7 /* HomeAction.swift */; };
 		9C9B56812AFA7F9000A4B2BC /* NutririonApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C9B56802AFA7F9000A4B2BC /* NutririonApp.swift */; };
 		9C9B56852AFA7F9200A4B2BC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9C9B56842AFA7F9200A4B2BC /* Assets.xcassets */; };
 		9C9B56882AFA7F9200A4B2BC /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9C9B56872AFA7F9200A4B2BC /* Preview Assets.xcassets */; };
@@ -24,6 +28,10 @@
 		9C60157A2B249886005A62C7 /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
 		9C60157C2B2499E3005A62C7 /* SearchReducer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchReducer.swift; sourceTree = "<group>"; };
 		9C60157F2B249BD9005A62C7 /* NutritionClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NutritionClient.swift; sourceTree = "<group>"; };
+		9C6015812B24CE0B005A62C7 /* SearchState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchState.swift; sourceTree = "<group>"; };
+		9C6015832B24CE24005A62C7 /* SearchAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchAction.swift; sourceTree = "<group>"; };
+		9C6015852B24CE56005A62C7 /* HomeState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeState.swift; sourceTree = "<group>"; };
+		9C6015872B24CE5E005A62C7 /* HomeAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeAction.swift; sourceTree = "<group>"; };
 		9C9B567D2AFA7F9000A4B2BC /* NutririonApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NutririonApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9C9B56802AFA7F9000A4B2BC /* NutririonApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NutririonApp.swift; sourceTree = "<group>"; };
 		9C9B56842AFA7F9200A4B2BC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -46,6 +54,8 @@
 			isa = PBXGroup;
 			children = (
 				9C6015712B24872B005A62C7 /* HomeReducer.swift */,
+				9C6015872B24CE5E005A62C7 /* HomeAction.swift */,
+				9C6015852B24CE56005A62C7 /* HomeState.swift */,
 				9C6015772B24874A005A62C7 /* HomeView.swift */,
 			);
 			path = Home;
@@ -56,6 +66,8 @@
 			children = (
 				9C60157A2B249886005A62C7 /* SearchView.swift */,
 				9C60157C2B2499E3005A62C7 /* SearchReducer.swift */,
+				9C6015832B24CE24005A62C7 /* SearchAction.swift */,
+				9C6015812B24CE0B005A62C7 /* SearchState.swift */,
 			);
 			path = Search;
 			sourceTree = "<group>";
@@ -88,9 +100,9 @@
 			isa = PBXGroup;
 			children = (
 				9C60157E2B249BC7005A62C7 /* Clients */,
-				9C6015792B249877005A62C7 /* Search */,
 				9C9B56802AFA7F9000A4B2BC /* NutririonApp.swift */,
 				9C60156D2B24868E005A62C7 /* Home */,
+				9C6015792B249877005A62C7 /* Search */,
 				9C9B56842AFA7F9200A4B2BC /* Assets.xcassets */,
 				9C9B56862AFA7F9200A4B2BC /* Preview Content */,
 			);
@@ -182,11 +194,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				9C60157B2B249886005A62C7 /* SearchView.swift in Sources */,
+				9C6015842B24CE24005A62C7 /* SearchAction.swift in Sources */,
 				9C6015802B249BD9005A62C7 /* NutritionClient.swift in Sources */,
 				9C60157D2B2499E3005A62C7 /* SearchReducer.swift in Sources */,
+				9C6015862B24CE56005A62C7 /* HomeState.swift in Sources */,
 				9C6015722B24872B005A62C7 /* HomeReducer.swift in Sources */,
+				9C6015882B24CE5E005A62C7 /* HomeAction.swift in Sources */,
 				9C6015782B24874A005A62C7 /* HomeView.swift in Sources */,
 				9C9B56812AFA7F9000A4B2BC /* NutririonApp.swift in Sources */,
+				9C6015822B24CE0B005A62C7 /* SearchState.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

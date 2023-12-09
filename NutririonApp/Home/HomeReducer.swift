@@ -4,18 +4,6 @@ import ComposableArchitecture
 @Reducer
 struct Home {
 
-    struct State: Equatable {
-
-        var numberOfMeals: Int
-
-    }
-
-    enum Action {
-
-        case onAppear
-
-    }
-
     var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
