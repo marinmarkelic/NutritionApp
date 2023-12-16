@@ -18,7 +18,7 @@ struct Search: Reducer {
             case let .searchResponse(result):
                 guard case let .success(info) = result else { return .none }
 
-                state.nutritionalItems = info
+                state.meal = info
                 return .none
             }
         }

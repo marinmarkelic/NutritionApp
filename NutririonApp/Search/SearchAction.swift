@@ -4,7 +4,7 @@ extension Search {
 
         case onAppear
         case search(String)
-        case searchResponse(Result<NutritionalItemsInformation, Error>)
+        case searchResponse(Result<MealViewModel, Error>)
 
     }
 

@@ -5,8 +5,10 @@ actor SearchUseCase {
     @Dependency(\.nutritionClient)
     private var client: NutritionClient
 
-    func search(for query: String) async -> NutritionalItemsInformation {
-        await (try? client.getNutritionalInformation(for: query)) ?? NutritionalItemsInformation(items: [])
+    func search(for query: String) async -> MealViewModel {
+        let viewModel = await (try? client.getNutritionalInformation(for: query)) ?? MealNetworkViewModel(items: [])
+
+        return MealViewModel(from: viewModel, with: query)
     }
 
 }

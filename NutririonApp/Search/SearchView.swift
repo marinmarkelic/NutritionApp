@@ -10,8 +10,8 @@ struct SearchView: View {
     var body: some View {
         WithViewStore(store, observe: { $0 }) { viewStore in
             ZStack {
-                if viewStore.nutritionalItems.items.count > 0 {
-                    nutritionalInformatonView(viewStore.nutritionalItems, query: viewStore.query)
+                if viewStore.meal.items.count > 0 {
+                    nutritionalInformatonView(viewStore.meal, query: viewStore.query)
                 }
 
                 searchBar(viewStore)
@@ -20,18 +20,18 @@ struct SearchView: View {
     }
 
     @ViewBuilder
-    private func nutritionalInformatonView(_ nutritionalItems: NutritionalItemsInformation, query: String) -> some View {
-        let items = nutritionalItems.items
+    private func nutritionalInformatonView(_ meal: MealViewModel, query: String) -> some View {
+        let items = meal.items
 
         ScrollView {
             VStack {
-                Text("Information for \(query)")
+                Text("Information for \(meal.name)")
 
-                Text(nutritionalItems.description)
+                Text(meal.description)
 
                 // Detailed info
                 if items.count > 1 {
-                    ForEach(nutritionalItems.items, id: \.name) { item in
+                    ForEach(meal.items, id: \.name) { item in
                         Text("Information for \(item.name)")
 
                         Text(item.description)

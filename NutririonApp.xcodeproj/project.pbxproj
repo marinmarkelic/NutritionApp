@@ -22,6 +22,7 @@
 		9C9B56882AFA7F9200A4B2BC /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9C9B56872AFA7F9200A4B2BC /* Preview Assets.xcassets */; };
 		9CBB0A852B2DC8E50064EFCC /* SearchUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CBB0A842B2DC8E50064EFCC /* SearchUseCase.swift */; };
 		9CBB0A872B2DC9AD0064EFCC /* BaseClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CBB0A862B2DC9AD0064EFCC /* BaseClient.swift */; };
+		9CBB0A892B2DD2FF0064EFCC /* SearchModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CBB0A882B2DD2FF0064EFCC /* SearchModels.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,6 +41,7 @@
 		9C9B56872AFA7F9200A4B2BC /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		9CBB0A842B2DC8E50064EFCC /* SearchUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchUseCase.swift; sourceTree = "<group>"; };
 		9CBB0A862B2DC9AD0064EFCC /* BaseClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseClient.swift; sourceTree = "<group>"; };
+		9CBB0A882B2DD2FF0064EFCC /* SearchModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchModels.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -127,6 +129,7 @@
 			isa = PBXGroup;
 			children = (
 				9CBB0A842B2DC8E50064EFCC /* SearchUseCase.swift */,
+				9CBB0A882B2DD2FF0064EFCC /* SearchModels.swift */,
 			);
 			path = UseCases;
 			sourceTree = "<group>";
@@ -213,6 +216,7 @@
 				9C6015802B249BD9005A62C7 /* NutritionClient.swift in Sources */,
 				9C60157D2B2499E3005A62C7 /* SearchReducer.swift in Sources */,
 				9C6015862B24CE56005A62C7 /* HomeState.swift in Sources */,
+				9CBB0A892B2DD2FF0064EFCC /* SearchModels.swift in Sources */,
 				9C6015722B24872B005A62C7 /* HomeReducer.swift in Sources */,
 				9C6015882B24CE5E005A62C7 /* HomeAction.swift in Sources */,
 				9C6015782B24874A005A62C7 /* HomeView.swift in Sources */,
