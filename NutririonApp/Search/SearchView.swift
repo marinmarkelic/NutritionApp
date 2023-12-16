@@ -27,15 +27,20 @@ struct SearchView: View {
             VStack {
                 Text("Information for \(query)")
 
+                Text(nutritionalItems.description)
+
                 // Detailed info
                 if items.count > 1 {
+                    ForEach(nutritionalItems.items, id: \.name) { item in
+                        Text("Information for \(item.name)")
 
+                        Text(item.description)
+                    }
                 }
             }
         }
     }
 
-    @ViewBuilder
     private func searchBar(_ viewStore: ViewStore<Search.State, Search.Action>) -> some View {
         VStack {
             Spacer()

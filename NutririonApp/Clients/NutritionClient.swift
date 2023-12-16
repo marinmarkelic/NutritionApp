@@ -1,34 +1,35 @@
 import Foundation
-import ComposableArchitecture
+import Dependencies
 
+// TODO: create base client that handles get, post, etc. requests and make this a class. This should only contain api keys.
 struct NutritionClient {
 
-    private static let apiUrl: String = "https://api.calorieninjas.com/v1/nutrition?query="
-    private static let apiKey: String = "rB4pVqCmFuAIPKYUunQSmA==qgG9oVfsqrPHsshE"
+    private let apiUrl: String = "https://api.calorieninjas.com/v1/nutrition?query="
+    private let apiKey: String = "rB4pVqCmFuAIPKYUunQSmA==qgG9oVfsqrPHsshE"
 
-    var nutritionalItems: @Sendable (String) async throws -> NutritionalItemsInformation
+    func getNutritionalInformation(for query: String) async throws -> NutritionalItemsInformation {
+        guard
+            let components = URLComponents(string: apiUrl + query),
+            let url = components.url
+        else { throw NutritionClientError.basicError }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Content-Type")
+        request.setValue(apiKey, forHTTPHeaderField: "X-Api-Key")
+
+        let (data, _) = try await URLSession.shared.data(for: request)
+
+        return try JSONDecoder().decode(NutritionalItemsInformation.self, from: data)
+
+    }
 
 }
 
 extension NutritionClient: DependencyKey {
 
     static var liveValue: NutritionClient {
-        NutritionClient(
-            nutritionalItems: { query in
-                guard
-                    let components = URLComponents(string: apiUrl + query),
-                    let url = components.url
-                else { throw NutritionClientError.basicError }
-
-                var request = URLRequest(url: url)
-                request.httpMethod = "GET"
-                request.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Content-Type")
-                request.setValue(apiKey, forHTTPHeaderField: "X-Api-Key")
-
-                let (data, _) = try await URLSession.shared.data(for: request)
-
-                return try JSONDecoder().decode(NutritionalItemsInformation.self, from: data)
-            })
+        NutritionClient()
     }
 
 }
@@ -42,13 +43,31 @@ extension DependencyValues {
 
 }
 
-struct NutritionalItemsInformation: Decodable, Equatable {
+// use case should convert this to array
+struct NutritionalItemsInformation: Decodable, Equatable, CustomStringConvertible {
 
     let items: [NutritionalItemInformation]
 
+    var description: String {
+        var calories: Float = 0
+        var protein: Float = 0
+        var fat: Float = 0
+        var carbs: Float = 0
+
+        items.forEach {
+            calories += $0.calories
+            protein += $0.nutrients[.protein_g] ?? 0
+            fat += $0.nutrients[.fat_total_g] ?? 0
+            carbs += $0.nutrients[.carbohydrates_total_g] ?? 0
+        }
+
+        return "\(calories)g of calories, \(protein)g of protein, \(fat)g of fat, \(carbs)g of carbs"
+    }
+
 }
 
-struct NutritionalItemInformation: Decodable, Equatable {
+// not move the decoding to view viewmodel
+struct NutritionalItemInformation: Decodable, Equatable, CustomStringConvertible {
 
     enum Nutrient: String, Decodable, CaseIterable {
 
@@ -63,6 +82,13 @@ struct NutritionalItemInformation: Decodable, Equatable {
         case sugar_g
 
     }
+
+    var description: String {
+
+        return "\(calories)g of calories, \(nutrients[.protein_g] ?? 0)g of protein, \(nutrients[.fat_total_g] ?? 0)g of fat, \(nutrients[.carbohydrates_total_g] ?? 0)g of carbs"
+
+    }
+
 
     let name: String
     let calories: Float
