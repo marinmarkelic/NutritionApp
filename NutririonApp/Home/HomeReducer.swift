@@ -1,8 +1,7 @@
 import Foundation
 import ComposableArchitecture
 
-@Reducer
-struct Home {
+struct Home: Reducer {
 
     var body: some Reducer<State, Action> {
         Reduce { state, action in

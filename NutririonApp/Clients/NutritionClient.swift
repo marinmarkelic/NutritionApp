@@ -15,7 +15,7 @@ extension NutritionClient: DependencyKey {
     static var liveValue: NutritionClient {
         NutritionClient(
             nutritionalItems: { query in
-                guard 
+                guard
                     let components = URLComponents(string: apiUrl + query),
                     let url = components.url
                 else { throw NutritionClientError.basicError }
@@ -50,18 +50,54 @@ struct NutritionalItemsInformation: Decodable, Equatable {
 
 struct NutritionalItemInformation: Decodable, Equatable {
 
+    enum Nutrient: String, Decodable, CaseIterable {
+
+        case fat_total_g
+        case fatSaturated_g
+        case protein_g
+        case sodium_mg
+        case potassium_mg
+        case cholesterol_mg
+        case carbohydrates_total_g
+        case fiber_g
+        case sugar_g
+
+    }
+
     let name: String
     let calories: Float
     let serving_size_g: Float
-    let fat_total_g: Float
-    let fat_saturated_g: Float
-    let protein_g: Float
-    let sodium_mg: Float
-    let potassium_mg: Float
-    let cholesterol_mg: Float
-    let carbohydrates_total_g: Float
-    let fiber_g: Float
-    let sugar_g: Float
+    let nutrients: [Nutrient : Float]
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        name = try container.decode(String.self, forKey: .name)
+        calories = try container.decode(Float.self, forKey: .calories)
+        serving_size_g = try container.decode(Float.self, forKey: .serving_size_g)
+
+        var nutrients: [Nutrient : Float] = [:]
+        for nutrient in Nutrient.allCases {
+            if let value = try? container.decode(Float.self, forKey: CodingKeys(stringValue: nutrient.rawValue)!) {
+                nutrients[nutrient] = value
+            }
+        }
+        self.nutrients = nutrients
+    }
+
+    enum CodingKeys: String, CodingKey {
+        case name
+        case calories
+        case serving_size_g
+        case fat_total_g
+        case fatSaturated_g
+        case protein_g
+        case sodium_mg
+        case potassium_mg
+        case cholesterol_mg
+        case carbohydrates_total_g
+        case fiber_g
+        case sugar_g
+    }
 
 }
 

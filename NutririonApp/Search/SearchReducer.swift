@@ -1,7 +1,6 @@
 import ComposableArchitecture
 
-@Reducer
-struct Search {
+struct Search: Reducer {
 
     @Dependency(\.nutritionClient) var client
 
@@ -11,6 +10,8 @@ struct Search {
             case .onAppear:
                 return .none
             case let .search(query):
+                state.query = query
+
                 return .run { send in
                   await send(.searchResponse(Result { try await client.nutritionalItems(query) }))
                 }
