@@ -23,6 +23,10 @@
 		9CBB0A852B2DC8E50064EFCC /* SearchUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CBB0A842B2DC8E50064EFCC /* SearchUseCase.swift */; };
 		9CBB0A872B2DC9AD0064EFCC /* BaseClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CBB0A862B2DC9AD0064EFCC /* BaseClient.swift */; };
 		9CBB0A892B2DD2FF0064EFCC /* SearchModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CBB0A882B2DD2FF0064EFCC /* SearchModels.swift */; };
+		9CBB0A8B2B2DF9500064EFCC /* StorageUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CBB0A8A2B2DF9500064EFCC /* StorageUseCase.swift */; };
+		9CBB0A952B2DFC240064EFCC /* StorageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CBB0A942B2DFC240064EFCC /* StorageService.swift */; };
+		9CBB0A972B2DFCB50064EFCC /* StorageModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CBB0A962B2DFCB50064EFCC /* StorageModels.swift */; };
+		9CBB0A992B2F36B30064EFCC /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CBB0A982B2F36B30064EFCC /* CoreDataStack.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -42,6 +46,10 @@
 		9CBB0A842B2DC8E50064EFCC /* SearchUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchUseCase.swift; sourceTree = "<group>"; };
 		9CBB0A862B2DC9AD0064EFCC /* BaseClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseClient.swift; sourceTree = "<group>"; };
 		9CBB0A882B2DD2FF0064EFCC /* SearchModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchModels.swift; sourceTree = "<group>"; };
+		9CBB0A8A2B2DF9500064EFCC /* StorageUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageUseCase.swift; sourceTree = "<group>"; };
+		9CBB0A942B2DFC240064EFCC /* StorageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageService.swift; sourceTree = "<group>"; };
+		9CBB0A962B2DFCB50064EFCC /* StorageModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageModels.swift; sourceTree = "<group>"; };
+		9CBB0A982B2F36B30064EFCC /* CoreDataStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -106,6 +114,7 @@
 		9C9B567F2AFA7F9000A4B2BC /* NutririonApp */ = {
 			isa = PBXGroup;
 			children = (
+				9CBB0A8C2B2DF9DB0064EFCC /* Storage */,
 				9CBB0A832B2DC8D20064EFCC /* UseCases */,
 				9C60157E2B249BC7005A62C7 /* Clients */,
 				9C9B56802AFA7F9000A4B2BC /* NutririonApp.swift */,
@@ -130,8 +139,19 @@
 			children = (
 				9CBB0A842B2DC8E50064EFCC /* SearchUseCase.swift */,
 				9CBB0A882B2DD2FF0064EFCC /* SearchModels.swift */,
+				9CBB0A8A2B2DF9500064EFCC /* StorageUseCase.swift */,
 			);
 			path = UseCases;
+			sourceTree = "<group>";
+		};
+		9CBB0A8C2B2DF9DB0064EFCC /* Storage */ = {
+			isa = PBXGroup;
+			children = (
+				9CBB0A942B2DFC240064EFCC /* StorageService.swift */,
+				9CBB0A962B2DFCB50064EFCC /* StorageModels.swift */,
+				9CBB0A982B2F36B30064EFCC /* CoreDataStack.swift */,
+			);
+			path = Storage;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -217,8 +237,12 @@
 				9C60157D2B2499E3005A62C7 /* SearchReducer.swift in Sources */,
 				9C6015862B24CE56005A62C7 /* HomeState.swift in Sources */,
 				9CBB0A892B2DD2FF0064EFCC /* SearchModels.swift in Sources */,
+				9CBB0A972B2DFCB50064EFCC /* StorageModels.swift in Sources */,
 				9C6015722B24872B005A62C7 /* HomeReducer.swift in Sources */,
 				9C6015882B24CE5E005A62C7 /* HomeAction.swift in Sources */,
+				9CBB0A8B2B2DF9500064EFCC /* StorageUseCase.swift in Sources */,
+				9CBB0A952B2DFC240064EFCC /* StorageService.swift in Sources */,
+				9CBB0A992B2F36B30064EFCC /* CoreDataStack.swift in Sources */,
 				9C6015782B24874A005A62C7 /* HomeView.swift in Sources */,
 				9CBB0A852B2DC8E50064EFCC /* SearchUseCase.swift in Sources */,
 				9C9B56812AFA7F9000A4B2BC /* NutririonApp.swift in Sources */,

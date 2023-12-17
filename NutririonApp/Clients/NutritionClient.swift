@@ -52,17 +52,17 @@ struct MealNetworkViewModel: Decodable {
 struct NutritionalItemNetworkViewModel: Decodable {
 
     let name: String
-    let calories: Float
-    let serving_size_g: Float
-    let fat_total_g: Float
-    let fat_saturated_g: Float
-    let protein_g: Float
-    let sodium_mg: Float
-    let potassium_mg: Float
-    let cholesterol_mg: Float
-    let carbohydrates_total_g: Float
-    let fiber_g: Float
-    let sugar_g: Float
+    let calories: CGFloat
+    let serving_size_g: CGFloat
+    let fat_total_g: CGFloat
+    let fat_saturated_g: CGFloat
+    let protein_g: CGFloat
+    let sodium_mg: CGFloat
+    let potassium_mg: CGFloat
+    let cholesterol_mg: CGFloat
+    let carbohydrates_total_g: CGFloat
+    let fiber_g: CGFloat
+    let sugar_g: CGFloat
 
 }
 

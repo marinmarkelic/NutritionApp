@@ -1,10 +1,12 @@
+import Foundation
+
 struct MealViewModel: Equatable, CustomStringConvertible {
 
     let name: String
     let items: [NutritionalItemViewModel]
 
-    var calories: Float {
-        var calories: Float = 0
+    var calories: CGFloat {
+        var calories: CGFloat = 0
 
         for item in items {
             calories += item.calories
@@ -13,14 +15,14 @@ struct MealViewModel: Equatable, CustomStringConvertible {
         return calories
     }
 
-    var nutrients: [Nutrient : Float] {
+    var nutrients: [Nutrient : CGFloat] {
         guard !items.isEmpty else { return [:] }
 
         guard items.count > 1 else {
             return items.first!.nutrients
         }
 
-        var nutrients: [Nutrient : Float] = Dictionary(uniqueKeysWithValues: Nutrient.allCases.map { ($0, 0) })
+        var nutrients: [Nutrient : CGFloat] = Dictionary(uniqueKeysWithValues: Nutrient.allCases.map { ($0, 0) })
 
         for item in items {
             for nutrient in Nutrient.allCases {
@@ -56,9 +58,14 @@ extension MealViewModel {
 struct NutritionalItemViewModel: Equatable {
 
     let name: String
-    let calories: Float
-    let serving_size_g: Float
-    let nutrients: [Nutrient : Float]
+    let calories: CGFloat
+    let serving_size_g: CGFloat
+    let nutrients: [Nutrient : CGFloat]
+
+    // Temp
+    var totalG: CGFloat {
+        nutrients[.carbohydrates_total_g]! + nutrients[.fat_total_g]! + nutrients[.protein_g]!
+    }
 
 }
 
@@ -69,12 +76,12 @@ extension NutritionalItemViewModel {
         calories = model.calories
         serving_size_g = model.serving_size_g
 
-        var nutrients = [Nutrient: Float]()
+        var nutrients = [Nutrient: CGFloat]()
         for nutrient in Nutrient.allCases {
             switch nutrient {
             case .fat_total_g:
                 nutrients[nutrient] = model.fat_total_g
-            case .fatSaturated_g:
+            case .fat_saturated_g:
                 nutrients[nutrient] = model.fat_saturated_g
             case .protein_g:
                 nutrients[nutrient] = model.protein_g
@@ -107,10 +114,14 @@ extension NutritionalItemViewModel: CustomStringConvertible {
 
 }
 
-enum Nutrient: String, CaseIterable {
+enum Nutrient: String, CaseIterable, Identifiable {
+
+    var id: String {
+        self.rawValue
+    }
 
     case fat_total_g
-    case fatSaturated_g
+    case fat_saturated_g
     case protein_g
     case sodium_mg
     case potassium_mg
@@ -120,4 +131,3 @@ enum Nutrient: String, CaseIterable {
     case sugar_g
 
 }
-

@@ -32,13 +32,52 @@ struct SearchView: View {
                 // Detailed info
                 if items.count > 1 {
                     ForEach(meal.items, id: \.name) { item in
-                        Text("Information for \(item.name)")
+                        VStack {
+                            Text("Information for \(item.name)")
 
-                        Text(item.description)
+                            Text(item.description)
+
+                            nutritionCircleGraph(item)
+                                .frame(width: 200, height: 200)
+                        }
                     }
                 }
             }
+
+            HStack {
+                Button("Save") {
+                    store.send(.save(meal))
+                }
+
+                Button("Print") {
+                    store.send(.print)
+                }
+            }
         }
+    }
+
+    @ViewBuilder
+    private func nutritionCircleGraph(_ item: NutritionalItemViewModel) -> some View {
+        var progress: CGFloat = 0.0
+
+        ZStack {
+            ForEach([Nutrient.protein_g, Nutrient.carbohydrates_total_g, Nutrient.fat_total_g]) { nutrient in
+                Circle()
+                    .trim(from: progress, to: item.nutrients[nutrient]! / item.totalG)
+                    .stroke(Color.red, style: StrokeStyle(lineWidth: 60, lineCap: .butt))
+
+//                progress += item.nutrients[nutrient]! / item.totalG
+            }
+//            Circle()
+//                .trim(from: progress, to: item.nutrients[.protein_g]! / item.totalG)
+//                .stroke(Color.red, style: StrokeStyle(lineWidth: 60, lineCap: .butt))
+//
+//            Circle()
+//                .trim(from: item.nutrients[.protein_g]! / item.totalG, to: item.nutrients[.carbohydrates_total_g]! / item.totalG)
+//                .stroke(Color.yellow, style: StrokeStyle(lineWidth: 60, lineCap: .butt))
+
+        }
+        .frame(width: 200 - 60, height: 200 - 60)
     }
 
     private func searchBar(_ viewStore: ViewStore<Search.State, Search.Action>) -> some View {
