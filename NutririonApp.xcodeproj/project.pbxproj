@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9C396B112B388A8300FEBC0E /* Realm in Frameworks */ = {isa = PBXBuildFile; productRef = 9C396B102B388A8300FEBC0E /* Realm */; };
+		9C396B132B388A8300FEBC0E /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 9C396B122B388A8300FEBC0E /* RealmSwift */; };
 		9C6015702B24870F005A62C7 /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = 9C60156F2B24870F005A62C7 /* ComposableArchitecture */; };
 		9C6015722B24872B005A62C7 /* HomeReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C6015712B24872B005A62C7 /* HomeReducer.swift */; };
 		9C6015782B24874A005A62C7 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C6015772B24874A005A62C7 /* HomeView.swift */; };
@@ -57,6 +59,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9C396B132B388A8300FEBC0E /* RealmSwift in Frameworks */,
+				9C396B112B388A8300FEBC0E /* Realm in Frameworks */,
 				9C6015702B24870F005A62C7 /* ComposableArchitecture in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -172,6 +176,8 @@
 			name = NutririonApp;
 			packageProductDependencies = (
 				9C60156F2B24870F005A62C7 /* ComposableArchitecture */,
+				9C396B102B388A8300FEBC0E /* Realm */,
+				9C396B122B388A8300FEBC0E /* RealmSwift */,
 			);
 			productName = NutririonApp;
 			productReference = 9C9B567D2AFA7F9000A4B2BC /* NutririonApp.app */;
@@ -203,6 +209,7 @@
 			mainGroup = 9C9B56742AFA7F9000A4B2BC;
 			packageReferences = (
 				9C60156E2B24870F005A62C7 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */,
+				9C396B0F2B388A8300FEBC0E /* XCRemoteSwiftPackageReference "realm-swift" */,
 			);
 			productRefGroup = 9C9B567E2AFA7F9000A4B2BC /* Products */;
 			projectDirPath = "";
@@ -456,6 +463,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		9C396B0F2B388A8300FEBC0E /* XCRemoteSwiftPackageReference "realm-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/realm/realm-swift";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 		9C60156E2B24870F005A62C7 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/pointfreeco/swift-composable-architecture";
@@ -467,6 +482,16 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		9C396B102B388A8300FEBC0E /* Realm */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 9C396B0F2B388A8300FEBC0E /* XCRemoteSwiftPackageReference "realm-swift" */;
+			productName = Realm;
+		};
+		9C396B122B388A8300FEBC0E /* RealmSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 9C396B0F2B388A8300FEBC0E /* XCRemoteSwiftPackageReference "realm-swift" */;
+			productName = RealmSwift;
+		};
 		9C60156F2B24870F005A62C7 /* ComposableArchitecture */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 9C60156E2B24870F005A62C7 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */;
