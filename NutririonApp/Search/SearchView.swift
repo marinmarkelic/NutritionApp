@@ -52,6 +52,10 @@ struct SearchView: View {
                 Button("Print") {
                     store.send(.print)
                 }
+
+                Button("Clear") {
+                    store.send(.clearAll)
+                }
             }
         }
     }

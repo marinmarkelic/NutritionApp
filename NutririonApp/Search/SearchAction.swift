@@ -7,6 +7,7 @@ extension Search {
         case searchResponse(Result<MealViewModel, Error>)
         case save(MealViewModel)
         case print
+        case clearAll
 
     }
 

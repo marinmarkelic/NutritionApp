@@ -1,3 +1,4 @@
+import Foundation
 import Dependencies
 
 actor StorageUseCase {
@@ -12,8 +13,16 @@ actor StorageUseCase {
         service.save(meal: meal)
     }
 
+    func fetchMeals(with date: Date) {
+        service.fetchMeals(with: date)
+    }
+
     func printAll() {
         service.print()
+    }
+
+    func deleteAll() {
+        service.deleteAll()
     }
 
 }

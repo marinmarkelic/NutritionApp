@@ -3,6 +3,7 @@ import Foundation
 struct MealViewModel: Equatable, CustomStringConvertible {
 
     let name: String
+    let date: Date
     let items: [NutritionalItemViewModel]
 
     var calories: CGFloat {
@@ -50,6 +51,7 @@ extension MealViewModel {
 
     init(from model: MealNetworkViewModel, with name: String) {
         self.name = name
+        date = .now
         items = model.items.compactMap { NutritionalItemViewModel(from: $0) }
     }
 

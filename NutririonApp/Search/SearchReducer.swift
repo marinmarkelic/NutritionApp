@@ -29,6 +29,10 @@ struct Search: Reducer {
                 return .run { _ in
                     await storageUseCase.printAll()
                 }
+            case .clearAll:
+                return .run { _ in
+                    await storageUseCase.deleteAll()
+                }
             }
         }
     }

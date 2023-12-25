@@ -3,12 +3,15 @@ import ComposableArchitecture
 
 struct Home: Reducer {
 
+    @Dependency(\.storageUseCase) var storageUseCase
+
     var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
             case .onAppear:
-                state.numberOfMeals = 2
-                return .none
+                return .run { _ in
+                    await storageUseCase.fetchMeals(with: .now)
+                }
             }
         }
     }
