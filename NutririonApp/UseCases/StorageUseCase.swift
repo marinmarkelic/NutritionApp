@@ -9,9 +9,11 @@ actor StorageUseCase {
     }
 
     func save(meal: MealViewModel) {
+        service.save(meal: meal)
     }
 
     func printAll() {
+        service.print()
     }
 
 }
