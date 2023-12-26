@@ -7,7 +7,7 @@ struct NutririonApp: App {
     var body: some Scene {
         WindowGroup {
             TabView {
-                HomeView(store: Store(initialState: Home.State(numberOfMeals: 1), reducer: { Home()._printChanges() }))
+                HomeView(store: Store(initialState: Home.State(), reducer: { Home()._printChanges() }))
                     .tabItem { Text("Home") }
 
                 SearchView(store: Store(initialState: Search.State.defaultValue, reducer: { Search()._printChanges() }))

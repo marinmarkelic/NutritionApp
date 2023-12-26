@@ -9,9 +9,11 @@ struct HomeView: View {
         WithViewStore(store, observe: { $0 }) { viewStore in
             ScrollView {
                 VStack {
-                    Text("Nutrition app")
+                    Text("Eaten meals")
 
-                    Text("Items eaten today: " + "\(viewStore.numberOfMeals)")
+                    ForEach(viewStore.meals) { meal in
+                        MealCell(meal: meal)
+                    }
                 }
             }
             .onAppear {
@@ -20,4 +22,21 @@ struct HomeView: View {
         }
     }
 
+}
+
+struct MealCell: View {
+
+    let meal: MealViewModel
+
+    var body: some View {
+        HStack {
+            Circle()
+                .foregroundStyle(Color.red)
+                .frame(width: 50, height: 50)
+
+            VStack {
+                Text(meal.name)
+            }
+        }
+    }
 }

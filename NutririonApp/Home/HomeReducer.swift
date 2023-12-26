@@ -9,9 +9,14 @@ struct Home: Reducer {
         Reduce { state, action in
             switch action {
             case .onAppear:
-                return .run { _ in
-                    await storageUseCase.fetchMeals(with: .now)
+                return .run { send in
+                    await send(.onMealsUpdate(Result { await storageUseCase.fetchMeals(with: .now) }))
                 }
+            case let .onMealsUpdate(result):
+                guard case let .success(meals) = result else { return .none }
+
+                state.meals = meals
+                return .none
             }
         }
     }

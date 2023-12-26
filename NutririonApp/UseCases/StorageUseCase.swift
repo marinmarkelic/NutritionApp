@@ -13,7 +13,7 @@ actor StorageUseCase {
         service.save(meal: meal)
     }
 
-    func fetchMeals(with date: Date) {
+    func fetchMeals(with date: Date) -> [MealViewModel] {
         service.fetchMeals(with: date)
     }
 

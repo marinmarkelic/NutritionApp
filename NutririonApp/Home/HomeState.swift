@@ -2,7 +2,7 @@ extension Home {
 
     struct State: Equatable {
 
-        var numberOfMeals: Int
+        var meals: [MealViewModel] = []
 
     }
 

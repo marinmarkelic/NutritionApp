@@ -1,10 +1,14 @@
 import Foundation
 
-struct MealViewModel: Equatable, CustomStringConvertible {
+struct MealViewModel: Equatable, CustomStringConvertible, Identifiable {
 
     let name: String
     let date: Date
     let items: [NutritionalItemViewModel]
+
+    var id: String {
+        date.description
+    }
 
     var calories: CGFloat {
         var calories: CGFloat = 0
@@ -55,6 +59,12 @@ extension MealViewModel {
         items = model.items.compactMap { NutritionalItemViewModel(from: $0) }
     }
 
+    init(from model: MealStorageViewModel) {
+        name = model.name
+        date = model.date
+        items = model.items.map { NutritionalItemViewModel(from: $0) }
+    }
+
 }
 
 struct NutritionalItemViewModel: Equatable {
@@ -99,6 +109,37 @@ extension NutritionalItemViewModel {
                 nutrients[nutrient] = model.fiber_g
             case .sugar_g:
                 nutrients[nutrient] = model.sugar_g
+            }
+        }
+        self.nutrients = nutrients
+    }
+
+    init(from model: NutritionalItemStorageViewModel) {
+        name = model.name
+        calories = CGFloat(model.calories)
+        serving_size_g = 0
+
+        var nutrients = [Nutrient: CGFloat]()
+        for nutrient in Nutrient.allCases {
+            switch nutrient {
+            case .fat_total_g:
+                nutrients[nutrient] = CGFloat(model.fat_total_g)
+            case .fat_saturated_g:
+                nutrients[nutrient] = CGFloat(model.fat_saturated_g)
+            case .protein_g:
+                nutrients[nutrient] = CGFloat(model.protein_g)
+            case .sodium_mg:
+                nutrients[nutrient] = CGFloat(model.sodium_mg)
+            case .potassium_mg:
+                nutrients[nutrient] = CGFloat(model.potassium_mg)
+            case .cholesterol_mg:
+                nutrients[nutrient] = CGFloat(model.cholesterol_mg)
+            case .carbohydrates_total_g:
+                nutrients[nutrient] = CGFloat(model.carbohydrates_total_g)
+            case .fiber_g:
+                nutrients[nutrient] = CGFloat(model.fiber_g)
+            case .sugar_g:
+                nutrients[nutrient] = CGFloat(model.sugar_g)
             }
         }
         self.nutrients = nutrients

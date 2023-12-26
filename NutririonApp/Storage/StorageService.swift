@@ -13,12 +13,12 @@ class StorageService {
         }
     }
 
-    func fetchMeals(with date: Date) {
+    func fetchMeals(with date: Date) -> [MealViewModel] {
         let meals = realm.objects(MealStorageViewModel.self).filter {
             Calendar.current.isDateInToday($0.date)
         }
 
-        Swift.print(meals)
+        return meals.map { MealViewModel(from: $0) }
     }
 
     func print() {
