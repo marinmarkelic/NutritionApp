@@ -7,18 +7,23 @@ struct HomeView: View {
 
     var body: some View {
         WithViewStore(store, observe: { $0 }) { viewStore in
-            ScrollView {
-                VStack {
-                    Text("Eaten meals")
+            VStack {
+                ScrollView {
+                    VStack(spacing: 8) {
+                        Text("Eaten meals")
 
-                    ForEach(viewStore.meals) { meal in
-                        MealCell(meal: meal)
+                        ForEach(viewStore.meals) { meal in
+                            MealCell(meal: meal)
+                        }
                     }
                 }
+                .onAppear {
+                    viewStore.send(.onAppear)
+                }
             }
-            .onAppear {
-                viewStore.send(.onAppear)
-            }
+            .maxSize()
+            .padding(8)
+            .background(Color.background)
         }
     }
 
@@ -38,5 +43,7 @@ struct MealCell: View {
                 Text(meal.name)
             }
         }
+        .maxWidth()
+        .background(Color.element)
     }
 }

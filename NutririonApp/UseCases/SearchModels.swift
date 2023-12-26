@@ -1,4 +1,5 @@
 import Foundation
+import SwiftUI
 
 struct MealViewModel: Equatable, CustomStringConvertible, Identifiable {
 
@@ -45,7 +46,7 @@ struct MealViewModel: Equatable, CustomStringConvertible, Identifiable {
 
     var description: String {
 
-        return "\(calories)g of calories, \(nutrients[.protein_g] ?? 0)g of protein, \(nutrients[.fat_total_g] ?? 0)g of fat, \(nutrients[.carbohydrates_total_g] ?? 0)g of carbs"
+        "\(calories)g of calories, \(nutrients[.protein_g] ?? 0)g of protein, \(nutrients[.fat_total_g] ?? 0)g of fat, \(nutrients[.carbohydrates_total_g] ?? 0)g of carbs"
 
     }
 
@@ -77,6 +78,61 @@ struct NutritionalItemViewModel: Equatable {
     // Temp
     var totalG: CGFloat {
         nutrients[.carbohydrates_total_g]! + nutrients[.fat_total_g]! + nutrients[.protein_g]!
+    }
+
+    var graphData: GraphViewModel {
+        GraphViewModel(from: self)
+    }
+
+    static func colorFor(nutrient: Nutrient) -> Color {
+        switch nutrient {
+        case .fat_total_g:
+            return .yellow
+        case .protein_g:
+               return .red
+        case .carbohydrates_total_g:
+               return .green
+        default:
+            return .clear
+        }
+    }
+
+}
+
+struct GraphViewModelData {
+
+    // rename properties
+    let color: Color
+    let previousCompleton: CGFloat
+    let completion: CGFloat
+
+}
+
+struct GraphViewModel {
+
+    static let evaluatedNutrients = [Nutrient.protein_g, Nutrient.carbohydrates_total_g, Nutrient.fat_total_g]
+
+    let data: [GraphViewModelData]
+
+    fileprivate init(from model: NutritionalItemViewModel) {
+        var progress: CGFloat = 0
+        var sum: CGFloat = 0
+        GraphViewModel.evaluatedNutrients.forEach { nutrient in
+            sum += model.nutrients[nutrient] ?? 0
+        }
+
+        var data = [GraphViewModelData]()
+        GraphViewModel.evaluatedNutrients.forEach { nutrient in
+            data.append(
+                GraphViewModelData(
+                    color: NutritionalItemViewModel.colorFor(nutrient: nutrient),
+                    previousCompleton: progress,
+                    completion: (model.nutrients[nutrient] ?? 0) / sum))
+
+            progress += (model.nutrients[nutrient] ?? 0) / sum
+        }
+
+        self.data = data
     }
 
 }

@@ -9,85 +9,22 @@ struct SearchView: View {
 
     var body: some View {
         WithViewStore(store, observe: { $0 }) { viewStore in
-            ZStack {
+            VStack(spacing: 0) {
                 if viewStore.meal.items.count > 0 {
-                    nutritionalInformatonView(viewStore.meal, query: viewStore.query)
+                    MealInformationView(meal: viewStore.meal, query: viewStore.query, input: viewStore.query)
                 }
+
+                Spacer()
 
                 searchBar(viewStore)
             }
+            .maxWidth()
+            .background(Color.background)
         }
-    }
-
-    @ViewBuilder
-    private func nutritionalInformatonView(_ meal: MealViewModel, query: String) -> some View {
-        let items = meal.items
-
-        ScrollView {
-            VStack {
-                Text("Information for \(meal.name)")
-
-                Text(meal.description)
-
-                // Detailed info
-                if items.count > 1 {
-                    ForEach(meal.items, id: \.name) { item in
-                        VStack {
-                            Text("Information for \(item.name)")
-
-                            Text(item.description)
-
-                            nutritionCircleGraph(item)
-                                .frame(width: 200, height: 200)
-                        }
-                    }
-                }
-            }
-
-            HStack {
-                Button("Save") {
-                    store.send(.save(meal))
-                }
-
-                Button("Print") {
-                    store.send(.print)
-                }
-
-                Button("Clear") {
-                    store.send(.clearAll)
-                }
-            }
-        }
-    }
-
-    @ViewBuilder
-    private func nutritionCircleGraph(_ item: NutritionalItemViewModel) -> some View {
-        var progress: CGFloat = 0.0
-
-        ZStack {
-            ForEach([Nutrient.protein_g, Nutrient.carbohydrates_total_g, Nutrient.fat_total_g]) { nutrient in
-                Circle()
-                    .trim(from: progress, to: item.nutrients[nutrient]! / item.totalG)
-                    .stroke(Color.red, style: StrokeStyle(lineWidth: 60, lineCap: .butt))
-
-//                progress += item.nutrients[nutrient]! / item.totalG
-            }
-//            Circle()
-//                .trim(from: progress, to: item.nutrients[.protein_g]! / item.totalG)
-//                .stroke(Color.red, style: StrokeStyle(lineWidth: 60, lineCap: .butt))
-//
-//            Circle()
-//                .trim(from: item.nutrients[.protein_g]! / item.totalG, to: item.nutrients[.carbohydrates_total_g]! / item.totalG)
-//                .stroke(Color.yellow, style: StrokeStyle(lineWidth: 60, lineCap: .butt))
-
-        }
-        .frame(width: 200 - 60, height: 200 - 60)
     }
 
     private func searchBar(_ viewStore: ViewStore<Search.State, Search.Action>) -> some View {
         VStack {
-            Spacer()
-
             HStack {
                 TextField("Search", text: $query)
 
@@ -100,6 +37,107 @@ struct SearchView: View {
             }
             .padding(16)
             .background(Color.gray.opacity(0.2))
+        }
+    }
+
+}
+
+struct MealInformationView: View {
+
+    private let meal: MealViewModel
+    private let query: String
+
+    init(meal: MealViewModel, query: String, input: String) {
+        self.meal = meal
+        self.query = query
+    }
+
+    var body: some View {
+        ScrollView {
+            VStack {
+                ForEach(meal.items, id: \.name) { item in
+                    NutritionInformationView(item: item, input: "\(item.serving_size_g)")
+                    .maxWidth()
+                    .background(Color.element)
+                }
+            }
+
+//            HStack {
+//                Button("Save") {
+//                    store.send(.save(meal))
+//                }
+//
+//                Button("Print") {
+//                    store.send(.print)
+//                }
+//
+//                Button("Clear") {
+//                    store.send(.clearAll)
+//                }
+//            }
+        }
+        .background(Color.background)
+    }
+
+}
+
+struct NutritionInformationView: View {
+
+    private let item: NutritionalItemViewModel
+    @State private var input: String
+
+    init(item: NutritionalItemViewModel, input: String) {
+        self.item = item
+        _input = State(initialValue: input)
+    }
+
+    var body: some View {
+        VStack {
+            Text("Information for \(item.name)")
+
+            HStack {
+                VStack {
+                    Text(item.name)
+
+                    NutritionCircleGraph(item: item)
+                        .frame(width: 200, height: 200)
+                }
+
+                VStack {
+                    Text("\(item.calories) calories")
+
+                    Text("\(item.nutrients[.protein_g] ?? 0) grams of protein")
+
+                    Spacer()
+
+                    VStack {
+                        Text("Serving size:")
+
+                        HStack {
+                            TextField("Amount", text: $input)
+
+
+                            Text("g")
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+}
+struct NutritionCircleGraph: View {
+
+    let item: NutritionalItemViewModel
+
+    var body: some View {
+        ZStack {
+            ForEach(item.graphData.data, id: \.color) { data in
+                Circle()
+                    .trim(from: data.previousCompleton, to: data.previousCompleton + data.completion)
+                    .stroke(data.color, style: StrokeStyle(lineWidth: 60, lineCap: .butt))
+                    .frame(width: 200 - 60, height: 200 - 60)
+            }
         }
     }
 

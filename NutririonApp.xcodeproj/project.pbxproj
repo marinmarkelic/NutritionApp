@@ -19,6 +19,8 @@
 		9C6015842B24CE24005A62C7 /* SearchAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C6015832B24CE24005A62C7 /* SearchAction.swift */; };
 		9C6015862B24CE56005A62C7 /* HomeState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C6015852B24CE56005A62C7 /* HomeState.swift */; };
 		9C6015882B24CE5E005A62C7 /* HomeAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C6015872B24CE5E005A62C7 /* HomeAction.swift */; };
+		9C93F96D2B3B048E0033E0BC /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C93F96C2B3B048E0033E0BC /* Colors.swift */; };
+		9C93F96F2B3B05D70033E0BC /* View+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C93F96E2B3B05D70033E0BC /* View+Extensions.swift */; };
 		9C9B56812AFA7F9000A4B2BC /* NutririonApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C9B56802AFA7F9000A4B2BC /* NutririonApp.swift */; };
 		9C9B56852AFA7F9200A4B2BC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9C9B56842AFA7F9200A4B2BC /* Assets.xcassets */; };
 		9C9B56882AFA7F9200A4B2BC /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9C9B56872AFA7F9200A4B2BC /* Preview Assets.xcassets */; };
@@ -40,6 +42,8 @@
 		9C6015832B24CE24005A62C7 /* SearchAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchAction.swift; sourceTree = "<group>"; };
 		9C6015852B24CE56005A62C7 /* HomeState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeState.swift; sourceTree = "<group>"; };
 		9C6015872B24CE5E005A62C7 /* HomeAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeAction.swift; sourceTree = "<group>"; };
+		9C93F96C2B3B048E0033E0BC /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
+		9C93F96E2B3B05D70033E0BC /* View+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extensions.swift"; sourceTree = "<group>"; };
 		9C9B567D2AFA7F9000A4B2BC /* NutririonApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NutririonApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9C9B56802AFA7F9000A4B2BC /* NutririonApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NutririonApp.swift; sourceTree = "<group>"; };
 		9C9B56842AFA7F9200A4B2BC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -97,6 +101,15 @@
 			path = Clients;
 			sourceTree = "<group>";
 		};
+		9C93F96B2B3B04850033E0BC /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				9C93F96C2B3B048E0033E0BC /* Colors.swift */,
+				9C93F96E2B3B05D70033E0BC /* View+Extensions.swift */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
 		9C9B56742AFA7F9000A4B2BC = {
 			isa = PBXGroup;
 			children = (
@@ -116,6 +129,7 @@
 		9C9B567F2AFA7F9000A4B2BC /* NutririonApp */ = {
 			isa = PBXGroup;
 			children = (
+				9C93F96B2B3B04850033E0BC /* Shared */,
 				9CBB0A8C2B2DF9DB0064EFCC /* Storage */,
 				9CBB0A832B2DC8D20064EFCC /* UseCases */,
 				9C60157E2B249BC7005A62C7 /* Clients */,
@@ -237,12 +251,14 @@
 				9C60157B2B249886005A62C7 /* SearchView.swift in Sources */,
 				9CBB0A872B2DC9AD0064EFCC /* BaseClient.swift in Sources */,
 				9C6015842B24CE24005A62C7 /* SearchAction.swift in Sources */,
+				9C93F96D2B3B048E0033E0BC /* Colors.swift in Sources */,
 				9C6015802B249BD9005A62C7 /* NutritionClient.swift in Sources */,
 				9C60157D2B2499E3005A62C7 /* SearchReducer.swift in Sources */,
 				9C6015862B24CE56005A62C7 /* HomeState.swift in Sources */,
 				9CBB0A892B2DD2FF0064EFCC /* SearchModels.swift in Sources */,
 				9CBB0A972B2DFCB50064EFCC /* StorageModels.swift in Sources */,
 				9C6015722B24872B005A62C7 /* HomeReducer.swift in Sources */,
+				9C93F96F2B3B05D70033E0BC /* View+Extensions.swift in Sources */,
 				9C6015882B24CE5E005A62C7 /* HomeAction.swift in Sources */,
 				9CBB0A8B2B2DF9500064EFCC /* StorageUseCase.swift in Sources */,
 				9CBB0A952B2DFC240064EFCC /* StorageService.swift in Sources */,
