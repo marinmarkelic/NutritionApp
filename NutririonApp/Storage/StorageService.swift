@@ -1,4 +1,5 @@
 import Foundation
+import Dependencies
 import RealmSwift
 
 class StorageService {
@@ -16,6 +17,18 @@ class StorageService {
     func fetchMeals(with date: Date) -> [MealViewModel] {
         let meals = realm.objects(MealStorageViewModel.self).filter {
             Calendar.current.isDateInToday($0.date)
+        }
+
+        return meals.map { MealViewModel(from: $0) }
+    }
+
+    func fetchMeals(from daysAgo: Int) -> [MealViewModel] {
+        let todayComponents = Calendar.current.dateComponents([.year, .month, .day], from: .now)
+        let beginningOfToday = Calendar.current.date(from: todayComponents)!
+        let beforeDate = Calendar.current.date(byAdding: .day, value: -1 * daysAgo, to: beginningOfToday)!
+
+        let meals = realm.objects(MealStorageViewModel.self).filter { meal in
+            meal.date >= beforeDate && meal.date <= beginningOfToday
         }
 
         return meals.map { MealViewModel(from: $0) }
@@ -54,3 +67,21 @@ class StorageService {
     }
 
 }
+
+extension StorageService: DependencyKey {
+
+    static var liveValue: StorageService {
+        StorageService()
+    }
+
+}
+
+extension DependencyValues {
+
+    var storageService: StorageService {
+        get { self[StorageService.self] }
+        set { self[StorageService.self] = newValue }
+    }
+
+}
+

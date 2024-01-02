@@ -10,8 +10,11 @@ struct NutririonApp: App {
                 HomeView(store: Store(initialState: Home.State(), reducer: { Home() }))
                     .tabItem { Text("Home") }
 
-                SearchView(store: Store(initialState: Search.State.defaultValue, reducer: { Search()._printChanges() }))
+                SearchView(store: Store(initialState: Search.State.defaultValue, reducer: { Search() }))
                     .tabItem { Text("Search") }
+
+                RatingsView(store: Store(initialState: Ratings.State(), reducer: { Ratings()._printChanges() }))
+                    .tabItem { Text("Ratings") }
             }
         }
     }

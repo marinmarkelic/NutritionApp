@@ -11,7 +11,23 @@ struct SearchView: View {
         WithViewStore(store, observe: { $0 }) { viewStore in
             VStack(spacing: 0) {
                 if viewStore.meal.items.count > 0 {
-                    MealInformationView(meal: viewStore.meal, query: viewStore.query, input: viewStore.query)
+                    VStack {
+                        MealInformationView(meal: viewStore.meal, query: viewStore.query, input: viewStore.query)
+
+                        HStack {
+                            Button("Save") {
+                                store.send(.save(viewStore.meal))
+                            }
+
+                            Button("Print") {
+                                store.send(.print)
+                            }
+
+                            Button("Clear") {
+                                store.send(.clearAll)
+                            }
+                        }
+                    }
                 }
 
                 Spacer()
@@ -19,6 +35,7 @@ struct SearchView: View {
                 searchBar(viewStore)
             }
             .maxWidth()
+            .padding(8)
             .background(Color.background)
         }
     }
@@ -61,20 +78,6 @@ struct MealInformationView: View {
                     .background(Color.element)
                 }
             }
-
-//            HStack {
-//                Button("Save") {
-//                    store.send(.save(meal))
-//                }
-//
-//                Button("Print") {
-//                    store.send(.print)
-//                }
-//
-//                Button("Clear") {
-//                    store.send(.clearAll)
-//                }
-//            }
         }
         .background(Color.background)
     }

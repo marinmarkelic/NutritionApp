@@ -21,6 +21,17 @@ struct MealViewModel: Equatable, CustomStringConvertible, Identifiable {
         return calories
     }
 
+    func getNutrientValue(for nutrient: Nutrient) -> CGFloat {
+        guard !items.isEmpty else { return .zero }
+
+        var value: CGFloat = .zero
+        for item in items {
+            value += item.nutrients[nutrient] ?? .zero
+        }
+
+        return value
+    }
+
     var nutrients: [Nutrient : CGFloat] {
         guard !items.isEmpty else { return [:] }
 
@@ -56,7 +67,7 @@ extension MealViewModel {
 
     init(from model: MealNetworkViewModel, with name: String) {
         self.name = name
-        date = .now
+        date = Calendar.current.date(byAdding: .day, value: -1, to: .now)!
         items = model.items.compactMap { NutritionalItemViewModel(from: $0) }
     }
 

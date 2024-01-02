@@ -3,11 +3,8 @@ import Dependencies
 
 actor StorageUseCase {
 
-    private let service: StorageService
-
-    init(service: StorageService) {
-        self.service = service
-    }
+    @Dependency(\.storageService)
+    private var service: StorageService
 
     func save(meal: MealViewModel) {
         service.save(meal: meal)
@@ -30,7 +27,7 @@ actor StorageUseCase {
 extension StorageUseCase: DependencyKey {
 
     static var liveValue: StorageUseCase {
-        StorageUseCase(service: StorageService())
+        StorageUseCase()
     }
 
 }
