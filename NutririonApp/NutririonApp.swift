@@ -2,7 +2,7 @@ import SwiftUI
 import ComposableArchitecture
 
 @main
-struct NutritionApp: App {
+struct NutririonApp: App {
 
     var body: some Scene {
         WindowGroup {
