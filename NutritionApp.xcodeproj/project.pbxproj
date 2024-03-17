@@ -23,7 +23,7 @@
 		9C6015802B249BD9005A62C7 /* NutritionClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C60157F2B249BD9005A62C7 /* NutritionClient.swift */; };
 		9C93F96D2B3B048E0033E0BC /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C93F96C2B3B048E0033E0BC /* Colors.swift */; };
 		9C93F96F2B3B05D70033E0BC /* View+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C93F96E2B3B05D70033E0BC /* View+Extensions.swift */; };
-		9C9B56812AFA7F9000A4B2BC /* NutririonApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C9B56802AFA7F9000A4B2BC /* NutririonApp.swift */; };
+		9C9B56812AFA7F9000A4B2BC /* NutritionApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C9B56802AFA7F9000A4B2BC /* NutritionApp.swift */; };
 		9C9B56852AFA7F9200A4B2BC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9C9B56842AFA7F9200A4B2BC /* Assets.xcassets */; };
 		9C9B56882AFA7F9200A4B2BC /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9C9B56872AFA7F9200A4B2BC /* Preview Assets.xcassets */; };
 		9CBB0A852B2DC8E50064EFCC /* SearchUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CBB0A842B2DC8E50064EFCC /* SearchUseCase.swift */; };
@@ -47,8 +47,8 @@
 		9C60157F2B249BD9005A62C7 /* NutritionClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NutritionClient.swift; sourceTree = "<group>"; };
 		9C93F96C2B3B048E0033E0BC /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
 		9C93F96E2B3B05D70033E0BC /* View+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extensions.swift"; sourceTree = "<group>"; };
-		9C9B567D2AFA7F9000A4B2BC /* NutririonApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NutririonApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		9C9B56802AFA7F9000A4B2BC /* NutririonApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NutririonApp.swift; sourceTree = "<group>"; };
+		9C9B567D2AFA7F9000A4B2BC /* NutritionApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NutritionApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		9C9B56802AFA7F9000A4B2BC /* NutritionApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NutritionApp.swift; sourceTree = "<group>"; };
 		9C9B56842AFA7F9200A4B2BC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9C9B56872AFA7F9200A4B2BC /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		9CBB0A842B2DC8E50064EFCC /* SearchUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchUseCase.swift; sourceTree = "<group>"; };
@@ -124,7 +124,7 @@
 		9C9B56742AFA7F9000A4B2BC = {
 			isa = PBXGroup;
 			children = (
-				9C9B567F2AFA7F9000A4B2BC /* NutririonApp */,
+				9C9B567F2AFA7F9000A4B2BC /* NutritionApp */,
 				9C9B567E2AFA7F9000A4B2BC /* Products */,
 			);
 			sourceTree = "<group>";
@@ -132,26 +132,26 @@
 		9C9B567E2AFA7F9000A4B2BC /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				9C9B567D2AFA7F9000A4B2BC /* NutririonApp.app */,
+				9C9B567D2AFA7F9000A4B2BC /* NutritionApp.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		9C9B567F2AFA7F9000A4B2BC /* NutririonApp */ = {
+		9C9B567F2AFA7F9000A4B2BC /* NutritionApp */ = {
 			isa = PBXGroup;
 			children = (
 				9C93F96B2B3B04850033E0BC /* Shared */,
 				9CBB0A8C2B2DF9DB0064EFCC /* Storage */,
 				9CBB0A832B2DC8D20064EFCC /* UseCases */,
 				9C60157E2B249BC7005A62C7 /* Clients */,
-				9C9B56802AFA7F9000A4B2BC /* NutririonApp.swift */,
+				9C9B56802AFA7F9000A4B2BC /* NutritionApp.swift */,
 				9C1FD3C12B445F1300D8C6FD /* Ratings */,
 				9C60156D2B24868E005A62C7 /* Home */,
 				9C6015792B249877005A62C7 /* Search */,
 				9C9B56842AFA7F9200A4B2BC /* Assets.xcassets */,
 				9C9B56862AFA7F9200A4B2BC /* Preview Content */,
 			);
-			path = NutririonApp;
+			path = NutritionApp;
 			sourceTree = "<group>";
 		};
 		9C9B56862AFA7F9200A4B2BC /* Preview Content */ = {
@@ -185,9 +185,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		9C9B567C2AFA7F9000A4B2BC /* NutririonApp */ = {
+		9C9B567C2AFA7F9000A4B2BC /* NutritionApp */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 9C9B568B2AFA7F9200A4B2BC /* Build configuration list for PBXNativeTarget "NutririonApp" */;
+			buildConfigurationList = 9C9B568B2AFA7F9200A4B2BC /* Build configuration list for PBXNativeTarget "NutritionApp" */;
 			buildPhases = (
 				9C9B56792AFA7F9000A4B2BC /* Sources */,
 				9C9B567A2AFA7F9000A4B2BC /* Frameworks */,
@@ -197,7 +197,7 @@
 			);
 			dependencies = (
 			);
-			name = NutririonApp;
+			name = NutritionApp;
 			packageProductDependencies = (
 				9C396B102B388A8300FEBC0E /* Realm */,
 				9C396B122B388A8300FEBC0E /* RealmSwift */,
@@ -205,7 +205,7 @@
 				9C48CF1B2BA723B400ABA072 /* DependenciesMacros */,
 			);
 			productName = NutririonApp;
-			productReference = 9C9B567D2AFA7F9000A4B2BC /* NutririonApp.app */;
+			productReference = 9C9B567D2AFA7F9000A4B2BC /* NutritionApp.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -223,7 +223,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 9C9B56782AFA7F9000A4B2BC /* Build configuration list for PBXProject "NutririonApp" */;
+			buildConfigurationList = 9C9B56782AFA7F9000A4B2BC /* Build configuration list for PBXProject "NutritionApp" */;
 			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -240,7 +240,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				9C9B567C2AFA7F9000A4B2BC /* NutririonApp */,
+				9C9B567C2AFA7F9000A4B2BC /* NutritionApp */,
 			);
 		};
 /* End PBXProject section */
@@ -279,7 +279,7 @@
 				9C1FD3C32B445F2E00D8C6FD /* RatingsView.swift in Sources */,
 				9C6015782B24874A005A62C7 /* HomeView.swift in Sources */,
 				9CBB0A852B2DC8E50064EFCC /* SearchUseCase.swift in Sources */,
-				9C9B56812AFA7F9000A4B2BC /* NutririonApp.swift in Sources */,
+				9C9B56812AFA7F9000A4B2BC /* NutritionApp.swift in Sources */,
 				9C1FD3CD2B44930100D8C6FD /* CGFloat+Extensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -413,7 +413,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"NutririonApp/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"NutritionApp/Preview Content\"";
 				DEVELOPMENT_TEAM = 4H6CZ7Q64Z;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -428,7 +428,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.marinmarkelic.NutririonApp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.marinmarkelic.NutritionApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -443,7 +443,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"NutririonApp/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"NutritionApp/Preview Content\"";
 				DEVELOPMENT_TEAM = 4H6CZ7Q64Z;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -458,7 +458,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.marinmarkelic.NutririonApp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.marinmarkelic.NutritionApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -469,7 +469,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		9C9B56782AFA7F9000A4B2BC /* Build configuration list for PBXProject "NutririonApp" */ = {
+		9C9B56782AFA7F9000A4B2BC /* Build configuration list for PBXProject "NutritionApp" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				9C9B56892AFA7F9200A4B2BC /* Debug */,
@@ -478,7 +478,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		9C9B568B2AFA7F9200A4B2BC /* Build configuration list for PBXNativeTarget "NutririonApp" */ = {
+		9C9B568B2AFA7F9200A4B2BC /* Build configuration list for PBXNativeTarget "NutritionApp" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				9C9B568C2AFA7F9200A4B2BC /* Debug */,
