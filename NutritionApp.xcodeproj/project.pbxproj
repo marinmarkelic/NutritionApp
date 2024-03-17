@@ -23,7 +23,7 @@
 		9C6015802B249BD9005A62C7 /* NutritionClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C60157F2B249BD9005A62C7 /* NutritionClient.swift */; };
 		9C93F96D2B3B048E0033E0BC /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C93F96C2B3B048E0033E0BC /* Colors.swift */; };
 		9C93F96F2B3B05D70033E0BC /* View+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C93F96E2B3B05D70033E0BC /* View+Extensions.swift */; };
-		9C9B56812AFA7F9000A4B2BC /* NutririonApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C9B56802AFA7F9000A4B2BC /* NutririonApp.swift */; };
+		9C9B56812AFA7F9000A4B2BC /* NutritionApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C9B56802AFA7F9000A4B2BC /* NutritionApp.swift */; };
 		9C9B56852AFA7F9200A4B2BC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9C9B56842AFA7F9200A4B2BC /* Assets.xcassets */; };
 		9C9B56882AFA7F9200A4B2BC /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9C9B56872AFA7F9200A4B2BC /* Preview Assets.xcassets */; };
 		9CBB0A852B2DC8E50064EFCC /* SearchUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CBB0A842B2DC8E50064EFCC /* SearchUseCase.swift */; };
@@ -48,7 +48,7 @@
 		9C93F96C2B3B048E0033E0BC /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
 		9C93F96E2B3B05D70033E0BC /* View+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extensions.swift"; sourceTree = "<group>"; };
 		9C9B567D2AFA7F9000A4B2BC /* NutritionApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NutritionApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		9C9B56802AFA7F9000A4B2BC /* NutririonApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NutririonApp.swift; sourceTree = "<group>"; };
+		9C9B56802AFA7F9000A4B2BC /* NutritionApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NutritionApp.swift; sourceTree = "<group>"; };
 		9C9B56842AFA7F9200A4B2BC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9C9B56872AFA7F9200A4B2BC /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		9CBB0A842B2DC8E50064EFCC /* SearchUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchUseCase.swift; sourceTree = "<group>"; };
@@ -144,7 +144,7 @@
 				9CBB0A8C2B2DF9DB0064EFCC /* Storage */,
 				9CBB0A832B2DC8D20064EFCC /* UseCases */,
 				9C60157E2B249BC7005A62C7 /* Clients */,
-				9C9B56802AFA7F9000A4B2BC /* NutririonApp.swift */,
+				9C9B56802AFA7F9000A4B2BC /* NutritionApp.swift */,
 				9C1FD3C12B445F1300D8C6FD /* Ratings */,
 				9C60156D2B24868E005A62C7 /* Home */,
 				9C6015792B249877005A62C7 /* Search */,
@@ -279,7 +279,7 @@
 				9C1FD3C32B445F2E00D8C6FD /* RatingsView.swift in Sources */,
 				9C6015782B24874A005A62C7 /* HomeView.swift in Sources */,
 				9CBB0A852B2DC8E50064EFCC /* SearchUseCase.swift in Sources */,
-				9C9B56812AFA7F9000A4B2BC /* NutririonApp.swift in Sources */,
+				9C9B56812AFA7F9000A4B2BC /* NutritionApp.swift in Sources */,
 				9C1FD3CD2B44930100D8C6FD /* CGFloat+Extensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -1,7 +1,7 @@
 import SwiftUI
 
 @main
-struct NutririonApp: App {
+struct NutritionApp: App {
 
     var body: some Scene {
         WindowGroup {
