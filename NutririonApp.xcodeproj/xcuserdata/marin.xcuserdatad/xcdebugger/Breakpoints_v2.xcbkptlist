@@ -3,4 +3,100 @@
    uuid = "645C60FE-5AC9-44DB-883C-941DB5EEF8CD"
    type = "1"
    version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "DE9648F8-A8FD-46DE-B106-2C86F3A42128"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "NutririonApp/Search/SearchPresenter.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "13"
+            endingLineNumber = "13"
+            landmarkName = "search(query:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "D5DB99CA-FCCD-4E61-A539-33F9BA447620"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "NutririonApp/UseCases/SearchUseCase.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "9"
+            endingLineNumber = "9"
+            landmarkName = "search(for:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "D5DB99CA-FCCD-4E61-A539-33F9BA447620 - 3d9798ff60ca37be"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(1) suspend resume partial function for NutririonApp.SearchUseCase.search(for: Swift.String) async -&gt; NutririonApp.MealViewModel"
+                  moduleName = "NutririonApp"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/marin/Documents/FER/NutririonApp/NutririonApp/UseCases/SearchUseCase.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "9"
+                  endingLineNumber = "9"
+                  offsetFromSymbolStart = "96">
+               </Location>
+               <Location
+                  uuid = "D5DB99CA-FCCD-4E61-A539-33F9BA447620 - 771d1de26271baf0"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(2) await resume partial function for NutririonApp.SearchUseCase.search(for: Swift.String) async -&gt; NutririonApp.MealViewModel"
+                  moduleName = "NutririonApp"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/marin/Documents/FER/NutririonApp/NutririonApp/UseCases/SearchUseCase.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "9"
+                  endingLineNumber = "9"
+                  offsetFromSymbolStart = "40">
+               </Location>
+               <Location
+                  uuid = "D5DB99CA-FCCD-4E61-A539-33F9BA447620 - ece9a0b9ac78bf42"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(3) suspend resume partial function for NutririonApp.SearchUseCase.search(for: Swift.String) async -&gt; NutririonApp.MealViewModel"
+                  moduleName = "NutririonApp"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/marin/Documents/FER/NutririonApp/NutririonApp/UseCases/SearchUseCase.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "9"
+                  endingLineNumber = "9"
+                  offsetFromSymbolStart = "48">
+               </Location>
+               <Location
+                  uuid = "D5DB99CA-FCCD-4E61-A539-33F9BA447620 - c4b0a4857241fb40"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(4) suspend resume partial function for NutririonApp.SearchUseCase.search(for: Swift.String) async -&gt; NutririonApp.MealViewModel"
+                  moduleName = "NutririonApp"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/marin/Documents/FER/NutririonApp/NutririonApp/UseCases/SearchUseCase.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "9"
+                  endingLineNumber = "9"
+                  offsetFromSymbolStart = "48">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
 </Bucket>
