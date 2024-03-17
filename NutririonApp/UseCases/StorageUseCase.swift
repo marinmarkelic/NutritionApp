@@ -14,6 +14,10 @@ actor StorageUseCase {
         service.fetchMeals(with: date)
     }
 
+    func fetchMeals(from daysAgo: Int) -> [MealViewModel] {
+        service.fetchMeals(from: daysAgo)
+    }
+
     func printAll() {
         service.print()
     }
@@ -24,3 +28,19 @@ actor StorageUseCase {
 
 }
 
+extension StorageUseCase: DependencyKey {
+
+    static var liveValue: StorageUseCase {
+        StorageUseCase()
+    }
+
+}
+
+extension DependencyValues {
+
+    var storageUseCase: StorageUseCase {
+        get { self[StorageUseCase.self] }
+        set { self[StorageUseCase.self] = newValue }
+    }
+
+}

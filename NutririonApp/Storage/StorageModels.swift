@@ -1,12 +1,11 @@
 import Foundation
 import RealmSwift
 
-@objc(MealStorageViewModel)
 class MealStorageViewModel: Object {
 
-    @objc dynamic var name: String = ""
-    @objc dynamic var date: Date = Date()
-    dynamic var items = List<NutritionalItemStorageViewModel>()
+    @Persisted var name: String
+    @Persisted var date: Date
+    @Persisted var items: List<NutritionalItemStorageViewModel>
 
     override init() {}
 
@@ -20,22 +19,22 @@ class MealStorageViewModel: Object {
             items.append(NutritionalItemStorageViewModel(from: item))
         }
     }
+
 }
 
-@objc(NutritionalItemStorageViewModel)
 class NutritionalItemStorageViewModel: Object {
 
-    @objc dynamic var name: String = ""
-    @objc dynamic var calories: Float = 0
-    @objc dynamic var fat_total_g: Float = 0
-    @objc dynamic var fat_saturated_g: Float = 0
-    @objc dynamic var protein_g: Float = 0
-    @objc dynamic var sodium_mg: Float = 0
-    @objc dynamic var potassium_mg: Float = 0
-    @objc dynamic var cholesterol_mg: Float = 0
-    @objc dynamic var carbohydrates_total_g: Float = 0
-    @objc dynamic var fiber_g: Float = 0
-    @objc dynamic var sugar_g: Float = 0
+    @Persisted var name: String
+    @Persisted var calories: Float
+    @Persisted var fat_total_g: Float
+    @Persisted var fat_saturated_g: Float
+    @Persisted var protein_g: Float
+    @Persisted var sodium_mg: Float
+    @Persisted var potassium_mg: Float
+    @Persisted var cholesterol_mg: Float
+    @Persisted var carbohydrates_total_g: Float
+    @Persisted var fiber_g: Float
+    @Persisted var sugar_g: Float
 
     override init() {}
 
@@ -44,14 +43,15 @@ class NutritionalItemStorageViewModel: Object {
 
         name = model.name
         calories = Float(model.calories)
-        fat_total_g = Float(model.nutrients[.fat_total_g] ?? 0)
-        fat_saturated_g = Float(model.nutrients[.fat_saturated_g] ?? 0)
-        protein_g = Float(model.nutrients[.protein_g] ?? 0)
-        sodium_mg = Float(model.nutrients[.sodium_mg] ?? 0)
-        potassium_mg = Float(model.nutrients[.potassium_mg] ?? 0)
-        cholesterol_mg = Float(model.nutrients[.cholesterol_mg] ?? 0)
-        carbohydrates_total_g = Float(model.nutrients[.carbohydrates_total_g] ?? 0)
-        fiber_g = Float(model.nutrients[.fiber_g] ?? 0)
-        sugar_g = Float(model.nutrients[.sugar_g] ?? 0)
+        fat_total_g = Float(model.value(for: .fat_total_g))
+        fat_saturated_g = Float(model.value(for: .fat_saturated_g))
+        protein_g = Float(model.value(for: .protein_g))
+        sodium_mg = Float(model.value(for: .sodium_mg))
+        potassium_mg = Float(model.value(for: .potassium_mg))
+        cholesterol_mg = Float(model.value(for: .cholesterol_mg))
+        carbohydrates_total_g = Float(model.value(for: .carbohydrates_total_g))
+        fiber_g = Float(model.value(for: .fiber_g))
+        sugar_g = Float(model.value(for: .sugar_g))
     }
+
 }

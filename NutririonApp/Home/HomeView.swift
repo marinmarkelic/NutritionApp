@@ -22,6 +22,7 @@ struct HomeView: View {
         .maxSize()
         .padding(8)
         .background(Color.background)
+        .onAppear(perform: presenter.fetchMeals)
     }
 
 }

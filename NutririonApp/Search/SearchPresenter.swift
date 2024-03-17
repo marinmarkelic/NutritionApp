@@ -7,18 +7,26 @@ class SearchPresenter: ObservableObject {
     let query: String = ""
 
     @Dependency(\.searchUseCase)
-    private var useCase: SearchUseCase
+    private var searchUseCase: SearchUseCase
+    @Dependency(\.storageUseCase)
+    private var storageUseCase: StorageUseCase
 
     @MainActor
     func search(query: String) {
         Task { [weak self] in
             guard let self else { return }
 
-            meal = await useCase.search(for: query)
+            meal = await searchUseCase.search(for: query)
         }
     }
 
-    func save() {}
+    func save() {
+        Task { [weak self] in
+            guard let self else { return }
+
+            storageUseCase.save(meal: meal)
+        }
+    }
 
     func print() {}
 

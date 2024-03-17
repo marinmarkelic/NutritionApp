@@ -1,9 +1,19 @@
 import Combine
+import Dependencies
 
 class HomePresenter: ObservableObject {
 
-    let meals: [MealViewModel] = []
+    @Published var meals: [MealViewModel] = []
 
-    func fetchMeals() {}
+    @Dependency(\.storageUseCase) var storageUseCase
+
+    @MainActor
+    func fetchMeals() {
+        Task { [weak self] in
+            guard let self else { return }
+
+            meals = await storageUseCase.fetchMeals(from: 3)
+        }
+    }
 
 }
