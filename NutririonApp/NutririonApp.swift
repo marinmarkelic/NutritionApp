@@ -1,5 +1,4 @@
 import SwiftUI
-import ComposableArchitecture
 
 @main
 struct NutririonApp: App {
@@ -7,13 +6,13 @@ struct NutririonApp: App {
     var body: some Scene {
         WindowGroup {
             TabView {
-                HomeView(store: Store(initialState: Home.State(), reducer: { Home() }))
+                HomeView()
                     .tabItem { Text("Home") }
 
-                SearchView(store: Store(initialState: Search.State.defaultValue, reducer: { Search() }))
+                SearchView()
                     .tabItem { Text("Search") }
 
-                RatingsView(store: Store(initialState: Ratings.State(), reducer: { Ratings()._printChanges() }))
+                RatingsView()
                     .tabItem { Text("Ratings") }
             }
         }

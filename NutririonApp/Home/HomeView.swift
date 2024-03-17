@@ -1,30 +1,28 @@
 import SwiftUI
-import ComposableArchitecture
 
 struct HomeView: View {
 
-    let store: StoreOf<Home>
+    @ObservedObject private var presenter = HomePresenter()
 
     var body: some View {
-        WithViewStore(store, observe: { $0 }) { viewStore in
-            VStack {
-                ScrollView {
-                    VStack(spacing: 8) {
-                        Text("Eaten meals")
+        VStack {
+            ScrollView {
+                VStack(spacing: 8) {
+                    Text("Eaten meals")
 
-                        ForEach(viewStore.meals) { meal in
-                            MealCell(meal: meal)
-                        }
+                    ForEach(presenter.meals) { meal in
+                        MealCell(meal: meal)
                     }
                 }
-                .onAppear {
-                    viewStore.send(.onAppear)
-                }
             }
-            .maxSize()
-            .padding(8)
-            .background(Color.background)
+            .onAppear {
+                presenter.fetchMeals()
+            }
         }
+        .maxSize()
+        .padding(8)
+        .background(Color.background)
+        .onAppear(perform: presenter.fetchMeals)
     }
 
 }

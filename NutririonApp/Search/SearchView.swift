@@ -1,46 +1,43 @@
 import SwiftUI
-import ComposableArchitecture
 
 struct SearchView: View {
 
-    let store: StoreOf<Search>
+    @ObservedObject private var presenter = SearchPresenter()
 
     @State private var query: String = ""
 
     var body: some View {
-        WithViewStore(store, observe: { $0 }) { viewStore in
-            VStack(spacing: 0) {
-                if viewStore.meal.items.count > 0 {
-                    VStack {
-                        MealInformationView(meal: viewStore.meal, query: viewStore.query, input: viewStore.query)
+        VStack(spacing: 0) {
+            if presenter.meal.items.count > 0 {
+                VStack {
+                    MealInformationView(meal: presenter.meal, query: presenter.query)
 
-                        HStack {
-                            Button("Save") {
-                                store.send(.save(viewStore.meal))
-                            }
+                    HStack {
+                        Button("Save") {
+                            presenter.save()
+                        }
 
-                            Button("Print") {
-                                store.send(.print)
-                            }
+                        Button("Print") {
+                            presenter.print()
+                        }
 
-                            Button("Clear") {
-                                store.send(.clearAll)
-                            }
+                        Button("Clear") {
+                            presenter.clearAll()
                         }
                     }
                 }
-
-                Spacer()
-
-                searchBar(viewStore)
             }
-            .maxWidth()
-            .padding(8)
-            .background(Color.background)
+
+            Spacer()
+
+            searchBar()
         }
+        .maxWidth()
+        .padding(8)
+        .background(Color.background)
     }
 
-    private func searchBar(_ viewStore: ViewStore<Search.State, Search.Action>) -> some View {
+    private func searchBar() -> some View {
         VStack {
             HStack {
                 TextField("Search", text: $query)
@@ -49,7 +46,7 @@ struct SearchView: View {
                     .foregroundStyle(Color.yellow)
                     .frame(width: 30, height: 30)
                     .onTapGesture {
-                        viewStore.send(.search(query))
+                        presenter.search(query: query)
                     }
             }
             .padding(16)
@@ -64,7 +61,7 @@ struct MealInformationView: View {
     private let meal: MealViewModel
     private let query: String
 
-    init(meal: MealViewModel, query: String, input: String) {
+    init(meal: MealViewModel, query: String) {
         self.meal = meal
         self.query = query
     }
@@ -74,8 +71,8 @@ struct MealInformationView: View {
             VStack {
                 ForEach(meal.items, id: \.name) { item in
                     NutritionInformationView(item: item, input: "\(item.serving_size_g)")
-                    .maxWidth()
-                    .background(Color.element)
+                        .maxWidth()
+                        .background(Color.element)
                 }
             }
         }

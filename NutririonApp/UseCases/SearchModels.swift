@@ -56,9 +56,7 @@ struct MealViewModel: Equatable, CustomStringConvertible, Identifiable {
     }
 
     var description: String {
-
         "\(calories)g of calories, \(nutrients[.protein_g] ?? 0)g of protein, \(nutrients[.fat_total_g] ?? 0)g of fat, \(nutrients[.carbohydrates_total_g] ?? 0)g of carbs"
-
     }
 
 }
@@ -106,6 +104,10 @@ struct NutritionalItemViewModel: Equatable {
         default:
             return .clear
         }
+    }
+
+    func value(for nutrient: Nutrient) -> CGFloat {
+        nutrients[nutrient] ?? 0
     }
 
 }
@@ -217,9 +219,7 @@ extension NutritionalItemViewModel {
 extension NutritionalItemViewModel: CustomStringConvertible {
 
     var description: String {
-
-        return "\(calories)g of calories, \(nutrients[.protein_g] ?? 0)g of protein, \(nutrients[.fat_total_g] ?? 0)g of fat, \(nutrients[.carbohydrates_total_g] ?? 0)g of carbs"
-
+        "\(calories)g of calories, \(nutrients[.protein_g] ?? 0)g of protein, \(nutrients[.fat_total_g] ?? 0)g of fat, \(nutrients[.carbohydrates_total_g] ?? 0)g of carbs"
     }
 
 }

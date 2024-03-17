@@ -14,6 +14,10 @@ actor StorageUseCase {
         service.fetchMeals(with: date)
     }
 
+    func fetchMeals(from daysAgo: Int) -> [MealViewModel] {
+        service.fetchMeals(from: daysAgo)
+    }
+
     func printAll() {
         service.print()
     }
