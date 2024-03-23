@@ -5,7 +5,12 @@ import Dependencies
 struct NutritionClient {
 
     private let apiUrl: String = "https://api.calorieninjas.com/v1/nutrition?query="
-    private let apiKey: String = "rB4pVqCmFuAIPKYUunQSmA==qgG9oVfsqrPHsshE"
+
+    @Dependency(\.secretsClient) private var secretsClient
+
+    private var apiKey: String {
+        secretsClient.nutritionKey
+    }
 
     func getNutritionalInformation(for query: String) async throws -> MealNetworkViewModel {
         guard
@@ -21,7 +26,6 @@ struct NutritionClient {
         let (data, _) = try await URLSession.shared.data(for: request)
 
         return try JSONDecoder().decode(MealNetworkViewModel.self, from: data)
-
     }
 
 }

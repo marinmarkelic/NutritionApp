@@ -1,0 +1,44 @@
+import Foundation
+import Dependencies
+
+struct SecretsClient {
+
+    var nutritionKey: String {
+        guard let apiKey = secrets["NutritionApiKey"] as? String {
+            print("Error - Entry not found in Secrets.plist")
+            return ""
+        }
+
+        return apiKey
+    }
+
+    private var secrets: [String: Any] {
+        guard let secretsPath = Bundle.main.path(forResource: "Secrets", ofType: "plist") else {
+            print("Error - Secrets.plist not found")
+        }
+
+        guard let secrets = NSDictionary(contentsOfFile: secretsPath) as? [String: Any] else {
+            print("Error - Unable to parse Secrets.plist")
+        }
+
+        return secrets
+    }
+
+}
+
+extension SecretsClient: DependencyKey {
+
+    static var liveValue: SecretsClient {
+        SecretsClient()
+    }
+
+}
+
+extension DependencyValues {
+
+    var secretsClient: SecretsClient {
+        get { self[SecretsClient.self] }
+        set { self[SecretsClient.self] = newValue }
+    }
+
+}
