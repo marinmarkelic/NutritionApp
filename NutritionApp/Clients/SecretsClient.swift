@@ -4,7 +4,7 @@ import Dependencies
 struct SecretsClient {
 
     var nutritionKey: String {
-        guard let apiKey = secrets["NutritionApiKey"] as? String {
+        guard let apiKey = secrets["NutritionApiKey"] as? String else {
             print("Error - Entry not found in Secrets.plist")
             return ""
         }
@@ -15,10 +15,12 @@ struct SecretsClient {
     private var secrets: [String: Any] {
         guard let secretsPath = Bundle.main.path(forResource: "Secrets", ofType: "plist") else {
             print("Error - Secrets.plist not found")
+            return [:]
         }
 
         guard let secrets = NSDictionary(contentsOfFile: secretsPath) as? [String: Any] else {
             print("Error - Unable to parse Secrets.plist")
+            return [:]
         }
 
         return secrets
