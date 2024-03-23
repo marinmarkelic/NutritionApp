@@ -31,3 +31,6 @@ build
 *.xcodeproj/*
 !*.xcodeproj/project.pbxproj
 !*.xcworkspace/contents.xcworkspacedata
+
+### Hiding API keys###
+Secrets.plist
