@@ -26,7 +26,7 @@ struct MealViewModel: Equatable, CustomStringConvertible, Identifiable {
 
         var value: CGFloat = .zero
         for item in items {
-            value += item.nutrients[nutrient] ?? .zero
+            value += item.value(for: nutrient)
         }
 
         return value
@@ -35,19 +35,15 @@ struct MealViewModel: Equatable, CustomStringConvertible, Identifiable {
     var nutrients: [Nutrient : CGFloat] {
         guard !items.isEmpty else { return [:] }
 
-        guard items.count > 1 else {
-            return items.first!.nutrients
-        }
-
         var nutrients: [Nutrient : CGFloat] = Dictionary(uniqueKeysWithValues: Nutrient.allCases.map { ($0, 0) })
 
         for item in items {
             for nutrient in Nutrient.allCases {
                 guard
-                    let itemValue = item.nutrients[nutrient],
                     let currentValue = nutrients[nutrient]
                 else { continue }
 
+                let itemValue = item.value(for: nutrient)
                 nutrients[nutrient] = itemValue + currentValue
             }
         }
@@ -57,6 +53,19 @@ struct MealViewModel: Equatable, CustomStringConvertible, Identifiable {
 
     var description: String {
         "\(calories)g of calories, \(nutrients[.protein_g] ?? 0)g of protein, \(nutrients[.fat_total_g] ?? 0)g of fat, \(nutrients[.carbohydrates_total_g] ?? 0)g of carbs"
+    }
+
+    func update(servingSize: CGFloat, for item: NutritionalItemViewModel) -> MealViewModel {
+        var items: [NutritionalItemViewModel] = []
+        self.items.forEach { nutritionItem in
+            if nutritionItem == item {
+                items.append(nutritionItem.with(servingSize: servingSize))
+            } else {
+                items.append(nutritionItem)
+            }
+        }
+
+        return MealViewModel(name: name, date: date, items: items)
     }
 
 }
@@ -80,9 +89,10 @@ extension MealViewModel {
 struct NutritionalItemViewModel: Equatable {
 
     let name: String
-    let calories: CGFloat
     let serving_size_g: CGFloat
-    let nutrients: [Nutrient : CGFloat]
+    let serving_size_baseline_g: CGFloat
+    let calories_baseline: CGFloat
+    private let nutrients: [Nutrient : CGFloat]
 
     // Temp
     var totalG: CGFloat {
@@ -91,6 +101,14 @@ struct NutritionalItemViewModel: Equatable {
 
     var graphData: GraphViewModel {
         GraphViewModel(from: self)
+    }
+
+    var serving_size_multiplier: CGFloat {
+        serving_size_baseline_g / serving_size_g
+    }
+
+    var calories: CGFloat {
+        calories_baseline * serving_size_multiplier
     }
 
     static func colorFor(nutrient: Nutrient) -> Color {
@@ -107,45 +125,16 @@ struct NutritionalItemViewModel: Equatable {
     }
 
     func value(for nutrient: Nutrient) -> CGFloat {
-        nutrients[nutrient] ?? 0
+        (nutrients[nutrient] ?? 0) * serving_size_multiplier
     }
 
-}
-
-struct GraphViewModelData {
-
-    // rename properties
-    let color: Color
-    let previousCompleton: CGFloat
-    let completion: CGFloat
-
-}
-
-struct GraphViewModel {
-
-    static let evaluatedNutrients = [Nutrient.protein_g, Nutrient.carbohydrates_total_g, Nutrient.fat_total_g]
-
-    let data: [GraphViewModelData]
-
-    fileprivate init(from model: NutritionalItemViewModel) {
-        var progress: CGFloat = 0
-        var sum: CGFloat = 0
-        GraphViewModel.evaluatedNutrients.forEach { nutrient in
-            sum += model.nutrients[nutrient] ?? 0
-        }
-
-        var data = [GraphViewModelData]()
-        GraphViewModel.evaluatedNutrients.forEach { nutrient in
-            data.append(
-                GraphViewModelData(
-                    color: NutritionalItemViewModel.colorFor(nutrient: nutrient),
-                    previousCompleton: progress,
-                    completion: (model.nutrients[nutrient] ?? 0) / sum))
-
-            progress += (model.nutrients[nutrient] ?? 0) / sum
-        }
-
-        self.data = data
+    func with(servingSize: CGFloat) -> NutritionalItemViewModel {
+        NutritionalItemViewModel(
+            name: name,
+            serving_size_g: serving_size_g,
+            serving_size_baseline_g: servingSize,
+            calories_baseline: calories_baseline,
+            nutrients: nutrients)
     }
 
 }
@@ -154,8 +143,9 @@ extension NutritionalItemViewModel {
 
     init(from model: NutritionalItemNetworkViewModel) {
         name = model.name
-        calories = model.calories
+        calories_baseline = model.calories
         serving_size_g = model.serving_size_g
+        serving_size_baseline_g = model.serving_size_g
 
         var nutrients = [Nutrient: CGFloat]()
         for nutrient in Nutrient.allCases {
@@ -185,8 +175,9 @@ extension NutritionalItemViewModel {
 
     init(from model: NutritionalItemStorageViewModel) {
         name = model.name
-        calories = CGFloat(model.calories)
-        serving_size_g = 0
+        calories_baseline = CGFloat(model.calories_baseline)
+        serving_size_g = CGFloat(model.serving_size_g)
+        serving_size_baseline_g = CGFloat(model.serving_size_baseline_g)
 
         var nutrients = [Nutrient: CGFloat]()
         for nutrient in Nutrient.allCases {
@@ -220,6 +211,44 @@ extension NutritionalItemViewModel: CustomStringConvertible {
 
     var description: String {
         "\(calories)g of calories, \(nutrients[.protein_g] ?? 0)g of protein, \(nutrients[.fat_total_g] ?? 0)g of fat, \(nutrients[.carbohydrates_total_g] ?? 0)g of carbs"
+    }
+
+}
+
+struct GraphViewModelData {
+
+    // rename properties
+    let color: Color
+    let previousCompleton: CGFloat
+    let completion: CGFloat
+
+}
+
+struct GraphViewModel {
+
+    static let evaluatedNutrients = [Nutrient.protein_g, Nutrient.carbohydrates_total_g, Nutrient.fat_total_g]
+
+    let data: [GraphViewModelData]
+
+    fileprivate init(from model: NutritionalItemViewModel) {
+        var progress: CGFloat = 0
+        var sum: CGFloat = 0
+        GraphViewModel.evaluatedNutrients.forEach { nutrient in
+            sum += model.value(for: nutrient)
+        }
+
+        var data = [GraphViewModelData]()
+        GraphViewModel.evaluatedNutrients.forEach { nutrient in
+            data.append(
+                GraphViewModelData(
+                    color: NutritionalItemViewModel.colorFor(nutrient: nutrient),
+                    previousCompleton: progress,
+                    completion: model.value(for: nutrient) / sum))
+
+            progress += model.value(for: nutrient) / sum
+        }
+
+        self.data = data
     }
 
 }

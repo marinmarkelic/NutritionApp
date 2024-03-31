@@ -10,7 +10,7 @@ struct SearchView: View {
         VStack(spacing: 0) {
             if presenter.meal.items.count > 0 {
                 VStack {
-                    MealInformationView(meal: presenter.meal, query: presenter.query)
+                    MealInformationView(meal: presenter.meal, query: presenter.query, updateServingSize: presenter.update)
 
                     HStack {
                         Button("Save") {
@@ -35,6 +35,7 @@ struct SearchView: View {
         .maxWidth()
         .padding(8)
         .background(Color.background)
+        .dismissKeyboardOnTap()
     }
 
     private func searchBar() -> some View {
@@ -60,17 +61,19 @@ struct MealInformationView: View {
 
     private let meal: MealViewModel
     private let query: String
+    private let updateServingSize: (String, NutritionalItemViewModel) -> Void
 
-    init(meal: MealViewModel, query: String) {
+    init(meal: MealViewModel, query: String, updateServingSize: @escaping (String, NutritionalItemViewModel) -> Void) {
         self.meal = meal
         self.query = query
+        self.updateServingSize = updateServingSize
     }
 
     var body: some View {
         ScrollView {
             VStack {
                 ForEach(meal.items, id: \.name) { item in
-                    NutritionInformationView(item: item, input: "\(item.serving_size_g)")
+                    NutritionInformationView(item: item, input: item.serving_size_g, updateServingSize: updateServingSize)
                         .maxWidth()
                         .background(Color.element)
                 }
@@ -84,11 +87,15 @@ struct MealInformationView: View {
 struct NutritionInformationView: View {
 
     private let item: NutritionalItemViewModel
+    private let updateServingSize: (String, NutritionalItemViewModel) -> Void
+
     @State private var input: String
 
-    init(item: NutritionalItemViewModel, input: String) {
+
+    init(item: NutritionalItemViewModel, input: CGFloat, updateServingSize: @escaping (String, NutritionalItemViewModel) -> Void) {
         self.item = item
-        _input = State(initialValue: input)
+        self.updateServingSize = updateServingSize
+        _input = State(initialValue: "\(input)")
     }
 
     var body: some View {
@@ -106,7 +113,7 @@ struct NutritionInformationView: View {
                 VStack {
                     Text("\(item.calories) calories")
 
-                    Text("\(item.nutrients[.protein_g] ?? 0) grams of protein")
+                    Text("\(item.value(for: .protein_g)) grams of protein")
 
                     Spacer()
 
@@ -115,7 +122,10 @@ struct NutritionInformationView: View {
 
                         HStack {
                             TextField("Amount", text: $input)
-
+                                .keyboardType(.numberPad)
+                                .onChange(of: input) { value in
+                                    updateServingSize(value, item)
+                                }
 
                             Text("g")
                         }
@@ -126,6 +136,7 @@ struct NutritionInformationView: View {
     }
 
 }
+
 struct NutritionCircleGraph: View {
 
     let item: NutritionalItemViewModel

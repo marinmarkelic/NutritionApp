@@ -25,7 +25,9 @@ class MealStorageViewModel: Object {
 class NutritionalItemStorageViewModel: Object {
 
     @Persisted var name: String
-    @Persisted var calories: Float
+    @Persisted var calories_baseline: Float
+    @Persisted var serving_size_g: Float
+    @Persisted var serving_size_baseline_g: Float
     @Persisted var fat_total_g: Float
     @Persisted var fat_saturated_g: Float
     @Persisted var protein_g: Float
@@ -42,7 +44,9 @@ class NutritionalItemStorageViewModel: Object {
         self.init()
 
         name = model.name
-        calories = Float(model.calories)
+        calories_baseline = Float(model.calories_baseline)
+        serving_size_g = Float(model.serving_size_g)
+        serving_size_baseline_g = Float(model.serving_size_baseline_g)
         fat_total_g = Float(model.value(for: .fat_total_g))
         fat_saturated_g = Float(model.value(for: .fat_saturated_g))
         protein_g = Float(model.value(for: .protein_g))

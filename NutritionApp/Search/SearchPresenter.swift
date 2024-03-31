@@ -1,4 +1,5 @@
 import Combine
+import Foundation
 import Dependencies
 
 class SearchPresenter: ObservableObject {
@@ -26,6 +27,12 @@ class SearchPresenter: ObservableObject {
 
             await storageUseCase.save(meal: meal)
         }
+    }
+
+    func update(servingSize: String, for nutritionItem: NutritionalItemViewModel) {
+        let value = CGFloat(Float(servingSize) ?? 0)
+
+        meal = meal.update(servingSize: value, for: nutritionItem)
     }
 
     func print() {}
