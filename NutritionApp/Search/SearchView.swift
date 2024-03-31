@@ -72,6 +72,9 @@ struct MealInformationView: View {
     var body: some View {
         ScrollView {
             VStack {
+                NutritionCircleGraph(meal: meal)
+                    .maxWidth()
+
                 ForEach(meal.items, id: \.name) { item in
                     NutritionInformationView(item: item, input: item.serving_size_g, updateServingSize: updateServingSize)
                         .maxWidth()
@@ -91,7 +94,6 @@ struct NutritionInformationView: View {
 
     @State private var input: String
 
-
     init(item: NutritionalItemViewModel, input: CGFloat, updateServingSize: @escaping (String, NutritionalItemViewModel) -> Void) {
         self.item = item
         self.updateServingSize = updateServingSize
@@ -99,38 +101,19 @@ struct NutritionInformationView: View {
     }
 
     var body: some View {
-        VStack {
-            Text("Information for \(item.name)")
+        HStack {
+            Text(item.name)
+
+            Spacer()
 
             HStack {
-                VStack {
-                    Text(item.name)
-
-                    NutritionCircleGraph(item: item)
-                        .frame(width: 200, height: 200)
-                }
-
-                VStack {
-                    Text("\(item.calories) calories")
-
-                    Text("\(item.value(for: .protein_g)) grams of protein")
-
-                    Spacer()
-
-                    VStack {
-                        Text("Serving size:")
-
-                        HStack {
-                            TextField("Amount", text: $input)
-                                .keyboardType(.numberPad)
-                                .onChange(of: input) { value in
-                                    updateServingSize(value, item)
-                                }
-
-                            Text("g")
-                        }
+                TextField("Amount", text: $input)
+                    .keyboardType(.numberPad)
+                    .onChange(of: input) { value in
+                        updateServingSize(value, item)
                     }
-                }
+
+                Text("g")
             }
         }
     }
@@ -139,16 +122,38 @@ struct NutritionInformationView: View {
 
 struct NutritionCircleGraph: View {
 
-    let item: NutritionalItemViewModel
+    private let strokeLineWidth: CGFloat = 60
+
+    let meal: MealViewModel
+
+    @State var circleSize: CGFloat = 100
 
     var body: some View {
-        ZStack {
-            ForEach(item.graphData.data, id: \.color) { data in
-                Circle()
-                    .trim(from: data.previousCompleton, to: data.previousCompleton + data.completion)
-                    .stroke(data.color, style: StrokeStyle(lineWidth: 60, lineCap: .butt))
-                    .frame(width: 200 - 60, height: 200 - 60)
+        HStack {
+            VStack {
+                Text("\(meal.name)")
+
+                ZStack {
+                    ForEach(meal.graphData.data, id: \.color) { data in
+                        Circle()
+                            .trim(from: data.previousCompleton, to: data.previousCompleton + data.completion)
+                            .stroke(data.color, style: StrokeStyle(lineWidth: strokeLineWidth, lineCap: .butt))
+                            .frame(width: circleSize)
+                    }
+                }
+                .size(with: 200)
+                .animation(.bouncy, value: meal)
+                .onSizeChange { size in
+                    let newCircleSize = size.width - strokeLineWidth
+                    circleSize = newCircleSize > .zero ? newCircleSize : .zero
+                }
             }
+        }
+
+        VStack {
+            Text("\(meal.calories) calories")
+
+            Text("\(meal.value(for: .protein_g)) grams of protein")
         }
     }
 

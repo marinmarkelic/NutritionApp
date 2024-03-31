@@ -3,21 +3,36 @@ import SwiftUI
 extension View {
 
     func maxSize() -> some View {
-        self.frame(maxWidth: .infinity, maxHeight: .infinity)
+        frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 
     func maxWidth() -> some View {
-        self.frame(maxWidth: .infinity)
+        frame(maxWidth: .infinity)
     }
 
     func maxHeight() -> some View {
-        self.frame(maxHeight: .infinity)
+        frame(maxHeight: .infinity)
+    }
+
+    func size(with size: CGFloat, alignment: Alignment = .center) -> some View {
+        frame(width: size, height: size, alignment: alignment)
     }
 
     func dismissKeyboardOnTap() -> some View {
         onTapGesture {
             UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
         }
+    }
+
+    func onSizeChange(onChange: @escaping (CGSize) -> Void) -> some View {
+        background(
+            GeometryReader { proxy in
+                Color
+                    .clear
+                    .preference(key: SizePreferenceKey.self, value: proxy.size)
+            }
+        )
+        .onPreferenceChange(SizePreferenceKey.self, perform: onChange)
     }
 
 }

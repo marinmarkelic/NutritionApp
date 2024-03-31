@@ -61,9 +61,9 @@ struct DailyNutrition {
     func add(_ model: MealViewModel) -> DailyNutrition {
         DailyNutrition(
             calories: (calories + model.calories).rounded(),
-            protein: (protein + model.getNutrientValue(for: .protein_g)).rounded(),
-            carbohydrates: (carbohydrates + model.getNutrientValue(for: .carbohydrates_total_g)).rounded(),
-            fat: (fat + model.getNutrientValue(for: .fat_total_g)).rounded(),
+            protein: (protein + model.value(for: .protein_g)).rounded(),
+            carbohydrates: (carbohydrates + model.value(for: .carbohydrates_total_g)).rounded(),
+            fat: (fat + model.value(for: .fat_total_g)).rounded(),
             items: items + [model.name])
     }
 

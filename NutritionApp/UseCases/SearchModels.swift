@@ -21,7 +21,11 @@ struct MealViewModel: Equatable, CustomStringConvertible, Identifiable {
         return calories
     }
 
-    func getNutrientValue(for nutrient: Nutrient) -> CGFloat {
+    var graphData: GraphViewModel {
+        GraphViewModel(from: self)
+    }
+
+    func value(for nutrient: Nutrient) -> CGFloat {
         guard !items.isEmpty else { return .zero }
 
         var value: CGFloat = .zero
@@ -99,10 +103,6 @@ struct NutritionalItemViewModel: Equatable {
         nutrients[.carbohydrates_total_g]! + nutrients[.fat_total_g]! + nutrients[.protein_g]!
     }
 
-    var graphData: GraphViewModel {
-        GraphViewModel(from: self)
-    }
-
     var serving_size_multiplier: CGFloat {
         serving_size_baseline_g / serving_size_g
     }
@@ -124,8 +124,9 @@ struct NutritionalItemViewModel: Equatable {
         }
     }
 
-    func value(for nutrient: Nutrient) -> CGFloat {
-        (nutrients[nutrient] ?? 0) * serving_size_multiplier
+    func value(for nutrient: Nutrient, ignoringMultiplier: Bool = false) -> CGFloat {
+        let multiplier = ignoringMultiplier ? 1 : serving_size_multiplier
+        return (nutrients[nutrient] ?? 0) * multiplier
     }
 
     func with(servingSize: CGFloat) -> NutritionalItemViewModel {
@@ -230,7 +231,7 @@ struct GraphViewModel {
 
     let data: [GraphViewModelData]
 
-    fileprivate init(from model: NutritionalItemViewModel) {
+    fileprivate init(from model: MealViewModel) {
         var progress: CGFloat = 0
         var sum: CGFloat = 0
         GraphViewModel.evaluatedNutrients.forEach { nutrient in
