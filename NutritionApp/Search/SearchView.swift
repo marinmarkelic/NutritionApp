@@ -10,7 +10,7 @@ struct SearchView: View {
         VStack(spacing: 0) {
             if presenter.meal.items.count > 0 {
                 VStack {
-                    MealInformationView(meal: presenter.meal, query: presenter.query)
+                    MealInformationView(meal: presenter.meal, query: presenter.query, updateServingSize: presenter.update)
 
                     HStack {
                         Button("Save") {
@@ -35,6 +35,7 @@ struct SearchView: View {
         .maxWidth()
         .padding(8)
         .background(Color.background)
+        .dismissKeyboardOnTap()
     }
 
     private func searchBar() -> some View {
@@ -60,17 +61,22 @@ struct MealInformationView: View {
 
     private let meal: MealViewModel
     private let query: String
+    private let updateServingSize: (String, NutritionalItemViewModel) -> Void
 
-    init(meal: MealViewModel, query: String) {
+    init(meal: MealViewModel, query: String, updateServingSize: @escaping (String, NutritionalItemViewModel) -> Void) {
         self.meal = meal
         self.query = query
+        self.updateServingSize = updateServingSize
     }
 
     var body: some View {
         ScrollView {
             VStack {
+                NutritionCircleGraph(meal: meal)
+                    .maxWidth()
+
                 ForEach(meal.items, id: \.name) { item in
-                    NutritionInformationView(item: item, input: "\(item.serving_size_g)")
+                    NutritionInformationView(item: item, input: item.serving_size_g, updateServingSize: updateServingSize)
                         .maxWidth()
                         .background(Color.element)
                 }
@@ -84,60 +90,70 @@ struct MealInformationView: View {
 struct NutritionInformationView: View {
 
     private let item: NutritionalItemViewModel
+    private let updateServingSize: (String, NutritionalItemViewModel) -> Void
+
     @State private var input: String
 
-    init(item: NutritionalItemViewModel, input: String) {
+    init(item: NutritionalItemViewModel, input: CGFloat, updateServingSize: @escaping (String, NutritionalItemViewModel) -> Void) {
         self.item = item
-        _input = State(initialValue: input)
+        self.updateServingSize = updateServingSize
+        _input = State(initialValue: "\(input)")
     }
 
     var body: some View {
-        VStack {
-            Text("Information for \(item.name)")
+        HStack {
+            Text(item.name)
+
+            Spacer()
 
             HStack {
-                VStack {
-                    Text(item.name)
-
-                    NutritionCircleGraph(item: item)
-                        .frame(width: 200, height: 200)
-                }
-
-                VStack {
-                    Text("\(item.calories) calories")
-
-                    Text("\(item.nutrients[.protein_g] ?? 0) grams of protein")
-
-                    Spacer()
-
-                    VStack {
-                        Text("Serving size:")
-
-                        HStack {
-                            TextField("Amount", text: $input)
-
-
-                            Text("g")
-                        }
+                TextField("Amount", text: $input)
+                    .keyboardType(.numberPad)
+                    .onChange(of: input) { value in
+                        updateServingSize(value, item)
                     }
-                }
+
+                Text("g")
             }
         }
     }
 
 }
+
 struct NutritionCircleGraph: View {
 
-    let item: NutritionalItemViewModel
+    private let strokeLineWidth: CGFloat = 60
+
+    let meal: MealViewModel
+
+    @State var circleSize: CGFloat = 100
 
     var body: some View {
-        ZStack {
-            ForEach(item.graphData.data, id: \.color) { data in
-                Circle()
-                    .trim(from: data.previousCompleton, to: data.previousCompleton + data.completion)
-                    .stroke(data.color, style: StrokeStyle(lineWidth: 60, lineCap: .butt))
-                    .frame(width: 200 - 60, height: 200 - 60)
+        HStack {
+            VStack {
+                Text("\(meal.name)")
+
+                ZStack {
+                    ForEach(meal.graphData.data, id: \.color) { data in
+                        Circle()
+                            .trim(from: data.previousCompleton, to: data.previousCompleton + data.completion)
+                            .stroke(data.color, style: StrokeStyle(lineWidth: strokeLineWidth, lineCap: .butt))
+                            .frame(width: circleSize)
+                    }
+                }
+                .size(with: 200)
+                .animation(.bouncy, value: meal)
+                .onSizeChange { size in
+                    let newCircleSize = size.width - strokeLineWidth
+                    circleSize = newCircleSize > .zero ? newCircleSize : .zero
+                }
             }
+        }
+
+        VStack {
+            Text("\(meal.calories) calories")
+
+            Text("\(meal.value(for: .protein_g)) grams of protein")
         }
     }
 

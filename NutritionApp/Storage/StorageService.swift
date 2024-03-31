@@ -5,7 +5,12 @@ import RealmSwift
 class StorageService {
 
     private var realm: Realm {
-        try! Realm()
+        guard let realm = try? Realm() else {
+            resetRealm()
+            return try! Realm()
+        }
+
+        return realm
     }
 
     func save(meal: MealViewModel) {
