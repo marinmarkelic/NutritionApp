@@ -6,6 +6,7 @@ extension Color {
 
     static let background = Color(hex: 0x343A40)
     static let element = Color(hex: 0x495057)
+    static let darkElement = Color(hex: 0x292a30)
 
 }
 
