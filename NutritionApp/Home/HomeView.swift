@@ -28,22 +28,29 @@ struct HomeView: View {
                     }
                 }
             }
-            .onAppear {
-                presenter.fetchMeals()
-                presenter.fetchCalories()
-            }
         }
         .maxSize()
         .padding(8)
         .background(Color.background)
-        .onAppear(perform: presenter.fetchMeals)
+        .task {
+            await presenter.fetchMeals()
+            await presenter.fetchCalories()
+        }
     }
 
     private func chart(for calories: [(Int, Int)]) -> some View {
         Chart {
             ForEach(calories, id: \.0) { day, calories in
+                if let dailyTarget = presenter.dailyTarget {
+                    LineMark(
+                        x: .value("Date", .dateWithAdded(days: day), unit: .day),
+                        y: .value("Calories", dailyTarget),
+                        series: .value("type", "Target Calories"))
+                    .foregroundStyle(.blue)
+                }
+
                 LineMark(
-                    x: .value("Date2", .dateWithAdded(days: day), unit: .day),
+                    x: .value("Date", .dateWithAdded(days: day), unit: .day),
                     y: .value("Calories", calories),
                     series: .value("type", "Eaten calories"))
                 .symbol(.circle)
