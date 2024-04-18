@@ -6,6 +6,14 @@ actor StorageUseCase {
     @Dependency(\.storageService)
     private var service: StorageService
 
+    func save(userMetric: Any?, for key: String) {
+        service.save(value: userMetric, for: key)
+    }
+
+    func userMetric(for key: String) -> Any? {
+        service.object(for: key)
+    }
+
     func save(meal: MealViewModel) {
         service.save(meal: meal)
     }

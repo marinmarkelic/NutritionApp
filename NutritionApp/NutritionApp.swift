@@ -14,6 +14,9 @@ struct NutritionApp: App {
 
                 RatingsView()
                     .tabItem { Text("Ratings") }
+
+                ProfileView()
+                    .tabItem { Text("Profile") }
             }
         }
     }

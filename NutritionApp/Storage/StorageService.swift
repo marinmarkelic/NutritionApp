@@ -13,6 +13,15 @@ class StorageService {
         return realm
     }
 
+    private lazy var defaults: UserDefaults = {
+        UserDefaults.standard
+    }()
+
+}
+
+// MARK: - Realm
+extension StorageService {
+
     func save(meal: MealViewModel) {
         try! realm.write {
             realm.add(MealStorageViewModel(from: meal))
@@ -69,6 +78,19 @@ class StorageService {
         } catch {
             Swift.print("Error resetting Realm: \(error)")
         }
+    }
+
+}
+
+// MARK: - UserDefaults
+extension StorageService {
+
+    func save(value: Any?, for key: String) {
+        defaults.setValue(value, forKey: key)
+    }
+
+    func object(for key: String) -> Any? {
+        defaults.object(forKey: key)
     }
 
 }

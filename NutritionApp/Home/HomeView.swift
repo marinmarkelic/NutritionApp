@@ -3,9 +3,9 @@ import SwiftUI
 
 struct HomeView: View {
 
-    private let chartHeight: Int = 200
     private let chartYDomain: Int = 600
     private let chartXDomain: Int = 86400 * 4 /// Number of seconds in a day times number of days
+    private let chartHeight: CGFloat? = 200
 
     @ObservedObject private var presenter = HomePresenter()
 
