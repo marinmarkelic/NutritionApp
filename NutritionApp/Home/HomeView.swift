@@ -16,8 +16,12 @@ struct HomeView: View {
     var body: some View {
         VStack {
             ScrollView {
-                if let calories = presenter.calories {
-                    chart(for: calories)
+                if let dailyNutrition = presenter.dailyNutrition {
+                    chart(for: dailyNutrition)
+                }
+
+                if let dailyTarget = presenter.dailyTarget, let nutritionForToday = presenter.nutritionForToday {
+                    dailyMacros(for: dailyTarget, nutrition: nutritionForToday)
                 }
 
                 VStack(spacing: 8) {
@@ -38,20 +42,20 @@ struct HomeView: View {
         }
     }
 
-    private func chart(for calories: [(Int, Int)]) -> some View {
+    private func chart(for dailyNutrition: [(Int, DailyNutrition)]) -> some View {
         Chart {
-            ForEach(calories, id: \.0) { day, calories in
-                if let dailyTarget = presenter.dailyTarget {
+            ForEach(dailyNutrition, id: \.0) { day, nutrition in
+                if let targetCalories = presenter.dailyTarget?.calories {
                     LineMark(
                         x: .value("Date", .dateWithAdded(days: day), unit: .day),
-                        y: .value("Calories", dailyTarget),
+                        y: .value("Calories", targetCalories),
                         series: .value("type", "Target Calories"))
                     .foregroundStyle(.blue)
                 }
 
                 LineMark(
                     x: .value("Date", .dateWithAdded(days: day), unit: .day),
-                    y: .value("Calories", calories),
+                    y: .value("Calories", nutrition.calories),
                     series: .value("type", "Eaten calories"))
                 .symbol(.circle)
                 .interpolationMethod(.catmullRom)
@@ -85,6 +89,35 @@ struct HomeView: View {
         .frame(maxWidth: .infinity)
         .padding()
         .background(Color.darkElement)
+    }
+
+    func dailyMacros(for dailyTarget: DailyTarget, nutrition: DailyNutrition) -> some View {
+        ScrollView(.horizontal) {
+            HStack {
+                macrosCard(title: "Protein", currentValue: nutrition.protein, targetValue: dailyTarget.gramsOfProtein)
+
+                macrosCard(title: "Fat", currentValue: nutrition.fat, targetValue: dailyTarget.gramsOfFat)
+
+                macrosCard(title: "Carbs", currentValue: nutrition.carbohydrates, targetValue: dailyTarget.gramsOfCarbs)
+            }
+        }
+        .scrollIndicators(.hidden)
+    }
+
+    func macrosCard(title: String, currentValue: Float, targetValue: Float) -> some View {
+        HStack {
+            Rectangle()
+                .fill(Color.red)
+                .frame(width: 40, height: 40)
+
+            VStack {
+                Text(title)
+
+                Text("\(Int(currentValue)) / \(Int(targetValue))")
+            }
+        }
+        .padding()
+        .background(Color.element)
     }
 
 }

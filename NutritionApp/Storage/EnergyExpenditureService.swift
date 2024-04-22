@@ -44,6 +44,7 @@ enum ActivityFrequency: String, CaseIterable, Identifiable {
 
 }
 
+/// https://healthyeater.com/how-to-calculate-your-macros
 class EnergyExpenditureService {
 
     func totalDailyEnergyExpenditure(
@@ -62,6 +63,23 @@ class EnergyExpenditureService {
         }
 
         return bmr * phisicalActivity.activityFactor
+    }
+
+    func gramsOfProtein(for weight: Float) -> Float {
+        weight * 0.8
+    }
+
+    func gramsOfFat(for dailyCalories: Float) -> Float {
+        let kCalsOfFat = dailyCalories * 0.25
+        return kCalsOfFat / 9
+    }
+
+    func gramsOfCarbs(for dailyCalories: Float, gramsOfProtein: Float, gramsOfFat: Float) -> Float {
+        let kcalsOfProtein = gramsOfProtein * 4
+        let kcalsOfFat = gramsOfFat * 9
+        let kcalsOfCarbs = dailyCalories - kcalsOfProtein - kcalsOfFat
+
+        return kcalsOfCarbs / 4
     }
 
 }

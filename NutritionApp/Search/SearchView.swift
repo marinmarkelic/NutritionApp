@@ -94,7 +94,7 @@ struct NutritionInformationView: View {
 
     @State private var input: String
 
-    init(item: NutritionalItemViewModel, input: CGFloat, updateServingSize: @escaping (String, NutritionalItemViewModel) -> Void) {
+    init(item: NutritionalItemViewModel, input: Float, updateServingSize: @escaping (String, NutritionalItemViewModel) -> Void) {
         self.item = item
         self.updateServingSize = updateServingSize
         _input = State(initialValue: "\(input)")
