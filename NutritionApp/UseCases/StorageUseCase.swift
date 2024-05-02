@@ -82,6 +82,36 @@ actor StorageUseCase {
         return calorieArray
     }
 
+    func fetchCalories(from daysAgo: Int) -> [(Int, Int)] {
+        let meals = service.fetchMeals(from: daysAgo)
+
+        /// (Days ago, Calories)
+        var caloriesForDaysAgo: [Int: Int] = [:]
+        meals.forEach { meal in
+            let daysAgo = meal.date.distance(from: .now, only: .day)
+            let calories = meal.calories
+
+            guard let writtenCalories = caloriesForDaysAgo[daysAgo] else {
+                caloriesForDaysAgo[daysAgo] = Int(calories)
+                return
+            }
+
+            caloriesForDaysAgo[daysAgo] = Int(calories) + writtenCalories
+        }
+
+        var calorieArray: [(Int, Int)] = []
+        caloriesForDaysAgo.keys.forEach { key in
+            let key = Int(key)
+            guard let calories = caloriesForDaysAgo[key] else { return }
+
+            calorieArray.append((key, calories))
+        }
+
+        print(caloriesForDaysAgo)
+
+        return calorieArray
+    }
+
     func printAll() {
         storageService.print()
     }

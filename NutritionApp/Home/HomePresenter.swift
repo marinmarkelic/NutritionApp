@@ -46,4 +46,16 @@ class HomePresenter: ObservableObject {
         chartHeight = max(maxCalorieValue, Int(dailyTarget?.calories ?? 0)) + chartHeightOffset
     }
 
+    @MainActor
+    func fetchCalories() {
+        Task { [weak self] in
+            guard let self else { return }
+
+//            calories = await storageUseCase.fetchCalories(from: 3)
+            let fetchedArray = [(0, 500), (-1, 1567), (-2, 1467)]
+            calories = fetchedArray
+            chartHeight = (fetchedArray.map { $0.1 }.max() ?? 0) + chartHeightOffset
+        }
+    }
+
 }
