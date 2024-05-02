@@ -30,7 +30,7 @@ class SearchPresenter: ObservableObject {
     }
 
     func update(servingSize: String, for nutritionItem: NutritionalItemViewModel) {
-        let value = CGFloat(Float(servingSize) ?? 0)
+        let value = Float(servingSize) ?? 0
 
         meal = meal.update(servingSize: value, for: nutritionItem)
     }

@@ -1,4 +1,5 @@
 import Dependencies
+import Foundation
 
 actor RatingsUseCase {
 
@@ -30,41 +31,6 @@ actor RatingsUseCase {
 
     private func fetchMeals(from daysAgo: Int) -> [MealViewModel] {
         storageService.fetchMeals(from: daysAgo)
-    }
-
-}
-
-import Foundation
-
-struct DailyNutrition {
-
-    let calories: CGFloat
-    let protein: CGFloat
-    let carbohydrates: CGFloat
-    let fat: CGFloat
-    let items: [String]
-
-    init(
-        calories: CGFloat = 0,
-        protein: CGFloat = 0,
-        carbohydrates: CGFloat = 0,
-        fat: CGFloat = 0,
-        items: [String] = []
-    ) {
-        self.calories = calories
-        self.protein = protein
-        self.carbohydrates = carbohydrates
-        self.fat = fat
-        self.items = items
-    }
-
-    func add(_ model: MealViewModel) -> DailyNutrition {
-        DailyNutrition(
-            calories: (calories + model.calories).rounded(),
-            protein: (protein + model.value(for: .protein_g)).rounded(),
-            carbohydrates: (carbohydrates + model.value(for: .carbohydrates_total_g)).rounded(),
-            fat: (fat + model.value(for: .fat_total_g)).rounded(),
-            items: items + [model.name])
     }
 
 }
