@@ -30,29 +30,12 @@ struct SearchView: View {
 
             Spacer()
 
-            searchBar()
+            SearchBar(text: $query, action: presenter.search)
         }
         .maxWidth()
         .padding(8)
         .background(Color.background)
         .dismissKeyboardOnTap()
-    }
-
-    private func searchBar() -> some View {
-        VStack {
-            HStack {
-                TextField("Search", text: $query)
-
-                Circle()
-                    .foregroundStyle(Color.yellow)
-                    .frame(width: 30, height: 30)
-                    .onTapGesture {
-                        presenter.search(query: query)
-                    }
-            }
-            .padding(16)
-            .background(Color.gray.opacity(0.2))
-        }
     }
 
 }
