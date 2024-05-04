@@ -4,14 +4,19 @@ struct ChatsView: View {
 
     @ObservedObject private var presenter = ChatsPresenter()
 
+    private let headerHeight: CGFloat = 40
+
     @State private var text: String = ""
 
     var body: some View {
         ZStack {
             VStack(spacing: 0) {
-                ScrollView {
-
+                ScrollView(.vertical) {
+                    textsStack
+                        .maxWidth()
                 }
+                .defaultScrollAnchor(.bottom)
+                .padding(.top, headerHeight)
                 .background(Color.darkElement)
 
                 SearchBar(text: $text, action: { _ in })
@@ -39,8 +44,16 @@ struct ChatsView: View {
         }
         .padding(.horizontal, 8)
         .maxWidth()
-        .frame(height: 40)
+        .frame(height: headerHeight)
         .background(Material.thin)
+    }
+
+    private var textsStack: some View {
+        VStack {
+            ForEach(presenter.texts) { text in
+                TextCell(model: text)
+            }
+        }
     }
 
 }
