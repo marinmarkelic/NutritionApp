@@ -83,7 +83,7 @@ actor StorageUseCase {
     }
 
     func fetchCalories(from daysAgo: Int) -> [(Int, Int)] {
-        let meals = service.fetchMeals(from: daysAgo)
+        let meals = storageService.fetchMeals(from: daysAgo)
 
         /// (Days ago, Calories)
         var caloriesForDaysAgo: [Int: Int] = [:]
