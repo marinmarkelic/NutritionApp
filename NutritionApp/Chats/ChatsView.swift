@@ -4,6 +4,8 @@ struct ChatsView: View {
 
     @ObservedObject private var presenter = ChatsPresenter()
 
+    @State private var conversation: Conversation?
+
     private let headerHeight: CGFloat = 40
 
     var body: some View {
@@ -18,7 +20,7 @@ struct ChatsView: View {
                 .background(Color.darkElement)
 
                 SearchBar(text: $presenter.query) { _ in
-                    presenter.send()
+                    presenter.send(id: conversation?.id)
                 }
             }
 
@@ -30,6 +32,12 @@ struct ChatsView: View {
         }
         .maxSize()
         .background(Color.background)
+        .onReceive(presenter.conversationPublisher) { conversation in
+            self.conversation = conversation
+        }
+        .onReceive(presenter.queryStatusPublisher) { status in
+            print("--- \(status)")
+        }
     }
 
     private var header: some View {
@@ -39,7 +47,6 @@ struct ChatsView: View {
                 .frame(width: 30, height: 30)
 
             Text("Assistant")
-                .foregroundStyle(Color.gray)
 
             Spacer()
         }
@@ -51,8 +58,8 @@ struct ChatsView: View {
 
     private var textsStack: some View {
         VStack {
-            if let conversation = presenter.conversation {
-                ForEach(conversation.messages) { text in
+            if let conversation {
+                ForEach(conversation.messages.reversed()) { text in
                     TextCell(model: text)
                 }
             }

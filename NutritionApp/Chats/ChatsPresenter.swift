@@ -1,3 +1,4 @@
+import Combine
 import SwiftUI
 import Dependencies
 
@@ -7,14 +8,21 @@ class ChatsPresenter: ObservableObject {
     private var useCase: ChatsUseCase
 
     @Published var query: String = ""
-    @Published var conversation: Conversation?
+
+    var queryStatusPublisher: AnyPublisher<QueryStatus, Never> {
+        useCase.queryStatusPublisher
+    }
+
+    var conversationPublisher: AnyPublisher<Conversation?, Never> {
+        useCase.conversationPublisher
+    }
 
     @MainActor
-    func send() {
+    func send(id: String?) {
         let queryToSend = query
         query = ""
         Task {
-            conversation = await useCase.send(text: queryToSend, conversationId: conversation?.id)
+            await useCase.send(text: queryToSend, conversationId: id)
         }
     }
 

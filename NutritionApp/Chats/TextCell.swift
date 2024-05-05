@@ -18,6 +18,7 @@ struct TextCell: View {
                 Spacer()
 
                 Text(model.text)
+                    .foregroundStyle(Color.gray)
                     .padding()
                     .background { Color.black.opacity(0.5) }
             }
@@ -25,6 +26,7 @@ struct TextCell: View {
         case .assistant:
             HStack {
                 Text(model.text)
+                    .foregroundStyle(Color.gray)
                     .padding()
                     .background { Color.black.opacity(0.5) }
 

@@ -1,7 +1,8 @@
+import Combine
 import Dependencies
 import Foundation
 
-actor ChatsUseCase {
+class ChatsUseCase {
 
     @Dependency(\.openAIClient)
     private var client: OpenAIClient
@@ -9,7 +10,15 @@ actor ChatsUseCase {
     @Dependency(\.storageService)
     private var storageService: StorageService
 
-    func send(text: String, conversationId: String?) async -> Conversation? {
+    var queryStatusPublisher: AnyPublisher<QueryStatus, Never> {
+        client.queryStatusPublisher
+    }
+
+    var conversationPublisher: AnyPublisher<Conversation?, Never> {
+        client.conversationPublisher
+    }
+
+    func send(text: String, conversationId: String?) async {
         await client.send(text: text, conversationId: conversationId)
     }
 

@@ -1,42 +1,76 @@
+import Combine
+import Foundation
 import Dependencies
 import SwiftOpenAI
+
+enum QueryStatus {
+
+    case available
+    case running
+    case failed
+
+}
 
 class OpenAIClient {
 
     @Dependency(\.secretsClient) private var secretsClient
 
+    private var queryStatusSubject = CurrentValueSubject<QueryStatus, Never>(.available)
+    private var conversationSubject = PassthroughSubject<Conversation?, Never>()
+
+    var queryStatusPublisher: AnyPublisher<QueryStatus, Never> {
+        queryStatusSubject
+            .removeDuplicates()
+            .receive(on: DispatchQueue.main)
+            .eraseToAnyPublisher()
+    }
+
+    var conversationPublisher: AnyPublisher<Conversation?, Never> {
+        conversationSubject
+            .removeDuplicates()
+            .receive(on: DispatchQueue.main)
+            .eraseToAnyPublisher()
+    }
+
     private lazy var service: OpenAIService = {
         OpenAIServiceFactory.service(apiKey: secretsClient.openAIKey)
     }()
 
+    private lazy var nutritionAssistantId: String = {
+        secretsClient.nutritionAssistantId
+    }()
+
     init() {}
 
-    func send(text: String, conversationId: String?) async -> Conversation? {
+    func send(text: String, conversationId: String?) async {
+        queryStatusSubject.send(.running)
         if let conversationId {
-            return await sendMessage(text: text, conversationId: conversationId)
+            await sendMessage(text: text, conversationId: conversationId)
+            queryStatusSubject.send(.available)
+            return
         }
 
-        guard let newThreadId = await createNewThread() else { return nil }
+        guard let newThreadId = await createNewThread() else {
+            queryStatusSubject.send(.failed)
+            return
+        }
 
-        return await sendMessage(text: text, conversationId: newThreadId)
+        await sendMessage(text: text, conversationId: newThreadId)
+        queryStatusSubject.send(.available)
     }
 
-    private func sendMessage(text: String, conversationId: String) async -> Conversation {
-        let assId = "asst_IypCXensPbrrZu6ms6vZqr9o"
+    private func sendMessage(text: String, conversationId: String) async {
         let message = MessageParameter(role: .user, content: text)
         let _ = try? await service.createMessage(threadID: conversationId, parameters: message)
-        let parameters = RunParameter(assistantID: assId)
-        let run = try? await service.createRun(threadID: conversationId, parameters: parameters)
+        await retreiveMessages(for: conversationId)
+        let parameters = RunParameter(assistantID: nutritionAssistantId)
 
-        var runStatus = run?.status ?? ""
-        while runStatus != "completed" {
-            let run = try? await service.retrieveRun(threadID: conversationId, runID: run?.id ?? "")
-            runStatus = run?.status ?? ""
+        guard let run = try? await service.createRun(threadID: conversationId, parameters: parameters) else {
+            queryStatusSubject.send(.failed)
+            return
         }
 
-        let messages = await retreiveMessages(for: conversationId, runId: run?.id)
-
-        return Conversation(id: conversationId, assistantId: assId, messages: messages)
+        await observeRun(run: run, threadId: conversationId)
     }
 
     private func createNewThread() async -> String? {
@@ -45,7 +79,7 @@ class OpenAIClient {
         return thread?.id
     }
 
-    private func retreiveMessages(for conversationId: String, runId: String?) async -> [Message] {
+    private func retreiveMessages(for conversationId: String) async {
         guard
             let messages = try? await service.listMessages(
                 threadID: conversationId,
@@ -54,56 +88,32 @@ class OpenAIClient {
                 after: nil,
                 before: nil,
                 runID: nil)
-        else { return [] }
+        else { return }
 
-        return messages.data.map { Message(from: $0) }
+        let conversationMessages = messages.data.map { Message(from: $0) }
+        let conversation = Conversation(id: conversationId, assistantId: nutritionAssistantId, messages: conversationMessages)
+        conversationSubject.send(conversation)
     }
 
-}
+    private func observeRun(run: RunObject, threadId: String) async {
+        var counter = 0
+        var runStatus = run.status
+        while runStatus != "completed" {
+            guard counter <= 5 else {
+                queryStatusSubject.send(.failed)
+                return
+            }
 
-struct Conversation {
-
-    let id: String
-    let assistantId: String
-    let messages: [Message]
-
-}
-
-struct Message: Identifiable {
-
-    enum MessageRole: String {
-
-        case assistant
-        case user
-
-    }
-
-    let id: String
-    let createdAt: Int
-    let role: MessageRole
-    let text: String
-
-}
-
-extension Message {
-
-    init(from model: MessageObject) {
-        id = model.id
-        createdAt = model.createdAt
-        role = .init(rawValue: model.role)!
-
-        if
-            let content = model.content.first,
-            case MessageContent.text(let text) = content
-        {
-            self.text = text.text.value
-        } else {
-            self.text = ""
+            let run = try? await service.retrieveRun(threadID: threadId, runID: run.id)
+            runStatus = run?.status ?? ""
+            counter += 1
         }
+
+        await retreiveMessages(for: threadId)
+        queryStatusSubject.send(.available)
     }
 
 }
-
 
 extension OpenAIClient: DependencyKey {
 

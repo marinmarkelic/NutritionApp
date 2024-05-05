@@ -21,6 +21,15 @@ struct SecretsClient {
         return apiKey
     }
 
+    var nutritionAssistantId: String {
+        guard let id = secrets["NutritionAssistantId"] as? String else {
+            print("Error - Entry not found in Secrets.plist")
+            return ""
+        }
+
+        return id
+    }
+
     private var secrets: [String: Any] {
         guard let secretsPath = Bundle.main.path(forResource: "Secrets", ofType: "plist") else {
             print("Error - Secrets.plist not found")
