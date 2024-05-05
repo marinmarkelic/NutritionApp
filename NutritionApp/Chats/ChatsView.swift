@@ -6,8 +6,6 @@ struct ChatsView: View {
 
     private let headerHeight: CGFloat = 40
 
-    @State private var text: String = ""
-
     var body: some View {
         ZStack {
             VStack(spacing: 0) {
@@ -19,7 +17,9 @@ struct ChatsView: View {
                 .padding(.top, headerHeight)
                 .background(Color.darkElement)
 
-                SearchBar(text: $text, action: { _ in })
+                SearchBar(text: $presenter.query) { _ in
+                    presenter.send()
+                }
             }
 
             VStack {

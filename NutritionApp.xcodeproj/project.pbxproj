@@ -16,6 +16,7 @@
 		9C3336022BD1537C00BC94D0 /* ProfilePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C3336012BD1537C00BC94D0 /* ProfilePresenter.swift */; };
 		9C3336042BD15F2D00BC94D0 /* EnergyExpenditureService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C3336032BD15F2D00BC94D0 /* EnergyExpenditureService.swift */; };
 		9C34C4062BE6BDA900BA16F8 /* TextCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C34C4052BE6BDA900BA16F8 /* TextCell.swift */; };
+		9C34C4092BE6C88300BA16F8 /* OpenAI in Frameworks */ = {isa = PBXBuildFile; productRef = 9C34C4082BE6C88300BA16F8 /* OpenAI */; };
 		9C396B112B388A8300FEBC0E /* Realm in Frameworks */ = {isa = PBXBuildFile; productRef = 9C396B102B388A8300FEBC0E /* Realm */; };
 		9C396B132B388A8300FEBC0E /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 9C396B122B388A8300FEBC0E /* RealmSwift */; };
 		9C48CF152BA707D700ABA072 /* SearchPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C48CF142BA707D700ABA072 /* SearchPresenter.swift */; };
@@ -84,6 +85,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9C34C4092BE6C88300BA16F8 /* OpenAI in Frameworks */,
 				9C48CF1A2BA723B400ABA072 /* Dependencies in Frameworks */,
 				9C396B132B388A8300FEBC0E /* RealmSwift in Frameworks */,
 				9C48CF1C2BA723B400ABA072 /* DependenciesMacros in Frameworks */,
@@ -249,6 +251,7 @@
 				9C396B122B388A8300FEBC0E /* RealmSwift */,
 				9C48CF192BA723B400ABA072 /* Dependencies */,
 				9C48CF1B2BA723B400ABA072 /* DependenciesMacros */,
+				9C34C4082BE6C88300BA16F8 /* OpenAI */,
 			);
 			productName = NutririonApp;
 			productReference = 9C9B567D2AFA7F9000A4B2BC /* NutritionApp.app */;
@@ -281,6 +284,7 @@
 			packageReferences = (
 				9C396B0F2B388A8300FEBC0E /* XCRemoteSwiftPackageReference "realm-swift" */,
 				9C48CF182BA723B400ABA072 /* XCRemoteSwiftPackageReference "swift-dependencies" */,
+				9C34C4072BE6C88300BA16F8 /* XCRemoteSwiftPackageReference "OpenAI" */,
 			);
 			productRefGroup = 9C9B567E2AFA7F9000A4B2BC /* Products */;
 			projectDirPath = "";
@@ -546,6 +550,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		9C34C4072BE6C88300BA16F8 /* XCRemoteSwiftPackageReference "OpenAI" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/MacPaw/OpenAI.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.2.8;
+			};
+		};
 		9C396B0F2B388A8300FEBC0E /* XCRemoteSwiftPackageReference "realm-swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/realm/realm-swift";
@@ -565,6 +577,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		9C34C4082BE6C88300BA16F8 /* OpenAI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 9C34C4072BE6C88300BA16F8 /* XCRemoteSwiftPackageReference "OpenAI" */;
+			productName = OpenAI;
+		};
 		9C396B102B388A8300FEBC0E /* Realm */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 9C396B0F2B388A8300FEBC0E /* XCRemoteSwiftPackageReference "realm-swift" */;

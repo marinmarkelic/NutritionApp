@@ -9,6 +9,10 @@ actor ChatsUseCase {
     @Dependency(\.storageService)
     private var storageService: StorageService
 
+    func send(text: String) async -> String {
+        await client.send(text: text)
+    }
+
 }
 
 extension ChatsUseCase: DependencyKey {
