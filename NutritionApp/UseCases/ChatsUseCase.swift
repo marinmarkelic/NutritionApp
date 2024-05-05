@@ -9,8 +9,8 @@ actor ChatsUseCase {
     @Dependency(\.storageService)
     private var storageService: StorageService
 
-    func send(text: String) async -> String {
-        await client.send(text: text)
+    func send(text: String, conversationId: String?) async -> Conversation? {
+        await client.send(text: text, conversationId: conversationId)
     }
 
 }

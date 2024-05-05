@@ -39,6 +39,7 @@ struct ChatsView: View {
                 .frame(width: 30, height: 30)
 
             Text("Assistant")
+                .foregroundStyle(Color.gray)
 
             Spacer()
         }
@@ -50,8 +51,10 @@ struct ChatsView: View {
 
     private var textsStack: some View {
         VStack {
-            ForEach(presenter.texts) { text in
-                TextCell(model: text)
+            if let conversation = presenter.conversation {
+                ForEach(conversation.messages) { text in
+                    TextCell(model: text)
+                }
             }
         }
     }
