@@ -10,6 +10,13 @@ struct Conversation: Equatable {
         lhs.id == rhs.id && lhs.assistantId == rhs.assistantId && lhs.messages == rhs.messages
     }
 
+    func add(message: Message) -> Conversation {
+        var messages = messages
+//        messages.append(message)
+        messages.insert(message, at: 0)
+        return Conversation(id: id, assistantId: assistantId, messages: messages)
+    }
+
 }
 
 struct Message: Identifiable, Equatable {

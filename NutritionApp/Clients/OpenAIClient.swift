@@ -16,18 +16,17 @@ class OpenAIClient {
     @Dependency(\.secretsClient) private var secretsClient
 
     private var queryStatusSubject = CurrentValueSubject<QueryStatus, Never>(.available)
-    private var conversationSubject = PassthroughSubject<Conversation?, Never>()
+    private var conversationSubject = CurrentValueSubject<Conversation?, Never>(nil)
 
     var queryStatusPublisher: AnyPublisher<QueryStatus, Never> {
         queryStatusSubject
-            .removeDuplicates()
-            .receive(on: DispatchQueue.main)
+//            .receive(on: DispatchQueue.main)
+            .print("***")
             .eraseToAnyPublisher()
     }
 
     var conversationPublisher: AnyPublisher<Conversation?, Never> {
         conversationSubject
-            .removeDuplicates()
             .receive(on: DispatchQueue.main)
             .eraseToAnyPublisher()
     }
@@ -44,9 +43,9 @@ class OpenAIClient {
 
     func send(text: String, conversationId: String?) async {
         queryStatusSubject.send(.running)
+        appendSentMessage(text: text)
         if let conversationId {
             await sendMessage(text: text, conversationId: conversationId)
-            queryStatusSubject.send(.available)
             return
         }
 
@@ -56,13 +55,23 @@ class OpenAIClient {
         }
 
         await sendMessage(text: text, conversationId: newThreadId)
-        queryStatusSubject.send(.available)
+    }
+
+    private func appendSentMessage(text: String) {
+        let conversation = conversationSubject.value ?? Conversation(id: "", assistantId: "", messages: [])
+        let message = Message(id: "", createdAt: 0, role: .user, text: text)
+        conversationSubject.send(conversation.add(message: message))
+    }
+
+    private func createNewThread() async -> String? {
+        let parameters = CreateThreadParameters()
+        let thread = try? await service.createThread(parameters: parameters)
+        return thread?.id
     }
 
     private func sendMessage(text: String, conversationId: String) async {
         let message = MessageParameter(role: .user, content: text)
         let _ = try? await service.createMessage(threadID: conversationId, parameters: message)
-        await retreiveMessages(for: conversationId)
         let parameters = RunParameter(assistantID: nutritionAssistantId)
 
         guard let run = try? await service.createRun(threadID: conversationId, parameters: parameters) else {
@@ -71,12 +80,6 @@ class OpenAIClient {
         }
 
         await observeRun(run: run, threadId: conversationId)
-    }
-
-    private func createNewThread() async -> String? {
-        let parameters = CreateThreadParameters()
-        let thread = try? await service.createThread(parameters: parameters)
-        return thread?.id
     }
 
     private func retreiveMessages(for conversationId: String) async {
@@ -98,6 +101,7 @@ class OpenAIClient {
     private func observeRun(run: RunObject, threadId: String) async {
         var counter = 0
         var runStatus = run.status
+        print("---- \(runStatus)")
         while runStatus != "completed" {
             guard counter <= 5 else {
                 queryStatusSubject.send(.failed)
@@ -106,6 +110,7 @@ class OpenAIClient {
 
             let run = try? await service.retrieveRun(threadID: threadId, runID: run.id)
             runStatus = run?.status ?? ""
+            print("---- \(runStatus)")
             counter += 1
         }
 

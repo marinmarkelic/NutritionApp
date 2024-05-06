@@ -2,11 +2,13 @@ import SwiftUI
 
 struct ChatsView: View {
 
-    @ObservedObject private var presenter = ChatsPresenter()
-
-    @State private var conversation: Conversation?
+    @ObservedObject private var presenter: ChatsPresenter
 
     private let headerHeight: CGFloat = 40
+
+    init(presenter: ChatsPresenter) {
+        self.presenter = presenter
+    }
 
     var body: some View {
         ZStack {
@@ -20,7 +22,7 @@ struct ChatsView: View {
                 .background(Color.darkElement)
 
                 SearchBar(text: $presenter.query) { _ in
-                    presenter.send(id: conversation?.id)
+                    presenter.send()
                 }
             }
 
@@ -32,12 +34,6 @@ struct ChatsView: View {
         }
         .maxSize()
         .background(Color.background)
-        .onReceive(presenter.conversationPublisher) { conversation in
-            self.conversation = conversation
-        }
-        .onReceive(presenter.queryStatusPublisher) { status in
-            print("--- \(status)")
-        }
     }
 
     private var header: some View {
@@ -58,7 +54,7 @@ struct ChatsView: View {
 
     private var textsStack: some View {
         VStack {
-            if let conversation {
+            if let conversation = presenter.conversation {
                 ForEach(conversation.messages.reversed()) { text in
                     TextCell(model: text)
                 }
