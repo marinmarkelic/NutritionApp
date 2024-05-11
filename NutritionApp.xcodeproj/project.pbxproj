@@ -43,7 +43,7 @@
 		9CBB0A952B2DFC240064EFCC /* StorageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CBB0A942B2DFC240064EFCC /* StorageService.swift */; };
 		9CBB0A972B2DFCB50064EFCC /* StorageModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CBB0A962B2DFCB50064EFCC /* StorageModels.swift */; };
 		9CEA12A02BE40B7700178EA1 /* ChatsPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CEA129F2BE40B7700178EA1 /* ChatsPresenter.swift */; };
-		9CEA12A32BE415B800178EA1 /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CEA12A22BE415B800178EA1 /* SearchBar.swift */; };
+		9CEA12A32BE415B800178EA1 /* CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CEA12A22BE415B800178EA1 /* CustomTextField.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -79,7 +79,7 @@
 		9CBB0A942B2DFC240064EFCC /* StorageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageService.swift; sourceTree = "<group>"; };
 		9CBB0A962B2DFCB50064EFCC /* StorageModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageModels.swift; sourceTree = "<group>"; };
 		9CEA129F2BE40B7700178EA1 /* ChatsPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatsPresenter.swift; sourceTree = "<group>"; };
-		9CEA12A22BE415B800178EA1 /* SearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
+		9CEA12A22BE415B800178EA1 /* CustomTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextField.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -228,7 +228,7 @@
 		9CEA12A12BE415A900178EA1 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				9CEA12A22BE415B800178EA1 /* SearchBar.swift */,
+				9CEA12A22BE415B800178EA1 /* CustomTextField.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -332,7 +332,7 @@
 				9C2E3CA32BB992A50099A6E0 /* PreferenceKeys.swift in Sources */,
 				9C93F96F2B3B05D70033E0BC /* View+Extensions.swift in Sources */,
 				9C34C40E2BE7E4D800BA16F8 /* ChatsModels.swift in Sources */,
-				9CEA12A32BE415B800178EA1 /* SearchBar.swift in Sources */,
+				9CEA12A32BE415B800178EA1 /* CustomTextField.swift in Sources */,
 				9CBB0A8B2B2DF9500064EFCC /* StorageUseCase.swift in Sources */,
 				9C1FD3C72B4466D300D8C6FD /* ChatsUseCase.swift in Sources */,
 				9CEA12A02BE40B7700178EA1 /* ChatsPresenter.swift in Sources */,

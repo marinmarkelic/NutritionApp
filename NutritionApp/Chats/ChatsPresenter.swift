@@ -9,6 +9,8 @@ class ChatsPresenter: ObservableObject {
 
     @Published var conversation: Conversation?
     @Published var query: String = ""
+    @Published var canSend: Bool = true
+    @Published var status: QueryStatus = .available
 
     private var disposables = Set<AnyCancellable>()
 
@@ -42,7 +44,19 @@ class ChatsPresenter: ObservableObject {
 
         queryStatusPublisher
             .sink { [weak self] status in
-                print("--- \(status)")
+                guard let self else { return }
+
+                withAnimation {
+                    self.status = status
+                    switch status {
+                    case .available:
+                        self.canSend = true
+                    case .running:
+                        self.canSend = false
+                    case .failed:
+                        self.canSend = true
+                    }
+                }
             }
             .store(in: &disposables)
     }

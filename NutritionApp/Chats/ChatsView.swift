@@ -21,13 +21,21 @@ struct ChatsView: View {
                 .padding(.top, headerHeight)
                 .background(Color.darkElement)
 
-                SearchBar(text: $presenter.query) { _ in
+                CustomTextField(text: $presenter.query, isEnabled: $presenter.canSend) { _ in
                     presenter.send()
                 }
             }
 
             VStack {
                 header
+
+                if presenter.status == .failed {
+                    Text("An error occured. Please try again.")
+                        .padding()
+                        .background(Color.element)
+                        .border(Color.black, width: 1)
+                        .transition(.move(edge: .top))
+                }
 
                 Spacer()
             }

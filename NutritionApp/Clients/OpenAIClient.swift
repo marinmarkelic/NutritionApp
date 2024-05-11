@@ -19,16 +19,11 @@ class OpenAIClient {
     private var conversationSubject = CurrentValueSubject<Conversation?, Never>(nil)
 
     var queryStatusPublisher: AnyPublisher<QueryStatus, Never> {
-        queryStatusSubject
-//            .receive(on: DispatchQueue.main)
-            .print("***")
-            .eraseToAnyPublisher()
+        queryStatusSubject.receive(on: RunLoop.main).eraseToAnyPublisher()
     }
 
     var conversationPublisher: AnyPublisher<Conversation?, Never> {
-        conversationSubject
-            .receive(on: DispatchQueue.main)
-            .eraseToAnyPublisher()
+        conversationSubject.receive(on: RunLoop.main).eraseToAnyPublisher()
     }
 
     private lazy var service: OpenAIService = {
@@ -39,7 +34,11 @@ class OpenAIClient {
         secretsClient.nutritionAssistantId
     }()
 
-    init() {}
+//    init() {
+//        Task {
+//            try await OpenAIAPI.message()
+//        }
+//    }
 
     func send(text: String, conversationId: String?, instructions: String? = nil) async {
         queryStatusSubject.send(.running)
@@ -60,7 +59,7 @@ class OpenAIClient {
 
     private func appendSentMessage(text: String) {
         let conversation = conversationSubject.value ?? Conversation(id: "", assistantId: "", messages: [])
-        let message = Message(id: "", createdAt: 0, role: .user, text: text)
+        let message = Message(id: UUID().uuidString, createdAt: 0, role: .user, text: text)
         conversationSubject.send(conversation.add(message: message))
     }
 
@@ -102,7 +101,6 @@ class OpenAIClient {
     private func observeRun(run: RunObject, threadId: String) async {
         var counter = 0
         var runStatus = run.status
-        print("---- \(runStatus)")
         while runStatus != "completed" {
             guard counter <= 5 else {
                 queryStatusSubject.send(.failed)
@@ -111,7 +109,6 @@ class OpenAIClient {
 
             let run = try? await service.retrieveRun(threadID: threadId, runID: run.id)
             runStatus = run?.status ?? ""
-            print("---- \(runStatus)")
             counter += 1
         }
 

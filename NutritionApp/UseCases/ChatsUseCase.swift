@@ -21,6 +21,7 @@ class ChatsUseCase {
 
     func send(text: String, conversationId: String?) async {
         let instructions = await fetchDailyMealsInstructions()
+        print("--- \(instructions)")
 
         guard let conversationId else {
             await client.send(text: text, conversationId: conversationId, instructions: instructions)
@@ -68,7 +69,10 @@ class ChatsUseCase {
             instruction.removeLast()
             instruction.append(";")
         }
-        instruction.removeLast()
+        print("---1 \(instruction)")
+        if !instruction.isEmpty {
+            instruction.removeLast()
+        }
 
         return instruction.isEmpty ? nil : instruction
     }

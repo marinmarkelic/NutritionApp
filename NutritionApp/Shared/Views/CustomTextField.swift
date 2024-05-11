@@ -1,12 +1,14 @@
 import SwiftUI
 
-struct SearchBar: View {
+struct CustomTextField: View {
 
-    let action: (String) -> Void
-    var text: Binding<String>
+    private let action: (String) -> Void
+    private var text: Binding<String>
+    private var isEnabled: Binding<Bool>
 
-    init(text: Binding<String>, action: @escaping (String) -> Void) {
+    init(text: Binding<String>, isEnabled: Binding<Bool> = .constant(true), action: @escaping (String) -> Void) {
         self.text = text
+        self.isEnabled = isEnabled
         self.action = action
     }
 
@@ -16,9 +18,11 @@ struct SearchBar: View {
                 TextField("Search", text: text)
 
                 Circle()
-                    .foregroundStyle(Color.yellow)
+                    .foregroundStyle(isEnabled.wrappedValue ? Color.yellow : Color.gray)
                     .frame(width: 30, height: 30)
                     .onTapGesture {
+                        guard isEnabled.wrappedValue else { return }
+
                         action(text.wrappedValue)
                     }
             }
