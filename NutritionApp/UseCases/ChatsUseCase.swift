@@ -6,8 +6,6 @@ class ChatsUseCase {
 
     @Dependency(\.openAIClient)
     private var client: OpenAIClient
-    @Dependency(\.storageService)
-    private var storageService: StorageService
     @Dependency(\.storageUseCase)
     private var storageUseCase: StorageUseCase
 
@@ -17,6 +15,18 @@ class ChatsUseCase {
 
     var conversationPublisher: AnyPublisher<Conversation?, Never> {
         client.conversationPublisher
+    }
+
+    func update(_ conversation: ConversationViewModel) async {
+        await storageUseCase.save(conversation: conversation)
+    }
+
+    func fetchConversations() async -> [ConversationViewModel] {
+        await storageUseCase.fetchCoversations()
+    }
+
+    func switchConversation(id: String) async {
+        await client.retreiveMessages(for: id)
     }
 
     func send(text: String, conversationId: String?) async {

@@ -7,6 +7,8 @@ class ChatsPresenter: ObservableObject {
     @Dependency(\.chatsUseCase)
     private var chatsUseCase: ChatsUseCase
 
+    @Published var isMenuShown: Bool = false
+    @Published var menuConversations: [ConversationViewModel] = []
     @Published var conversation: Conversation?
     @Published var query: String = ""
     @Published var canSend: Bool = true
@@ -26,6 +28,12 @@ class ChatsPresenter: ObservableObject {
         bindPublishers()
     }
 
+    func onAppear() {
+        Task {
+            menuConversations = await chatsUseCase.fetchConversations()
+        }
+    }
+
     @MainActor
     func send() {
         let queryToSend = query
@@ -35,10 +43,27 @@ class ChatsPresenter: ObservableObject {
         }
     }
 
+    func showMenu() {
+        isMenuShown = true
+    }
+
+    func hideMenu() {
+        isMenuShown = false
+    }
+
+    func switchConversation(for id: String) {
+        Task {
+            await chatsUseCase.switchConversation(id: id)
+        }
+    }
+
     private func bindPublishers() {
         conversationPublisher
             .sink { [weak self] conversation in
-                self?.conversation = conversation
+                guard let self else { return }
+
+                self.conversation = conversation
+                update(conversation: conversation)
             }
             .store(in: &disposables)
 
@@ -59,6 +84,38 @@ class ChatsPresenter: ObservableObject {
                 }
             }
             .store(in: &disposables)
+    }
+
+    private func update(conversation: Conversation?) {
+        guard let conversation else { return }
+
+        Task {
+            await chatsUseCase.update(ConversationViewModel(from: conversation))
+        }
+    }
+
+}
+
+struct ConversationViewModel: Identifiable {
+
+    let id: String
+    let lastMessage: String
+    let time: Int
+
+}
+
+extension ConversationViewModel {
+
+    init(from model: ConversationStorageViewModel) {
+        id = model.id
+        lastMessage = model.lastMessage
+        time = model.time
+    }
+
+    init(from model: Conversation) {
+        id = model.id
+        lastMessage = model.messages.last?.text ?? ""
+        time = model.messages.last?.createdAt ?? .zero
     }
 
 }

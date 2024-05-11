@@ -82,7 +82,7 @@ class OpenAIClient {
         await observeRun(run: run, threadId: conversationId)
     }
 
-    private func retreiveMessages(for conversationId: String) async {
+    func retreiveMessages(for conversationId: String) async {
         guard
             let messages = try? await service.listMessages(
                 threadID: conversationId,

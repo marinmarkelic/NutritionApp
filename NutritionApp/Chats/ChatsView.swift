@@ -3,6 +3,7 @@ import SwiftUI
 struct ChatsView: View {
 
     @ObservedObject private var presenter: ChatsPresenter
+    @State private var containerSize: CGSize = .zero
 
     private let headerHeight: CGFloat = 40
 
@@ -12,36 +13,73 @@ struct ChatsView: View {
 
     var body: some View {
         ZStack {
-            VStack(spacing: 0) {
-                ScrollView(.vertical) {
-                    textsStack
+            ZStack {
+                VStack(spacing: 0) {
+                    ScrollView(.vertical) {
+                        textsStack
+                            .maxWidth()
+                    }
+                    .defaultScrollAnchor(.bottom)
+                    .padding(.top, headerHeight)
+                    .background(Color.darkElement)
+
+                    CustomTextField(text: $presenter.query, isEnabled: $presenter.canSend) { _ in
+                        presenter.send()
+                    }
+                }
+
+                VStack {
+                    header
+
+                    if presenter.status == .failed {
+                        Text("An error occured. Please try again.")
+                            .padding()
+                            .background(Color.element)
+                            .border(Color.black, width: 1)
+                            .transition(.move(edge: .top))
+                    }
+
+                    Spacer()
+                }
+
+                HStack {
+                    VStack {
+                        Text("New chat")
+
+                        ForEach(presenter.menuConversations) { conversation in
+                            Text(conversation.lastMessage)
+                                .padding()
+                                .onTapGesture {
+                                    presenter.switchConversation(for: conversation.id)
+                                }
+                        }
+                    }
+                    .padding()
+                    .ignoresSafeArea()
+                    .maxHeight()
+                    .frame(width: containerSize.width * 2/3)
+                    .background {
+                        Color.background
+                    }
+
+                    Color
+                        .clear
                         .maxWidth()
+                        .contentShape(Rectangle())
+                        .onTapGesture(perform: presenter.hideMenu)
                 }
-                .defaultScrollAnchor(.bottom)
-                .padding(.top, headerHeight)
-                .background(Color.darkElement)
-
-                CustomTextField(text: $presenter.query, isEnabled: $presenter.canSend) { _ in
-                    presenter.send()
-                }
+                .opacity(presenter.isMenuShown ? 1 : 0)
+                .maxWidth()
+                .transition(.move(edge: .leading))
             }
-
-            VStack {
-                header
-
-                if presenter.status == .failed {
-                    Text("An error occured. Please try again.")
-                        .padding()
-                        .background(Color.element)
-                        .border(Color.black, width: 1)
-                        .transition(.move(edge: .top))
-                }
-
-                Spacer()
+            .onSizeChange { size in
+                self.containerSize = size
             }
+            .maxSize()
+            .background(Color.background)
+            .animation(.easeInOut, value: presenter.isMenuShown)
         }
-        .maxSize()
-        .background(Color.background)
+        .onAppear(perform: presenter.onAppear)
     }
 
     private var header: some View {
@@ -49,6 +87,7 @@ struct ChatsView: View {
             Rectangle()
                 .foregroundStyle(Color.yellow)
                 .frame(width: 30, height: 30)
+                .onTapGesture(perform: presenter.showMenu)
 
             Text("Assistant")
 

@@ -20,6 +20,14 @@ actor StorageUseCase {
         storageService.save(meal: meal)
     }
 
+    func save(conversation: ConversationViewModel) {
+        storageService.save(conversation: conversation)
+    }
+
+    func fetchCoversations() -> [ConversationViewModel] {
+        storageService.fetchConversations()
+    }
+
     func fetchMeals(with date: Date) -> [MealViewModel] {
         storageService.fetchMeals(with: date)
     }

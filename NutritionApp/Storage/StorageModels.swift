@@ -1,6 +1,24 @@
 import Foundation
 import RealmSwift
 
+class ConversationStorageViewModel: Object {
+
+    @Persisted(primaryKey: true) var id: String
+    @Persisted var lastMessage: String
+    @Persisted var time: Int
+
+    override init() {}
+
+    convenience init(from model: ConversationViewModel) {
+        self.init()
+
+        id = model.id
+        lastMessage = model.lastMessage
+        time = model.time
+    }
+
+}
+
 class MealStorageViewModel: Object {
 
     @Persisted var name: String
