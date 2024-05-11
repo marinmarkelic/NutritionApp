@@ -19,7 +19,7 @@ class HomePresenter: ObservableObject {
     @Published var dailyTarget: DailyTarget?
     @Published var chartHeight: Int = 0
 
-    @Dependency(\.storageUseCase) var storageUseCase
+    @Dependency(\.storageUseCase) private var storageUseCase
 
     var nutritionForToday: DailyNutrition? {
         guard let nutrition = dailyNutrition?.first(where: { $0.0 == 0 }) else { return nil }
@@ -34,15 +34,10 @@ class HomePresenter: ObservableObject {
 
     @MainActor
     func fetchCalories() async {
-        let fetchedArray = [
-            (0, DailyNutrition(calories: 500, protein: 60, carbohydrates: 200, fat: 300, items: [])),
-            (-1, DailyNutrition(calories: 1573, protein: 100, carbohydrates: 700, fat: 300, items: [])),
-            (-2, DailyNutrition(calories: 1467, protein: 150, carbohydrates: 200, fat: 400, items: []))
-        ]
-        dailyNutrition = fetchedArray
+        dailyNutrition = await storageUseCase.fetchCalories(from: 3)
         dailyTarget = await storageUseCase.fetchNecessaryCalories()
 
-        let maxCalorieValue = Int(fetchedArray.map { $0.1.calories }.max() ?? 0)
+        let maxCalorieValue = Int(dailyNutrition?.map { $0.1.calories }.max() ?? 0)
         chartHeight = max(maxCalorieValue, Int(dailyTarget?.calories ?? 0)) + chartHeightOffset
     }
 

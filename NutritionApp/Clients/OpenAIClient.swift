@@ -41,11 +41,12 @@ class OpenAIClient {
 
     init() {}
 
-    func send(text: String, conversationId: String?) async {
+    func send(text: String, conversationId: String?, instructions: String? = nil) async {
         queryStatusSubject.send(.running)
         appendSentMessage(text: text)
+
         if let conversationId {
-            await sendMessage(text: text, conversationId: conversationId)
+            await sendMessage(text: text, conversationId: conversationId, instructions: instructions)
             return
         }
 
@@ -54,7 +55,7 @@ class OpenAIClient {
             return
         }
 
-        await sendMessage(text: text, conversationId: newThreadId)
+        await sendMessage(text: text, conversationId: newThreadId, instructions: instructions)
     }
 
     private func appendSentMessage(text: String) {
@@ -69,10 +70,10 @@ class OpenAIClient {
         return thread?.id
     }
 
-    private func sendMessage(text: String, conversationId: String) async {
+    private func sendMessage(text: String, conversationId: String, instructions: String? = nil) async {
         let message = MessageParameter(role: .user, content: text)
         let _ = try? await service.createMessage(threadID: conversationId, parameters: message)
-        let parameters = RunParameter(assistantID: nutritionAssistantId)
+        let parameters = RunParameter(assistantID: nutritionAssistantId, instructions: instructions)
 
         guard let run = try? await service.createRun(threadID: conversationId, parameters: parameters) else {
             queryStatusSubject.send(.failed)

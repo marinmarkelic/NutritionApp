@@ -5,7 +5,7 @@ import Dependencies
 class ChatsPresenter: ObservableObject {
 
     @Dependency(\.chatsUseCase)
-    private var useCase: ChatsUseCase
+    private var chatsUseCase: ChatsUseCase
 
     @Published var conversation: Conversation?
     @Published var query: String = ""
@@ -13,11 +13,11 @@ class ChatsPresenter: ObservableObject {
     private var disposables = Set<AnyCancellable>()
 
     var queryStatusPublisher: AnyPublisher<QueryStatus, Never> {
-        useCase.queryStatusPublisher
+        chatsUseCase.queryStatusPublisher
     }
 
     var conversationPublisher: AnyPublisher<Conversation?, Never> {
-        useCase.conversationPublisher
+        chatsUseCase.conversationPublisher
     }
 
     init() {
@@ -29,7 +29,7 @@ class ChatsPresenter: ObservableObject {
         let queryToSend = query
         query = ""
         Task {
-            await useCase.send(text: queryToSend, conversationId: conversation?.id)
+            await chatsUseCase.send(text: queryToSend, conversationId: conversation?.id)
         }
     }
 
