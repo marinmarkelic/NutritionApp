@@ -66,7 +66,16 @@ class ChatsUseCase {
         meals.keys.forEach { day in
             guard let dailyMeals = meals[day] else { return }
 
-            instruction.append("Day \(day):")
+            let dayString: String
+            switch day {
+            case 0:
+                dayString = "Today:"
+            case -1:
+                dayString = "Yesterday:"
+            default:
+                dayString = "\(abs(day)) days ago:"
+            }
+            instruction.append(dayString)
 
             dailyMeals.forEach { meal in
                 instruction.append(" Meal: \(meal.name), ingredients:")

@@ -43,17 +43,18 @@ class ChatsPresenter: ObservableObject {
         }
     }
 
-    func showMenu() {
-        isMenuShown = true
+    func toggleMenuVisibility() {
+        isMenuShown.toggle()
     }
 
-    func hideMenu() {
-        isMenuShown = false
+    func newConversation() {
+        conversation = nil
     }
 
     func switchConversation(for id: String) {
+        toggleMenuVisibility()
+
         Task {
-            print("--- sw \(id)")
             await chatsUseCase.switchConversation(id: id)
         }
     }
@@ -88,8 +89,6 @@ class ChatsPresenter: ObservableObject {
     }
 
     private func update(conversation: Conversation?) {
-        print("--- update \(conversation?.id)")
-
         guard
             let conversation,
             !conversation.id.isEmpty
