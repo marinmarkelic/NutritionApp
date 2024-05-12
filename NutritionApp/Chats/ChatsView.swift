@@ -43,15 +43,18 @@ struct ChatsView: View {
                 }
 
                 HStack {
-                    VStack {
-                        Text("New chat")
-
-                        ForEach(presenter.menuConversations) { conversation in
-                            Text(conversation.lastMessage)
-                                .padding()
-                                .onTapGesture {
-                                    presenter.switchConversation(for: conversation.id)
-                                }
+                    ScrollView {
+                        VStack {
+                            Text("New chat")
+                            
+                            ForEach(presenter.menuConversations) { conversation in
+                                Text(conversation.lastMessage)
+                                    .lineLimit(3)
+                                    .padding()
+                                    .onTapGesture {
+                                        presenter.switchConversation(for: conversation.id)
+                                    }
+                            }
                         }
                     }
                     .padding()

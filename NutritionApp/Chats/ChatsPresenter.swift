@@ -53,6 +53,7 @@ class ChatsPresenter: ObservableObject {
 
     func switchConversation(for id: String) {
         Task {
+            print("--- sw \(id)")
             await chatsUseCase.switchConversation(id: id)
         }
     }
@@ -87,7 +88,12 @@ class ChatsPresenter: ObservableObject {
     }
 
     private func update(conversation: Conversation?) {
-        guard let conversation else { return }
+        print("--- update \(conversation?.id)")
+
+        guard
+            let conversation,
+            !conversation.id.isEmpty
+        else { return }
 
         Task {
             await chatsUseCase.update(ConversationViewModel(from: conversation))
@@ -114,8 +120,9 @@ extension ConversationViewModel {
 
     init(from model: Conversation) {
         id = model.id
-        lastMessage = model.messages.last?.text ?? ""
-        time = model.messages.last?.createdAt ?? .zero
+        /// First is used here because messages are reversed
+        lastMessage = model.messages.first?.text ?? ""
+        time = model.messages.first?.createdAt ?? .zero
     }
 
 }

@@ -34,15 +34,17 @@ extension StorageService {
             try! realm.write {
                 realm.add(ConversationStorageViewModel(from: conversation))
             }
-            Swift.print("*** old")
+
             return
         }
+
+        Swift.print("*** old \(oldConversation)")
 
         try! realm.write {
             oldConversation.lastMessage = conversation.lastMessage
             oldConversation.time = conversation.time
+            Swift.print("*** new \(oldConversation)")
         }
-        Swift.print("*** new")
     }
 
     func fetchConversations() -> [ConversationViewModel] {
