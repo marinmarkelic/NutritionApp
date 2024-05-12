@@ -2,7 +2,7 @@ import SwiftUI
 
 struct TextCell: View {
 
-    let model: TextViewModel
+    let model: Message
 
     private let maxWidthRatio: CGFloat = 4/5
 
@@ -12,19 +12,21 @@ struct TextCell: View {
 
     @ViewBuilder
     private var container: some View {
-        switch model.state {
-        case .sent:
+        switch model.role {
+        case .user:
             HStack {
                 Spacer()
 
                 Text(model.text)
+                    .foregroundStyle(Color.gray)
                     .padding()
                     .background { Color.black.opacity(0.5) }
             }
             .padding(.horizontal)
-        case .received:
+        case .assistant:
             HStack {
                 Text(model.text)
+                    .foregroundStyle(Color.gray)
                     .padding()
                     .background { Color.black.opacity(0.5) }
 

@@ -30,7 +30,7 @@ struct SearchView: View {
 
             Spacer()
 
-            SearchBar(text: $query, action: presenter.search)
+            CustomTextField(text: $query, action: presenter.search)
         }
         .maxWidth()
         .padding(8)

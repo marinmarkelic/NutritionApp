@@ -50,6 +50,7 @@ struct HomeView: View {
                         x: .value("Date", .dateWithAdded(days: day), unit: .day),
                         y: .value("Calories", targetCalories),
                         series: .value("type", "Target Calories"))
+                    .symbol(.circle)
                     .foregroundStyle(.blue)
                 }
 

@@ -28,6 +28,31 @@ extension StorageService {
         }
     }
 
+    func save(conversation: ConversationViewModel) {
+        let conversations = realm.objects(ConversationStorageViewModel.self).filter { conversation.id == $0.id }
+        guard let oldConversation = conversations.first else {
+            try! realm.write {
+                realm.add(ConversationStorageViewModel(from: conversation))
+            }
+
+            return
+        }
+
+        Swift.print("*** old \(oldConversation)")
+
+        try! realm.write {
+            oldConversation.lastMessage = conversation.lastMessage
+            oldConversation.time = conversation.time
+            Swift.print("*** new \(oldConversation)")
+        }
+    }
+
+    func fetchConversations() -> [ConversationViewModel] {
+        let meals = realm.objects(ConversationStorageViewModel.self)
+
+        return meals.map { ConversationViewModel(from: $0) }
+    }
+
     func fetchMeals(with date: Date) -> [MealViewModel] {
         let meals = realm.objects(MealStorageViewModel.self).filter {
             Calendar.current.isDateInToday($0.date)
