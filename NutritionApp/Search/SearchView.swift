@@ -36,6 +36,9 @@ struct SearchView: View {
         .padding(8)
         .background(Color.background)
         .dismissKeyboardOnTap()
+        .onChange(of: presenter.meal) { newValue in
+            print("--- \(newValue)")
+        }
     }
 
 }

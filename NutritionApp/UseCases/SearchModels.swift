@@ -36,6 +36,14 @@ struct MealViewModel: Equatable, CustomStringConvertible, Identifiable {
         return value
     }
 
+    var weight: Float {
+        var value: Float = .zero
+        for item in items {
+            value += item.serving_size_g
+        }
+        return value
+    }
+
     var nutrients: [Nutrient : Float] {
         guard !items.isEmpty else { return [:] }
 
@@ -56,7 +64,14 @@ struct MealViewModel: Equatable, CustomStringConvertible, Identifiable {
     }
 
     var description: String {
-        "\(calories)g of calories, \(nutrients[.protein_g] ?? 0)g of protein, \(nutrients[.fat_total_g] ?? 0)g of fat, \(nutrients[.carbohydrates_total_g] ?? 0)g of carbs"
+"""
+Name: \(name)
+\(weight)g,
+\(calories)g of calories,
+\(nutrients[.protein_g] ?? 0)g of protein,
+\(nutrients[.fat_total_g] ?? 0)g of fat,
+\(nutrients[.carbohydrates_total_g] ?? 0)g of carbs
+"""
     }
 
     func update(servingSize: Float, for item: NutritionalItemViewModel) -> MealViewModel {
@@ -104,7 +119,7 @@ struct NutritionalItemViewModel: Equatable {
     }
 
     var serving_size_multiplier: Float {
-        serving_size_baseline_g / serving_size_g
+        serving_size_g / serving_size_baseline_g
     }
 
     var calories: Float {
@@ -132,8 +147,8 @@ struct NutritionalItemViewModel: Equatable {
     func with(servingSize: Float) -> NutritionalItemViewModel {
         NutritionalItemViewModel(
             name: name,
-            serving_size_g: serving_size_g,
-            serving_size_baseline_g: servingSize,
+            serving_size_g: servingSize,
+            serving_size_baseline_g: serving_size_baseline_g,
             calories_baseline: calories_baseline,
             nutrients: nutrients)
     }
@@ -204,6 +219,8 @@ extension NutritionalItemViewModel {
             }
         }
         self.nutrients = nutrients
+
+        print("--- from storage \(self.description)")
     }
 
 }
@@ -211,7 +228,14 @@ extension NutritionalItemViewModel {
 extension NutritionalItemViewModel: CustomStringConvertible {
 
     var description: String {
-        "\(calories)g of calories, \(nutrients[.protein_g] ?? 0)g of protein, \(nutrients[.fat_total_g] ?? 0)g of fat, \(nutrients[.carbohydrates_total_g] ?? 0)g of carbs"
+"""
+Name: \(name)
+\(serving_size_g)g \(serving_size_baseline_g)g,
+\(calories)g of calories,
+\(nutrients[.protein_g] ?? 0)g of protein,
+\(nutrients[.fat_total_g] ?? 0)g of fat,
+\(nutrients[.carbohydrates_total_g] ?? 0)g of carbs
+"""
     }
 
 }

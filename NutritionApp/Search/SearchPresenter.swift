@@ -4,8 +4,9 @@ import Dependencies
 
 class SearchPresenter: ObservableObject {
 
-    @Published var meal = MealViewModel(name: "mock", date: .now, items: [])
     let query: String = ""
+
+    @Published var meal = MealViewModel(name: "mock", date: .now, items: [])
 
     @Dependency(\.searchUseCase)
     private var searchUseCase: SearchUseCase
@@ -25,6 +26,8 @@ class SearchPresenter: ObservableObject {
         Task { [weak self] in
             guard let self else { return }
 
+//            Swift.print(meal)
+
             await storageUseCase.save(meal: meal)
         }
     }
@@ -37,6 +40,10 @@ class SearchPresenter: ObservableObject {
 
     func print() {}
 
-    func clearAll() {}
+    func clearAll() {
+        Task {
+            await storageUseCase.deleteAll()
+        }
+    }
 
 }

@@ -24,7 +24,10 @@ extension StorageService {
 
     func save(meal: MealViewModel) {
         try! realm.write {
-            realm.add(MealStorageViewModel(from: meal))
+            let model = MealStorageViewModel(from: meal)
+            realm.add(model)
+            Swift.print("--- save")
+            Swift.print(model.items.first?.description)
         }
     }
 
