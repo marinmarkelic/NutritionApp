@@ -108,31 +108,15 @@ struct NutritionInformationView: View {
 
 struct NutritionCircleGraph: View {
 
-    private let strokeLineWidth: CGFloat = 60
-
     let meal: MealViewModel
-
-    @State var circleSize: CGFloat = 100
 
     var body: some View {
         HStack {
             VStack {
                 Text("\(meal.name)")
 
-                ZStack {
-                    ForEach(meal.graphData.data, id: \.color) { data in
-                        Circle()
-                            .trim(from: data.previousCompleton, to: data.previousCompleton + data.completion)
-                            .stroke(data.color, style: StrokeStyle(lineWidth: strokeLineWidth, lineCap: .butt))
-                            .frame(width: circleSize)
-                    }
-                }
+                MultipleCircleView(meal: meal, strokeLineWidth: 60)
                 .size(with: 200)
-                .animation(.bouncy, value: meal)
-                .onSizeChange { size in
-                    let newCircleSize = size.width - strokeLineWidth
-                    circleSize = newCircleSize > .zero ? newCircleSize : .zero
-                }
             }
         }
 
@@ -140,6 +124,38 @@ struct NutritionCircleGraph: View {
             Text("\(meal.calories) calories")
 
             Text("\(meal.value(for: .protein_g)) grams of protein")
+        }
+    }
+
+}
+
+public struct MultipleCircleView: View {
+
+    let meal: MealViewModel
+    let strokeLineWidth: CGFloat
+
+    @State var size: CGSize = .zero
+
+    private var circleSize: CGFloat {
+        let size = size.width - strokeLineWidth
+        print("***2 \(size)")
+        return size > .zero ? size : .zero
+    }
+
+    public var body: some View {
+        ZStack {
+            ForEach(meal.graphData.data, id: \.color) { data in
+                Circle()
+                    .trim(from: data.previousCompleton, to: data.previousCompleton + data.completion)
+                    .stroke(data.color, style: StrokeStyle(lineWidth: strokeLineWidth, lineCap: .butt))
+                    .frame(width: circleSize)
+            }
+        }
+        .animation(.bouncy, value: meal)
+        .maxSize()
+        .onSizeChange { size in
+            self.size = size
+            print("***1 \(size)")
         }
     }
 
