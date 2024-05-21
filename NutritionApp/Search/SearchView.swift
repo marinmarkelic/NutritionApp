@@ -64,7 +64,7 @@ struct MealInformationView: View {
                 ForEach(meal.items, id: \.name) { item in
                     NutritionInformationView(item: item, input: item.serving_size_g, updateServingSize: updateServingSize)
                         .maxWidth()
-                        .background(Color.element)
+                        .background(Color.overlay())
                 }
             }
         }

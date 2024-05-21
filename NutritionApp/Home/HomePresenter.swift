@@ -57,7 +57,7 @@ class HomePresenter: ObservableObject {
 
     @MainActor
     func fetchCalories() async {
-        dailyNutrition = await storageUseCase.fetchCalories(from: 3)
+        dailyNutrition = await storageUseCase.fetchCalories(from: 3).sorted { $0.0 > $1.0 }
         dailyTarget = await storageUseCase.fetchNecessaryCalories()
         calculateDailyStats()
 

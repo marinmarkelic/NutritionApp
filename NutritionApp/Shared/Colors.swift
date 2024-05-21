@@ -1,12 +1,23 @@
 import SwiftUI
 
+// https://m2.material.io/design/color/dark-theme.html#ui-application
 extension Color {
 
-    // https://coolors.co/palette/f8f9fa-e9ecef-dee2e6-ced4da-adb5bd-6c757d-495057-343a40-212529
+    enum ColorEmphasis: CGFloat {
+        case high = 0.87
+        case medium = 0.6
+        case disabled = 0.38
+    }
 
-    static let background = Color(hex: 0x343A40)
-    static let element = Color(hex: 0x495057)
-    static let darkElement = Color(hex: 0x292a30)
+    static let background = Color(hex: 0x121212)
+
+    static func overlay(opacity: CGFloat = 0.05) -> Color {
+        white.opacity(opacity)
+    }
+
+    static func text(emphasis: ColorEmphasis = .high) -> Color {
+        white.opacity(emphasis.rawValue)
+    }
 
 }
 

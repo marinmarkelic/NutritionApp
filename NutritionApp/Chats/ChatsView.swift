@@ -22,7 +22,7 @@ struct ChatsView: View {
                     .scrollBounceBehavior(.basedOnSize)
                     .defaultScrollAnchor(.bottom)
                     .padding(.top, headerHeight)
-                    .background(Color.darkElement)
+                    .background(Color.overlay())
 
                     sideMenu
                         .padding(.top, headerHeight)
@@ -39,7 +39,7 @@ struct ChatsView: View {
                 if presenter.status == .failed {
                     Text("An error occured. Please try again.")
                         .padding()
-                        .background(Color.element)
+                        .background(Color.overlay())
                         .border(Color.black, width: 1)
                         .transition(.move(edge: .top))
                 }

@@ -22,6 +22,7 @@ struct HomeView: View {
 
                 HStack {
                     Text("Today")
+                        .color(emphasis: .high)
                         .font(.title)
 
                     Spacer()
@@ -29,23 +30,7 @@ struct HomeView: View {
 
                 todayCard
 
-                VStack(spacing: 8) {
-                    Text("Eaten meals")
-
-                    VStack(spacing: .zero) {
-                        ForEach(presenter.meals) { meal in
-                            MealCell(meal: meal)
-                                .padding(4)
-
-                            Divider()
-                                .frame(maxHeight: 1)
-                                .overlay(Color.gray)
-                                .opacity(presenter.meals.last == meal ? 0 : 1)
-                        }
-                    }
-                    .padding(8)
-                    .background(Color.element)
-                }
+                mealsCard
             }
         }
         .maxSize()
@@ -57,59 +42,88 @@ struct HomeView: View {
         }
     }
 
-    var todayCard: some View {
-        VStack {
-            if let dailyStats = presenter.dailyStats {
-                dailyCalorieCard(for: dailyStats)
-            }
+    @ViewBuilder
+    var mealsCard: some View {
+        if !presenter.meals.isEmpty {
+            VStack(spacing: 8) {
+                Text("Eaten meals")
+                    .color(emphasis: .high)
+                    .shiftLeft()
 
-            if let dailyTarget = presenter.dailyTarget, let nutritionForToday = presenter.nutritionForToday {
-                dailyMacros(for: dailyTarget, nutrition: nutritionForToday)
+                VStack(spacing: .zero) {
+                    ForEach(presenter.meals) { meal in
+                        MealCell(meal: meal)
+                            .padding(4)
+
+                        Divider()
+                            .frame(maxHeight: 1)
+                            .overlay(Color.gray)
+                            .opacity(presenter.meals.last == meal ? 0 : 1)
+                    }
+                }
+                .padding(8)
+                .background(Color.overlay())
             }
         }
-        .padding(8)
-        .background(Color.element)
+    }
+
+}
+
+// MARK: - Daily info
+extension HomeView {
+
+    @ViewBuilder
+    var todayCard: some View {
+        if
+            let dailyStats = presenter.dailyStats,
+            let dailyTarget = presenter.dailyTarget,
+            let nutritionForToday = presenter.nutritionForToday
+        {
+            VStack(spacing: 16) {
+                dailyCalorieCard(for: dailyStats)
+
+                dailyMacros(for: dailyTarget, nutrition: nutritionForToday)
+            }
+            .padding(8)
+            .background(Color.overlay())
+        }
     }
 
     func dailyCalorieCard(for dailyStats: DailyCalorieStats) -> some View {
-        HStack {
-            VStack {
-                VStack {
-                    Text("\(dailyStats.calories.toInt())%")
-                        .bold()
+        VStack {
+            Text("Calories")
+                .color(emphasis: .medium)
+                .shiftLeft()
+                .padding(.bottom, 8)
 
-                    Text("Consumed")
-                }
+            HStack {
+                Spacer()
+                    .overlay {
+                        VStack {
+                            calorieInfoCell(with: dailyStats.calories.toInt(), title: "Consumed")
 
-                VStack {
-                    Text("\(dailyStats.targetCalories.toInt())")
-                        .bold()
+                            calorieInfoCell(with: dailyStats.targetCalories.toInt(), title: "Target")
+                        }
+                    }
 
-                    Text("Target")
-                }
+                CalorieRatioCell(title: dailyStats.ratioString, value: dailyStats.calorieRatio.toInt())
+
+                Spacer()
+                    .overlay {
+                        calorieInfoCell(with: 0, title: "Burned")
+                    }
             }
+        }
+    }
 
-            VStack {
-                Text("\(dailyStats.calorieRatio.toInt())")
-                    .bold()
+    func calorieInfoCell(with value: Int, title: String) -> some View {
+        VStack {
+            Text("\(value)")
+                .color(emphasis: .medium)
+                .bold()
 
-                Text(dailyStats.ratioString)
-
-                Rectangle()
-                    .fill (
-                        LinearGradient(
-                            stops: [
-                                .init(color: .red, location: 0),
-                                .init(color: .yellow, location: 0.3),
-                                .init(color: .green, location: 0.5),
-                                .init(color: .yellow, location: 0.7),
-                                .init(color: .red, location: 1)
-                            ],
-                            startPoint: .leading,
-                            endPoint: .trailing))
-                    .frame(width: 100, height: 20)
-                //                    .size(width: 50, height: 20)
-            }
+            Text(title)
+                .color(emphasis: .disabled)
         }
     }
 
@@ -138,57 +152,7 @@ struct HomeView: View {
             }
         }
         .padding()
-        .background(Color.darkElement)
-    }
-
-}
-
-struct MealCell: View {
-
-    let meal: MealViewModel
-
-    var body: some View {
-        HStack {
-            VStack(alignment: .leading) {
-                Text(meal.name)
-                    .bold()
-
-                Text("\(Int(meal.calories)) calories, \(meal.date.formatted(date: .omitted, time: .shortened))")
-            }
-
-            Spacer()
-        }
-        .maxWidth()
-    }
-
-}
-
-struct CircularProgressView: View {
-
-    let graphProgress: Double
-    let progressText: String
-    let color: Color
-    let lineWidth: CGFloat = 5
-
-    init(progress: Double, color: Color) {
-        self.graphProgress = progress > 1 ? 1 : progress
-        self.progressText = "\(Int(progress * 100))%"
-        self.color = color
-    }
-
-    var body: some View {
-        ZStack {
-            Circle()
-                .stroke(color.opacity(0.5), lineWidth: lineWidth)
-
-            Circle()
-                .trim(from: 0, to: graphProgress)
-                .stroke(color, style: StrokeStyle(lineWidth: lineWidth, lineCap: .round))
-                .rotationEffect(.degrees(-90))
-
-            Text(progressText)
-                .font(.callout)
-        }
+        .background(Color.overlay())
     }
 
 }
@@ -243,7 +207,7 @@ extension HomeView {
         .frame(height: chartHeight)
         .frame(maxWidth: .infinity)
         .padding()
-        .background(Color.darkElement)
+        .background(Color.overlay())
     }
 
     func chart(for calories: [(Int, Int)]) -> some View {
@@ -284,7 +248,7 @@ extension HomeView {
         .frame(height: chartHeight)
         .frame(maxWidth: .infinity)
         .padding()
-        .background(Color.darkElement)
+        .background(Color.overlay())
     }
 
 }

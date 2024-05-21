@@ -14,6 +14,10 @@ extension View {
         frame(maxHeight: .infinity)
     }
 
+    func size(with size: CGSize, alignment: Alignment = .center) -> some View {
+        frame(width: size.width, height: size.height, alignment: alignment)
+    }
+
     func size(with size: CGFloat, alignment: Alignment = .center) -> some View {
         frame(width: size, height: size, alignment: alignment)
     }
@@ -33,6 +37,42 @@ extension View {
             }
         )
         .onPreferenceChange(SizePreferenceKey.self, perform: onChange)
+    }
+
+}
+
+extension View {
+
+    func shiftLeft(spacing: CGFloat = .zero) -> some View {
+        HStack(spacing: spacing) {
+            self
+
+            Spacer()
+        }
+    }
+
+    func shiftRight(spacing: CGFloat = .zero) -> some View {
+        HStack(spacing: spacing) {
+            Spacer()
+
+            self
+        }
+    }
+
+    func shiftUp(spacing: CGFloat = .zero) -> some View {
+        VStack(spacing: spacing) {
+            Spacer()
+
+            self
+        }
+    }
+
+    func shiftDown(spacing: CGFloat = .zero) -> some View {
+        VStack(spacing: spacing) {
+            self
+
+            Spacer()
+        }
     }
 
 }

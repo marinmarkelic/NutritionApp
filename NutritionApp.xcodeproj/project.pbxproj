@@ -43,6 +43,10 @@
 		9CBB0A8B2B2DF9500064EFCC /* StorageUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CBB0A8A2B2DF9500064EFCC /* StorageUseCase.swift */; };
 		9CBB0A952B2DFC240064EFCC /* StorageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CBB0A942B2DFC240064EFCC /* StorageService.swift */; };
 		9CBB0A972B2DFCB50064EFCC /* StorageModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CBB0A962B2DFCB50064EFCC /* StorageModels.swift */; };
+		9CD90C9E2BFCF1D300BF244B /* CircularProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CD90C9D2BFCF1D300BF244B /* CircularProgressView.swift */; };
+		9CD90CA02BFCF1F100BF244B /* MealCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CD90C9F2BFCF1F100BF244B /* MealCell.swift */; };
+		9CD90CA22BFCFB1400BF244B /* CalorieRatioCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CD90CA12BFCFB1400BF244B /* CalorieRatioCell.swift */; };
+		9CD90CA42BFD205100BF244B /* Text+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CD90CA32BFD205100BF244B /* Text+Extensions.swift */; };
 		9CEA12A02BE40B7700178EA1 /* ChatsPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CEA129F2BE40B7700178EA1 /* ChatsPresenter.swift */; };
 		9CEA12A32BE415B800178EA1 /* CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CEA12A22BE415B800178EA1 /* CustomTextField.swift */; };
 /* End PBXBuildFile section */
@@ -80,6 +84,10 @@
 		9CBB0A8A2B2DF9500064EFCC /* StorageUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageUseCase.swift; sourceTree = "<group>"; };
 		9CBB0A942B2DFC240064EFCC /* StorageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageService.swift; sourceTree = "<group>"; };
 		9CBB0A962B2DFCB50064EFCC /* StorageModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageModels.swift; sourceTree = "<group>"; };
+		9CD90C9D2BFCF1D300BF244B /* CircularProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircularProgressView.swift; sourceTree = "<group>"; };
+		9CD90C9F2BFCF1F100BF244B /* MealCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealCell.swift; sourceTree = "<group>"; };
+		9CD90CA12BFCFB1400BF244B /* CalorieRatioCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalorieRatioCell.swift; sourceTree = "<group>"; };
+		9CD90CA32BFD205100BF244B /* Text+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Text+Extensions.swift"; sourceTree = "<group>"; };
 		9CEA129F2BE40B7700178EA1 /* ChatsPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatsPresenter.swift; sourceTree = "<group>"; };
 		9CEA12A22BE415B800178EA1 /* CustomTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextField.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -116,6 +124,8 @@
 			children = (
 				9C6015772B24874A005A62C7 /* HomeView.swift */,
 				9C48CF162BA722FD00ABA072 /* HomePresenter.swift */,
+				9CD90C9F2BFCF1F100BF244B /* MealCell.swift */,
+				9CD90CA12BFCFB1400BF244B /* CalorieRatioCell.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -155,6 +165,7 @@
 				9CEA12A12BE415A900178EA1 /* Views */,
 				9C93F96C2B3B048E0033E0BC /* Colors.swift */,
 				9C93F96E2B3B05D70033E0BC /* View+Extensions.swift */,
+				9CD90CA32BFD205100BF244B /* Text+Extensions.swift */,
 				9C1FD3CA2B4484D200D8C6FD /* Date+Extensions.swift */,
 				9C1FD3CC2B44930100D8C6FD /* CGFloat+Extensions.swift */,
 				9C2E3CA22BB992A50099A6E0 /* PreferenceKeys.swift */,
@@ -232,6 +243,7 @@
 			children = (
 				9CEA12A22BE415B800178EA1 /* CustomTextField.swift */,
 				9C71541F2BF9F65B0057B0F7 /* Float+Extensions.swift */,
+				9CD90C9D2BFCF1D300BF244B /* CircularProgressView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -321,19 +333,23 @@
 			files = (
 				9C48CF152BA707D700ABA072 /* SearchPresenter.swift in Sources */,
 				9C3336022BD1537C00BC94D0 /* ProfilePresenter.swift in Sources */,
+				9CD90CA42BFD205100BF244B /* Text+Extensions.swift in Sources */,
 				9C60157B2B249886005A62C7 /* SearchView.swift in Sources */,
 				9C3336042BD15F2D00BC94D0 /* EnergyExpenditureService.swift in Sources */,
 				9CBB0A872B2DC9AD0064EFCC /* BaseClient.swift in Sources */,
 				9C48CF172BA722FD00ABA072 /* HomePresenter.swift in Sources */,
 				9C1FD3C92B4467A000D8C6FD /* OpenAIClient.swift in Sources */,
 				9C93F96D2B3B048E0033E0BC /* Colors.swift in Sources */,
+				9CD90CA02BFCF1F100BF244B /* MealCell.swift in Sources */,
 				9C6015802B249BD9005A62C7 /* NutritionClient.swift in Sources */,
 				9CBB0A892B2DD2FF0064EFCC /* SearchModels.swift in Sources */,
+				9CD90CA22BFCFB1400BF244B /* CalorieRatioCell.swift in Sources */,
 				9C7154202BF9F65B0057B0F7 /* Float+Extensions.swift in Sources */,
 				9C34C4062BE6BDA900BA16F8 /* TextCell.swift in Sources */,
 				9CBB0A972B2DFCB50064EFCC /* StorageModels.swift in Sources */,
 				9C1FD3CB2B4484D200D8C6FD /* Date+Extensions.swift in Sources */,
 				9C2E3CA32BB992A50099A6E0 /* PreferenceKeys.swift in Sources */,
+				9CD90C9E2BFCF1D300BF244B /* CircularProgressView.swift in Sources */,
 				9C93F96F2B3B05D70033E0BC /* View+Extensions.swift in Sources */,
 				9C34C40E2BE7E4D800BA16F8 /* ChatsModels.swift in Sources */,
 				9CEA12A32BE415B800178EA1 /* CustomTextField.swift in Sources */,
