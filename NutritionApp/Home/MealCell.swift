@@ -10,16 +10,21 @@ struct MealCell: View {
         HStack {
             VStack(alignment: .leading) {
                 Text(meal.name)
+                    .color(emphasis: .medium)
                     .bold()
 
-                Text("\(Int(meal.calories)) calories, \(meal.date.formatted(date: .omitted, time: .shortened))")
+                label(
+                    boldedText: "\(Int(meal.calories))",
+                    normalText: " calories, \(meal.date.formatted(date: .omitted, time: .shortened))")
 
                 if isExpanded {
-                    Text("\(meal.value(for: .protein_g).toInt()) grams of protein")
+                    label(boldedText: "\(meal.value(for: .protein_g).toInt())", normalText: " grams of protein")
 
-                    Text("\(meal.value(for: .carbohydrates_total_g).toInt()) grams of carbs")
+                    label(
+                        boldedText: "\(meal.value(for: .carbohydrates_total_g).toInt())",
+                        normalText: " grams of carbs")
 
-                    Text("\(meal.value(for: .fat_total_g).toInt()) grams of fat")
+                    label(boldedText: "\(meal.value(for: .fat_total_g).toInt())", normalText: " grams of fat")
                 }
             }
 
@@ -27,6 +32,15 @@ struct MealCell: View {
         }
         .maxWidth()
         .onTapGesture(perform: toggleExpansion)
+    }
+
+    private func label(boldedText: String, normalText: String) -> some View {
+        Text(boldedText)
+            .color(emphasis: .disabled)
+            .bold()
+        +
+        Text(normalText)
+            .color(emphasis: .disabled)
     }
 
     private func toggleExpansion() {

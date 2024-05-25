@@ -16,6 +16,7 @@ struct CustomTextField: View {
         VStack {
             HStack {
                 TextField("Search", text: text)
+                    .autocorrectionDisabled()
 
                 Circle()
                     .foregroundStyle(isEnabled.wrappedValue ? Color.yellow : Color.gray)

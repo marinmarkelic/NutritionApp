@@ -24,6 +24,7 @@ struct CircularProgressView: View {
                 .rotationEffect(.degrees(-90))
 
             Text(progressText)
+                .color(emphasis: .medium)
                 .font(.callout)
         }
     }

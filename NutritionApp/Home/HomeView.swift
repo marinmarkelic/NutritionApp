@@ -130,25 +130,27 @@ extension HomeView {
     func dailyMacros(for dailyTarget: DailyTarget, nutrition: DailyNutrition) -> some View {
         ScrollView(.horizontal) {
             HStack {
-                macrosCard(title: "Protein", currentValue: nutrition.protein, targetValue: dailyTarget.gramsOfProtein)
+                macrosCard(title: "Protein", currentValue: nutrition.protein, targetValue: dailyTarget.gramsOfProtein, color: .protein)
 
-                macrosCard(title: "Fat", currentValue: nutrition.fat, targetValue: dailyTarget.gramsOfFat)
+                macrosCard(title: "Fat", currentValue: nutrition.fat, targetValue: dailyTarget.gramsOfFat, color: .fat)
 
-                macrosCard(title: "Carbs", currentValue: nutrition.carbohydrates, targetValue: dailyTarget.gramsOfCarbs)
+                macrosCard(title: "Carbs", currentValue: nutrition.carbohydrates, targetValue: dailyTarget.gramsOfCarbs, color: .carbs)
             }
         }
         .scrollIndicators(.hidden)
     }
 
-    func macrosCard(title: String, currentValue: Float, targetValue: Float) -> some View {
+    func macrosCard(title: String, currentValue: Float, targetValue: Float, color: Color) -> some View {
         HStack {
-            CircularProgressView(progress: Double(currentValue / targetValue), color: .red)
+            CircularProgressView(progress: Double(currentValue / targetValue), color: color)
                 .frame(width: 60, height: 60)
 
             VStack {
                 Text(title)
+                    .color(emphasis: .medium)
 
                 Text("\(Int(currentValue)) / \(Int(targetValue))")
+                    .color(emphasis: .disabled)
             }
         }
         .padding()

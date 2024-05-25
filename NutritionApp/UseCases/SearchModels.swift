@@ -251,7 +251,7 @@ struct GraphViewModelData {
 
 struct GraphViewModel {
 
-    static let evaluatedNutrients = [Nutrient.protein_g, Nutrient.carbohydrates_total_g, Nutrient.fat_total_g]
+    static let evaluatedNutrients = Nutrient.allCases
 
     let data: [GraphViewModelData]
 
@@ -266,7 +266,7 @@ struct GraphViewModel {
         GraphViewModel.evaluatedNutrients.forEach { nutrient in
             data.append(
                 GraphViewModelData(
-                    color: NutritionalItemViewModel.colorFor(nutrient: nutrient),
+                    color: nutrient.color,
                     previousCompleton: progress,
                     completion: CGFloat(model.value(for: nutrient)) / sum))
 
@@ -280,10 +280,6 @@ struct GraphViewModel {
 
 enum Nutrient: String, CaseIterable, Identifiable {
 
-    var id: String {
-        self.rawValue
-    }
-
     case fat_total_g
     case fat_saturated_g
     case protein_g
@@ -293,5 +289,32 @@ enum Nutrient: String, CaseIterable, Identifiable {
     case carbohydrates_total_g
     case fiber_g
     case sugar_g
+
+    var id: String {
+        self.rawValue
+    }
+
+    var color: Color {
+        switch self {
+        case .fat_total_g:
+            return Color.fat
+        case .fat_saturated_g:
+            return Color.fatSaturated
+        case .protein_g:
+            return Color.protein
+        case .sodium_mg:
+            return Color.sodium
+        case .potassium_mg:
+            return Color.potassium
+        case .cholesterol_mg:
+            return Color.cholesterol
+        case .carbohydrates_total_g:
+            return Color.carbs
+        case .fiber_g:
+            return Color.fiber
+        case .sugar_g:
+            return Color.sugar
+        }
+    }
 
 }
