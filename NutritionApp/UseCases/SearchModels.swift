@@ -163,7 +163,7 @@ extension NutritionalItemViewModel {
         serving_size_g = model.serving_size_g
         serving_size_baseline_g = model.serving_size_g
 
-        var nutrients = [Nutrient: Float]()
+        var nutrients = NutrientValues()
         for nutrient in Nutrient.allCases {
             switch nutrient {
             case .fat_total_g:
@@ -195,7 +195,7 @@ extension NutritionalItemViewModel {
         serving_size_g = model.serving_size_g
         serving_size_baseline_g = model.serving_size_baseline_g
 
-        var nutrients = [Nutrient: Float]()
+        var nutrients = NutrientValues()
         for nutrient in Nutrient.allCases {
             switch nutrient {
             case .fat_total_g:
@@ -259,7 +259,7 @@ struct GraphViewModel {
         var progress: CGFloat = 0
         var sum: CGFloat = 0
         GraphViewModel.evaluatedNutrients.forEach { nutrient in
-            sum += CGFloat(model.value(for: nutrient))
+            sum += CGFloat(model.value(for: nutrient) * nutrient.unit.multiplier)
         }
 
         var data = [GraphViewModelData]()
@@ -268,9 +268,9 @@ struct GraphViewModel {
                 GraphViewModelData(
                     color: nutrient.color,
                     previousCompleton: progress,
-                    completion: CGFloat(model.value(for: nutrient)) / sum))
+                    completion: CGFloat(model.value(for: nutrient) * nutrient.unit.multiplier) / sum))
 
-            progress += CGFloat(model.value(for: nutrient)) / sum
+            progress += CGFloat(model.value(for: nutrient) * nutrient.unit.multiplier) / sum
         }
 
         self.data = data

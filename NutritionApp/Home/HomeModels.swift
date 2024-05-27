@@ -1,7 +1,7 @@
 struct DailyTarget {
 
     let calories: Float
-    let nutrients: [Nutrient: Float]
+    let nutrients: NutrientValues
 
 }
 

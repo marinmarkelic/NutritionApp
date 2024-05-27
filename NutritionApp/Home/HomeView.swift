@@ -34,7 +34,7 @@ struct HomeView: View {
             }
         }
         .maxSize()
-        .padding(8)
+//        .padding(8)
         .background(Color.background)
         .task {
             await presenter.fetchMeals()

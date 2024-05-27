@@ -61,11 +61,19 @@ struct MealInformationView: View {
                 NutritionCircleGraph(meal: meal)
                     .maxWidth()
 
-                ForEach(meal.items, id: \.name) { item in
-                    NutritionInformationView(item: item, input: item.serving_size_g, updateServingSize: updateServingSize)
-                        .maxWidth()
-                        .background(Color.overlay())
+                VStack {
+                    Text("Amount")
+                        .color(emphasis: .high)
+                        .shiftLeft()
+
+                    ForEach(meal.items, id: \.name) { item in
+                        NutritionInformationView(item: item, input: item.serving_size_g, updateServingSize: updateServingSize)
+                            .maxWidth()
+                            .background(Color.overlay())
+                    }
                 }
+                .padding()
+                .background(Color.overlay())
             }
         }
         .background(Color.background)
@@ -79,6 +87,7 @@ struct NutritionInformationView: View {
     private let updateServingSize: (String, NutritionalItemViewModel) -> Void
 
     @State private var input: String
+    @State private var textWidth: CGFloat = .zero
 
     init(item: NutritionalItemViewModel, input: Float, updateServingSize: @escaping (String, NutritionalItemViewModel) -> Void) {
         self.item = item
@@ -88,18 +97,30 @@ struct NutritionInformationView: View {
 
     var body: some View {
         HStack {
-            Text(item.name)
-
-            Spacer()
+            Text("\(item.name.capitalized):")
+                .color(emphasis: .medium)
+                .bold()
 
             HStack {
                 TextField("Amount", text: $input)
+                    .foregroundStyle(Color.text(emphasis: .medium))
                     .keyboardType(.numberPad)
                     .onChange(of: input) { value in
                         updateServingSize(value, item)
                     }
+                    .fixedSize(horizontal: true, vertical: false)
+//                    .frame(width: textWidth)
+                    .overlay {
+                        Text(input)
+                            .hidden()
+                            .fixedSize(horizontal: true, vertical: false)
+//                            .onSizeChange { size in
+//                                textWidth = size.width + 10
+//                            }
+                    }
 
                 Text("g")
+                    .color(emphasis: .disabled)
             }
         }
     }
@@ -113,36 +134,72 @@ struct NutritionCircleGraph: View {
     var body: some View {
         HStack {
             VStack {
-                Text("\(meal.name)")
+                Text("\(meal.name.capitalized)")
+                    .color(emphasis: .high)
+                    .font(.title)
+                    .shiftLeft()
 
-                MultipleCircleView(meal: meal, strokeLineWidth: 60)
-                .size(with: 200)
+                MealGraphView(meal: meal)
             }
         }
 
         VStack {
-            Text("\(meal.calories) calories")
-
-            Text("\(meal.value(for: .protein_g)) grams of protein")
+            Text("\(meal.calories.toInt()) calories")
+                .color(emphasis: .medium)
         }
     }
 
 }
 
-public struct MultipleCircleView: View {
+struct MealGraphView: View {
 
     let meal: MealViewModel
+
+    var body: some View {
+        HStack {
+            MultipleCircleView(meal: meal, size: 200, strokeLineWidth: 60)
+
+            VStack {
+                ForEach(Array(meal.nutrients.sortedByValue(ascending: false)), id: \.0) { nutrient, value in
+                    nutrientCell(for: nutrient, value: value)
+                }
+            }
+        }
+    }
+
+    private func nutrientCell(for nutrient: Nutrient, value: Float) -> some View {
+        HStack {
+            Circle()
+                .size(with: 12)
+                .foregroundStyle(nutrient.color)
+                .frame(alignment: .leading)
+
+            Text(nutrient.title)
+                .color(emphasis: .medium)
+                .bold()
+
+            Text("\(value.toInt()) \(nutrient.unit.shortened)")
+                .color(emphasis: .medium)
+        }
+        .shiftLeft()
+    }
+
+}
+
+struct MultipleCircleView: View {
+
+    let meal: MealViewModel
+    let size: CGFloat
     let strokeLineWidth: CGFloat
 
-    @State var size: CGSize = .zero
+//    @State var size: CGSize = .zero
 
     private var circleSize: CGFloat {
-        let size = size.width - strokeLineWidth
-        print("***2 \(size)")
+        let size = size - strokeLineWidth
         return size > .zero ? size : .zero
     }
 
-    public var body: some View {
+    var body: some View {
         ZStack {
             ForEach(meal.graphData.data, id: \.color) { data in
                 Circle()
@@ -151,12 +208,12 @@ public struct MultipleCircleView: View {
                     .frame(width: circleSize)
             }
         }
+        .size(with: size)
         .animation(.bouncy, value: meal)
-        .maxSize()
-        .onSizeChange { size in
-            self.size = size
-            print("***1 \(size)")
-        }
+//        .maxSize()
+//        .onSizeChange { size in
+//            self.size = size
+//        }
     }
 
 }

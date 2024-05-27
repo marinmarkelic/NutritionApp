@@ -1,6 +1,47 @@
 import Foundation
 import SwiftUI
 
+typealias NutrientValues = [Nutrient: Float]
+
+extension NutrientValues {
+
+    static let empty: NutrientValues = [:]
+
+    func sortedByValue(ascending: Bool = true) -> [(Nutrient, Float)] {
+        if ascending {
+            return self.sorted { $0.value * $0.key.unit.multiplier < $1.value * $1.key.unit.multiplier }
+        } else {
+            return self.sorted { $0.value * $0.key.unit.multiplier > $1.value * $1.key.unit.multiplier }
+        }
+    }
+
+}
+
+enum MeasuringUnit: String {
+
+    case grams = "Grams"
+    case milligrams = "Milligrams"
+
+    var shortened: String {
+        switch self {
+        case .grams:
+            "g"
+        case .milligrams:
+            "mg"
+        }
+    }
+
+    var multiplier: Float {
+        switch self {
+        case .grams:
+            1
+        case .milligrams:
+            0.001
+        }
+    }
+
+}
+
 enum Nutrient: String, CaseIterable, Identifiable {
 
     case fat_total_g
@@ -40,6 +81,15 @@ enum Nutrient: String, CaseIterable, Identifiable {
         }
     }
 
+    var unit: MeasuringUnit {
+        switch self {
+        case .fat_total_g, .fat_saturated_g, .protein_g, .carbohydrates_total_g, .fiber_g, .sugar_g:
+            return .grams
+        case .sodium_mg, .potassium_mg, .cholesterol_mg:
+            return .milligrams
+        }
+    }
+
     var color: Color {
         switch self {
         case .fat_total_g:
@@ -68,12 +118,12 @@ enum Nutrient: String, CaseIterable, Identifiable {
 struct DailyNutrition {
 
     let calories: Float
-    let nutrients: [Nutrient: Float]
+    let nutrients: NutrientValues
     let items: [String]
 
     init(
         calories: Float = 0,
-        nutrients: [Nutrient: Float] = [:],
+        nutrients: NutrientValues = .empty,
         items: [String] = []
     ) {
         self.calories = calories

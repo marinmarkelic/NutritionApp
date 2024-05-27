@@ -64,7 +64,7 @@ actor StorageUseCase {
         let fiber = energyExpenditureService.gramsOfFiber(for: calories)
         let sugar = energyExpenditureService.gramsOfSugar(for: calories)
 
-        var nutrients: [Nutrient: Float] = [:]
+        var nutrients: NutrientValues = .empty
         nutrients[.protein_g] = protein
         nutrients[.fat_total_g] = fat
         nutrients[.carbohydrates_total_g] = carbs

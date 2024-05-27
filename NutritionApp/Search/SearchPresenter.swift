@@ -26,8 +26,6 @@ class SearchPresenter: ObservableObject {
         Task { [weak self] in
             guard let self else { return }
 
-//            Swift.print(meal)
-
             await storageUseCase.save(meal: meal)
         }
     }
