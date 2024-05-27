@@ -1,37 +1,6 @@
 import Combine
 import Dependencies
 
-struct DailyTarget {
-
-    let calories: Float
-    let gramsOfProtein: Float
-    let gramsOfFat: Float
-    let gramsOfCarbs: Float
-
-}
-
-struct DailyCalorieStats {
-
-    let calories: Float
-    let targetCalories: Float
-    let burnedCalores: Float
-
-    var calorieRatio: Float {
-        ((calories / targetCalories) - 1) * 100
-    }
-
-    var ratioString: String {
-        if calorieRatio < 100 {
-            return "Deficit"
-        } else if calorieRatio > 100 {
-            return "Surplus"
-        } else {
-            return "At target"
-        }
-    }
-
-}
-
 class HomePresenter: ObservableObject {
 
     private let chartHeightOffset: Int = 400

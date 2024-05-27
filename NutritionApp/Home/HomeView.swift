@@ -130,31 +130,36 @@ extension HomeView {
     func dailyMacros(for dailyTarget: DailyTarget, nutrition: DailyNutrition) -> some View {
         ScrollView(.horizontal) {
             HStack {
-                macrosCard(title: "Protein", currentValue: nutrition.protein, targetValue: dailyTarget.gramsOfProtein, color: .protein)
-
-                macrosCard(title: "Fat", currentValue: nutrition.fat, targetValue: dailyTarget.gramsOfFat, color: .fat)
-
-                macrosCard(title: "Carbs", currentValue: nutrition.carbohydrates, targetValue: dailyTarget.gramsOfCarbs, color: .carbs)
+                ForEach(Array(nutrition.nutrients.keys)) { nutrient in
+                    macrosCard(
+                        title: nutrient.title,
+                        currentValue: nutrition.nutrients[nutrient] ?? .zero,
+                        targetValue: dailyTarget.nutrients[nutrient] ?? .zero,
+                        color: nutrient.color)
+                }
             }
         }
         .scrollIndicators(.hidden)
     }
 
+    @ViewBuilder
     func macrosCard(title: String, currentValue: Float, targetValue: Float, color: Color) -> some View {
-        HStack {
-            CircularProgressView(progress: Double(currentValue / targetValue), color: color)
-                .frame(width: 60, height: 60)
+        if targetValue != .zero {
+            HStack {
+                CircularProgressView(progress: Double(currentValue / targetValue), color: color)
+                    .frame(width: 60, height: 60)
 
-            VStack {
-                Text(title)
-                    .color(emphasis: .medium)
+                VStack {
+                    Text(title)
+                        .color(emphasis: .medium)
 
-                Text("\(Int(currentValue)) / \(Int(targetValue))")
-                    .color(emphasis: .disabled)
+                    Text("\(Int(currentValue)) / \(Int(targetValue))")
+                        .color(emphasis: .disabled)
+                }
             }
+            .padding()
+            .background(Color.overlay())
         }
-        .padding()
-        .background(Color.overlay())
     }
 
 }

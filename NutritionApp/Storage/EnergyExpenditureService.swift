@@ -82,6 +82,31 @@ class EnergyExpenditureService {
         return kcalsOfCarbs / 4
     }
 
+    func milligramsOfSodium() -> Float {
+        2300
+    }
+
+    func milligramsOfCholesterol() -> Float {
+        300
+    }
+
+    func milligramsOfPotassium(for sex: Sex) -> Float {
+        switch sex {
+        case .male:
+            return 3250
+        case .female:
+            return 2750
+        }
+    }
+
+    func gramsOfFiber(for calories: Float) -> Float {
+        14 * calories / 1000
+    }
+
+    func gramsOfSugar(for calories: Float) -> Float {
+        calories * 0.1 / 4
+    }
+
 }
 
 extension EnergyExpenditureService: DependencyKey {

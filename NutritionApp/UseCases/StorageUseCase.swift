@@ -38,28 +38,43 @@ actor StorageUseCase {
 
     func fetchNecessaryCalories() -> DailyTarget? {
         guard
-            let sexStr = userMetric(for: "sex") as? String,
-            let sex = Sex(rawValue: sexStr),
-            let phisicalActivityStr = userMetric(for: "activityType") as? String,
-            let phisicalActivity = ActivityFrequency(rawValue: phisicalActivityStr),
+            let sexString = userMetric(for: "sex") as? String,
+            let sex = Sex(rawValue: sexString),
+            let phisicalActivityString = userMetric(for: "activityType") as? String,
+            let phisicalActivity = ActivityFrequency(rawValue: phisicalActivityString),
             let age = userMetric(for: "age") as? Int,
             let height = userMetric(for: "height") as? Int,
-            let weight = userMetric(for: "weight") as? Int
+            let weight = userMetric(for: "weight") as? Float
         else { return nil }
 
-        let enEx = energyExpenditureService
+        let calories = energyExpenditureService
             .totalDailyEnergyExpenditure(
                 for: sex,
                 age: age,
                 height: height,
-                weight: weight,
+                weight: Int(weight),
                 phisicalActivity: phisicalActivity)
 
-        let protein = energyExpenditureService.gramsOfProtein(for: userMetric(for: "weight") as? Float ?? 0)
-        let fat = energyExpenditureService.gramsOfFat(for: enEx)
-        let carbs = energyExpenditureService.gramsOfCarbs(for: enEx, gramsOfProtein: protein, gramsOfFat: fat)
+        let protein = energyExpenditureService.gramsOfProtein(for: weight)
+        let fat = energyExpenditureService.gramsOfFat(for: calories)
+        let carbs = energyExpenditureService.gramsOfCarbs(for: calories, gramsOfProtein: protein, gramsOfFat: fat)
+        let sodium = energyExpenditureService.milligramsOfSodium()
+        let cholesterol = energyExpenditureService.milligramsOfCholesterol()
+        let potassium = energyExpenditureService.milligramsOfPotassium(for: sex)
+        let fiber = energyExpenditureService.gramsOfFiber(for: calories)
+        let sugar = energyExpenditureService.gramsOfSugar(for: calories)
 
-        return DailyTarget(calories: enEx, gramsOfProtein: protein, gramsOfFat: fat, gramsOfCarbs: carbs)
+        var nutrients: [Nutrient: Float] = [:]
+        nutrients[.protein_g] = protein
+        nutrients[.fat_total_g] = fat
+        nutrients[.carbohydrates_total_g] = carbs
+        nutrients[.sodium_mg] = sodium
+        nutrients[.cholesterol_mg] = cholesterol
+        nutrients[.potassium_mg] = potassium
+        nutrients[.fiber_g] = fiber
+        nutrients[.sugar_g] = sugar
+
+        return DailyTarget(calories: calories, nutrients: nutrients)
      }
 
     func fetchCalories(from daysAgo: Int) -> [(Int, DailyNutrition)] {
