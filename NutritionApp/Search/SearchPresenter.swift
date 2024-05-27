@@ -19,6 +19,7 @@ class SearchPresenter: ObservableObject {
             guard let self else { return }
 
 //            meal = await searchUseCase.search(for: query)
+            // TODO: remove onAppear
             meal = mockMeal()
         }
     }

@@ -61,17 +61,17 @@ extension View {
 
     func shiftUp(spacing: CGFloat = .zero) -> some View {
         VStack(spacing: spacing) {
-            Spacer()
-
             self
+
+            Spacer()
         }
     }
 
     func shiftDown(spacing: CGFloat = .zero) -> some View {
         VStack(spacing: spacing) {
-            self
-
             Spacer()
+
+            self
         }
     }
 

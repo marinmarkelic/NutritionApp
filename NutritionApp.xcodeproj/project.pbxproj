@@ -37,6 +37,8 @@
 		9C9B56852AFA7F9200A4B2BC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9C9B56842AFA7F9200A4B2BC /* Assets.xcassets */; };
 		9C9B56882AFA7F9200A4B2BC /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9C9B56872AFA7F9200A4B2BC /* Preview Assets.xcassets */; };
 		9CA3E76E2C047AF400F38B16 /* HomeModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CA3E76D2C047AF400F38B16 /* HomeModels.swift */; };
+		9CA3E7702C04C47F00F38B16 /* MealGraphView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CA3E76F2C04C47F00F38B16 /* MealGraphView.swift */; };
+		9CA3E7722C04C57600F38B16 /* MealGraphNutrientCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CA3E7712C04C57600F38B16 /* MealGraphNutrientCell.swift */; };
 		9CB5EE982BD3E4F600059A24 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CB5EE972BD3E4F600059A24 /* Models.swift */; };
 		9CBB0A852B2DC8E50064EFCC /* SearchUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CBB0A842B2DC8E50064EFCC /* SearchUseCase.swift */; };
 		9CBB0A872B2DC9AD0064EFCC /* BaseClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CBB0A862B2DC9AD0064EFCC /* BaseClient.swift */; };
@@ -79,6 +81,8 @@
 		9C9B56842AFA7F9200A4B2BC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9C9B56872AFA7F9200A4B2BC /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		9CA3E76D2C047AF400F38B16 /* HomeModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeModels.swift; sourceTree = "<group>"; };
+		9CA3E76F2C04C47F00F38B16 /* MealGraphView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealGraphView.swift; sourceTree = "<group>"; };
+		9CA3E7712C04C57600F38B16 /* MealGraphNutrientCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealGraphNutrientCell.swift; sourceTree = "<group>"; };
 		9CB5EE972BD3E4F600059A24 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
 		9CBB0A842B2DC8E50064EFCC /* SearchUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchUseCase.swift; sourceTree = "<group>"; };
 		9CBB0A862B2DC9AD0064EFCC /* BaseClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseClient.swift; sourceTree = "<group>"; };
@@ -138,6 +142,8 @@
 			children = (
 				9C60157A2B249886005A62C7 /* SearchView.swift */,
 				9C48CF142BA707D700ABA072 /* SearchPresenter.swift */,
+				9CA3E76F2C04C47F00F38B16 /* MealGraphView.swift */,
+				9CA3E7712C04C57600F38B16 /* MealGraphNutrientCell.swift */,
 			);
 			path = Search;
 			sourceTree = "<group>";
@@ -363,11 +369,13 @@
 				9CBB0A952B2DFC240064EFCC /* StorageService.swift in Sources */,
 				9C97861A2BAECD020013C15F /* SecretsClient.swift in Sources */,
 				9C1FD3C32B445F2E00D8C6FD /* ChatsView.swift in Sources */,
+				9CA3E7722C04C57600F38B16 /* MealGraphNutrientCell.swift in Sources */,
 				9C6015782B24874A005A62C7 /* HomeView.swift in Sources */,
 				9CBB0A852B2DC8E50064EFCC /* SearchUseCase.swift in Sources */,
 				9C9B56812AFA7F9000A4B2BC /* NutritionApp.swift in Sources */,
 				9C8458252BCC3C06005EE698 /* ProfileView.swift in Sources */,
 				9C1FD3CD2B44930100D8C6FD /* CGFloat+Extensions.swift in Sources */,
+				9CA3E7702C04C47F00F38B16 /* MealGraphView.swift in Sources */,
 				9CB5EE982BD3E4F600059A24 /* Models.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

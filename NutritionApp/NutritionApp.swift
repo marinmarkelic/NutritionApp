@@ -18,7 +18,7 @@ struct NutritionApp: App {
                 ProfileView()
                     .tabItem { Text("Profile") }
             }
-            .toolbarColorScheme(.light, for: .tabBar)
+            .toolbarBackground(.hidden, for: .tabBar)
         }
     }
 

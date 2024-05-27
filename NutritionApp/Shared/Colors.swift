@@ -1,18 +1,26 @@
 import SwiftUI
 
 // https://m2.material.io/design/color/dark-theme.html#ui-application
+
+// MARK: Elements
+extension Color {
+
+    static let background = Color(hex: 0x121212)
+    static let action = Color(hex: 0xBB86FC)
+
+    static func overlay(opacity: CGFloat = 0.05) -> Color {
+        white.opacity(opacity)
+    }
+
+}
+
+// MARK: Text
 extension Color {
 
     enum ColorEmphasis: CGFloat {
         case high = 0.87
         case medium = 0.6
         case disabled = 0.38
-    }
-
-    static let background = Color(hex: 0x121212)
-
-    static func overlay(opacity: CGFloat = 0.05) -> Color {
-        white.opacity(opacity)
     }
 
     static func text(emphasis: ColorEmphasis = .high) -> Color {

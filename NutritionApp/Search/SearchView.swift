@@ -7,37 +7,62 @@ struct SearchView: View {
     @State private var query: String = ""
 
     var body: some View {
-        VStack(spacing: 0) {
+        ZStack {
             if presenter.meal.items.count > 0 {
-                VStack {
+                ScrollView {
+                    Text("\(presenter.meal.name.capitalized)")
+                        .color(emphasis: .high)
+                        .font(.title)
+                        .shiftLeft()
+
                     MealInformationView(meal: presenter.meal, query: presenter.query, updateServingSize: presenter.update)
 
-                    HStack {
-                        Button("Save") {
-                            presenter.save()
-                        }
-
-                        Button("Print") {
-                            presenter.print()
-                        }
-
-                        Button("Clear") {
-                            presenter.clearAll()
-                        }
-                    }
+                    actionsView
                 }
+                .background(Color.background)
+                .padding([.leading, .top, .trailing], 8)
             }
 
-            Spacer()
-
             CustomTextField(text: $query, action: presenter.search)
+                .background(Material.bar)
+                .shiftDown()
         }
         .maxWidth()
-        .padding(8)
         .background(Color.background)
+        .toolbarBackground(.hidden, for: .tabBar)
         .dismissKeyboardOnTap()
         .onChange(of: presenter.meal) { newValue in
             print("--- \(newValue)")
+        }
+        .onAppear {
+            presenter.search(query: "")
+        }
+    }
+
+    var actionsView: some View {
+        HStack {
+            Button("Save") {
+                presenter.save()
+            }
+            .padding(8)
+            .foregroundStyle(Color.background)
+            .background(Color.action)
+
+            Button("Print") {
+                presenter.print()
+            }
+            .backgroundStyle(Color.action)
+            .padding(8)
+            .foregroundStyle(Color.background)
+            .background(Color.action)
+
+            Button("Clear") {
+                presenter.clearAll()
+            }
+            .backgroundStyle(Color.action)
+            .padding(8)
+            .foregroundStyle(Color.background)
+            .background(Color.action)
         }
     }
 
@@ -56,7 +81,6 @@ struct MealInformationView: View {
     }
 
     var body: some View {
-        ScrollView {
             VStack {
                 NutritionCircleGraph(meal: meal)
                     .maxWidth()
@@ -69,14 +93,11 @@ struct MealInformationView: View {
                     ForEach(meal.items, id: \.name) { item in
                         NutritionInformationView(item: item, input: item.serving_size_g, updateServingSize: updateServingSize)
                             .maxWidth()
-                            .background(Color.overlay())
                     }
                 }
                 .padding()
                 .background(Color.overlay())
             }
-        }
-        .background(Color.background)
     }
 
 }
@@ -96,13 +117,13 @@ struct NutritionInformationView: View {
     }
 
     var body: some View {
-        HStack {
+        HStack/*(alignment: .leading)*/ {
             Text("\(item.name.capitalized):")
                 .color(emphasis: .medium)
                 .bold()
 
             HStack {
-                TextField("Amount", text: $input)
+                TextField("", text: $input)
                     .foregroundStyle(Color.text(emphasis: .medium))
                     .keyboardType(.numberPad)
                     .onChange(of: input) { value in
@@ -121,7 +142,11 @@ struct NutritionInformationView: View {
 
                 Text("g")
                     .color(emphasis: .disabled)
+
+                Spacer()
             }
+            .maxWidth()
+            .background(Color.overlay())
         }
     }
 
@@ -132,56 +157,12 @@ struct NutritionCircleGraph: View {
     let meal: MealViewModel
 
     var body: some View {
-        HStack {
-            VStack {
-                Text("\(meal.name.capitalized)")
-                    .color(emphasis: .high)
-                    .font(.title)
-                    .shiftLeft()
-
-                MealGraphView(meal: meal)
-            }
-        }
-
         VStack {
+            MealGraphView(meal: meal)
+
             Text("\(meal.calories.toInt()) calories")
                 .color(emphasis: .medium)
         }
-    }
-
-}
-
-struct MealGraphView: View {
-
-    let meal: MealViewModel
-
-    var body: some View {
-        HStack {
-            MultipleCircleView(meal: meal, size: 200, strokeLineWidth: 60)
-
-            VStack {
-                ForEach(Array(meal.nutrients.sortedByValue(ascending: false)), id: \.0) { nutrient, value in
-                    nutrientCell(for: nutrient, value: value)
-                }
-            }
-        }
-    }
-
-    private func nutrientCell(for nutrient: Nutrient, value: Float) -> some View {
-        HStack {
-            Circle()
-                .size(with: 12)
-                .foregroundStyle(nutrient.color)
-                .frame(alignment: .leading)
-
-            Text(nutrient.title)
-                .color(emphasis: .medium)
-                .bold()
-
-            Text("\(value.toInt()) \(nutrient.unit.shortened)")
-                .color(emphasis: .medium)
-        }
-        .shiftLeft()
     }
 
 }

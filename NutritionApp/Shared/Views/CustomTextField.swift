@@ -28,7 +28,6 @@ struct CustomTextField: View {
                     }
             }
             .padding(16)
-            .background(Color.gray.opacity(0.2))
         }
 
     }

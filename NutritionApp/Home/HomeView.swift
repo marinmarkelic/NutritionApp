@@ -34,8 +34,9 @@ struct HomeView: View {
             }
         }
         .maxSize()
-//        .padding(8)
+        .padding([.leading, .top, .trailing], 8)
         .background(Color.background)
+        .toolbarBackground(.visible, for: .tabBar)
         .task {
             await presenter.fetchMeals()
             await presenter.fetchCalories()
