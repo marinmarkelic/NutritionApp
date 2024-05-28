@@ -66,8 +66,21 @@ struct MealGraphNutrientCell: View {
     }
 
     private var valueText: some View {
-        Text("\(value.toInt()) \(nutrient.unit.shortened)")
+        Text(text(for: value, unit: nutrient.unit))
             .color(emphasis: .medium)
+    }
+
+    private func text(for value: Float, unit: MeasuringUnit) -> String {
+        switch unit {
+        case .grams:
+            guard value < 1 else { return String(format: "%.1f \(MeasuringUnit.grams.shortened)", value) }
+
+            return "\((value * 1000).toInt()) \(MeasuringUnit.milligrams.shortened)"
+        case .milligrams:
+            guard value >= 1000 else { return "\(value.toInt()) \(nutrient.unit.shortened)" }
+
+            return String(format: "%.1f \(MeasuringUnit.grams.shortened)", value / 1000)
+        }
     }
 
 }

@@ -4,4 +4,8 @@ extension Float {
         Int(self)
     }
 
+    func formatWithDecimalPoint() -> String {
+        "%d.1"
+    }
+
 }

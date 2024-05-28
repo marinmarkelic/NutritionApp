@@ -220,7 +220,7 @@ extension NutritionalItemViewModel {
         }
         self.nutrients = nutrients
 
-        print("--- from storage \(self.description)")
+//        print("--- from storage \(self.description)")
     }
 
 }

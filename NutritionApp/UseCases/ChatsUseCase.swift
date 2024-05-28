@@ -37,7 +37,7 @@ class ChatsUseCase {
 
     func send(text: String, conversationId: String?) async {
         let instructions = await fetchDailyMealsInstructions()
-        print("--- \(instructions)")
+//        print("--- \(instructions)")
 
         guard let conversationId else {
             await client.send(text: text, conversationId: conversationId, instructions: instructions)

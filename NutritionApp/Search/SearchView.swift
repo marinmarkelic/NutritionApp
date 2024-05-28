@@ -23,7 +23,7 @@ struct SearchView: View {
                 .padding([.leading, .top, .trailing], 8)
             }
 
-            CustomTextField(text: $query, action: presenter.search)
+            CustomTextField(text: $query, icon: .search, action: presenter.search)
                 .background(Material.bar)
                 .shiftDown()
         }
@@ -31,9 +31,9 @@ struct SearchView: View {
         .background(Color.background)
         .toolbarBackground(.hidden, for: .tabBar)
         .dismissKeyboardOnTap()
-        .onChange(of: presenter.meal) { newValue in
-            print("--- \(newValue)")
-        }
+//        .onChange(of: presenter.meal) { newValue in
+//            print("--- \(newValue)")
+//        }
         .onAppear {
             presenter.search(query: "")
         }
@@ -117,7 +117,7 @@ struct NutritionInformationView: View {
     }
 
     var body: some View {
-        HStack/*(alignment: .leading)*/ {
+        HStack {
             Text("\(item.name.capitalized):")
                 .color(emphasis: .medium)
                 .bold()
@@ -130,15 +130,6 @@ struct NutritionInformationView: View {
                         updateServingSize(value, item)
                     }
                     .fixedSize(horizontal: true, vertical: false)
-//                    .frame(width: textWidth)
-                    .overlay {
-                        Text(input)
-                            .hidden()
-                            .fixedSize(horizontal: true, vertical: false)
-//                            .onSizeChange { size in
-//                                textWidth = size.width + 10
-//                            }
-                    }
 
                 Text("g")
                     .color(emphasis: .disabled)

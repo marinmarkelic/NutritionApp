@@ -28,7 +28,7 @@ struct ChatsView: View {
                         .padding(.top, headerHeight)
                 }
 
-                CustomTextField(text: $presenter.query, isEnabled: $presenter.canSend) { _ in
+                CustomTextField(text: $presenter.query, icon: .send, isEnabled: $presenter.canSend) { _ in
                     presenter.send()
                 }
             }
