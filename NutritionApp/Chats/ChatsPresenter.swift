@@ -32,6 +32,7 @@ class ChatsPresenter: ObservableObject {
         Task {
             menuConversations = await chatsUseCase.fetchConversations()
         }
+        conversation = mockChats()
     }
 
     @MainActor
@@ -122,6 +123,23 @@ extension ConversationViewModel {
         /// First is used here because messages are reversed
         lastMessage = model.messages.first?.text ?? ""
         time = model.messages.first?.createdAt ?? .zero
+    }
+
+}
+
+extension ChatsPresenter {
+
+    func mockChats() -> Conversation {
+        let messages: [Message] = [
+            .init(id: "1", createdAt: 0, role: .user, text: "Hello"),
+            .init(id: "2", createdAt: 0, role: .assistant, text: "Hello"),
+            .init(id: "3", createdAt: 0, role: .user, text: "Hello"),
+            .init(id: "4", createdAt: 0, role: .assistant, text: "Hello"),
+            .init(id: "5", createdAt: 0, role: .user, text: "Hello"),
+            .init(id: "6", createdAt: 0, role: .assistant, text: "Hello"),
+            .init(id: "7", createdAt: 0, role: .user, text: "Hello"),
+        ]
+        return Conversation(id: "", assistantId: "", messages: messages)
     }
 
 }

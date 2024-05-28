@@ -22,7 +22,7 @@ struct ChatsView: View {
                     .scrollBounceBehavior(.basedOnSize)
                     .defaultScrollAnchor(.bottom)
                     .padding(.top, headerHeight)
-                    .background(Color.overlay())
+                    .background(Color.background)
 
                     sideMenu
                         .padding(.top, headerHeight)
@@ -31,6 +31,7 @@ struct ChatsView: View {
                 CustomTextField(text: $presenter.query, icon: .send, isEnabled: $presenter.canSend) { _ in
                     presenter.send()
                 }
+                .background(Material.bar)
             }
 
             VStack {
