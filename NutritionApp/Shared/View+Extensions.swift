@@ -22,6 +22,10 @@ extension View {
         frame(width: size, height: size, alignment: alignment)
     }
 
+    func roundCorners(radius: CGFloat, corners: UIRectCorner = .allCorners) -> some View {
+        clipShape(RoundedCorner(radius: radius, corners: corners)).ignoresSafeArea()
+    }
+
     func dismissKeyboardOnTap() -> some View {
         onTapGesture {
             UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
@@ -37,6 +41,17 @@ extension View {
             }
         )
         .onPreferenceChange(SizePreferenceKey.self, perform: onChange)
+    }
+
+    func onSafeAreaChanged(onChange: @escaping (EdgeInsets) -> Void) -> some View {
+        background(
+            GeometryReader { proxy in
+                Color
+                    .clear
+                    .preference(key: SafeAreaPreferenceKey.self, value: proxy.safeAreaInsets)
+            }
+        )
+        .onPreferenceChange(SafeAreaPreferenceKey.self, perform: onChange)
     }
 
 }

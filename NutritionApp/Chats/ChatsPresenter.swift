@@ -130,14 +130,35 @@ extension ConversationViewModel {
 extension ChatsPresenter {
 
     func mockChats() -> Conversation {
+        let longerText =
+"""
+asdaaaasdad asd adasdasdasadadasdsasdas
+asdasasdasdasdasda
+asd
+asd
+asdasdasd
+"""
+
         let messages: [Message] = [
             .init(id: "1", createdAt: 0, role: .user, text: "Hello"),
             .init(id: "2", createdAt: 0, role: .assistant, text: "Hello"),
-            .init(id: "3", createdAt: 0, role: .user, text: "Hello"),
+            .init(id: "3", createdAt: 0, role: .user, text: longerText),
             .init(id: "4", createdAt: 0, role: .assistant, text: "Hello"),
             .init(id: "5", createdAt: 0, role: .user, text: "Hello"),
             .init(id: "6", createdAt: 0, role: .assistant, text: "Hello"),
             .init(id: "7", createdAt: 0, role: .user, text: "Hello"),
+            .init(id: "8", createdAt: 0, role: .assistant, text: longerText),
+            .init(id: "9", createdAt: 0, role: .user, text: "Hello"),
+            .init(id: "10", createdAt: 0, role: .assistant, text: "Hello"),
+            .init(id: "15", createdAt: 0, role: .user, text: "Hello"),
+            .init(id: "16", createdAt: 0, role: .assistant, text: "Hello"),
+            .init(id: "71", createdAt: 0, role: .user, text: "Hello"),
+            .init(id: "21", createdAt: 0, role: .assistant, text: longerText),
+            .init(id: "31", createdAt: 0, role: .user, text: longerText),
+            .init(id: "41", createdAt: 0, role: .assistant, text: "Hello"),
+            .init(id: "51", createdAt: 0, role: .user, text: "Hello"),
+            .init(id: "61", createdAt: 0, role: .assistant, text: "Hello"),
+            .init(id: "71", createdAt: 0, role: .user, text: "Hello"),
         ]
         return Conversation(id: "", assistantId: "", messages: messages)
     }

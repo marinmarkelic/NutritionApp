@@ -7,6 +7,7 @@ extension Color {
 
     static let background = Color(hex: 0x121212)
     static let action = Color(hex: 0xBB86FC)
+    static let chatBubble = Color(hex: 0xFFFBE6)
 
     static func overlay(opacity: CGFloat = 0.05) -> Color {
         white.opacity(opacity)
