@@ -117,8 +117,16 @@ extension StorageService {
         defaults.setValue(value, forKey: key)
     }
 
+    func setValuesForKeys(_ keyedValues: [String : Any]) {
+        defaults.setValuesForKeys(keyedValues)
+    }
+
     func object(for key: String) -> Any? {
-        defaults.object(forKey: key)
+//        defaults.object(forKey: key)
+        let value = defaults.value(forKey: key)
+
+        Swift.print("Reading key \(key): \(value)")
+        return value
     }
 
 }

@@ -8,12 +8,33 @@ actor StorageUseCase {
     @Dependency(\.energyExpenditureService)
     private var energyExpenditureService: EnergyExpenditureService
 
-    func save(userMetric: Any?, for key: String) {
-        storageService.save(value: userMetric, for: key)
+    func save(userData: UserData) {
+        var keyedValues: [String : Any] = [:]
+        keyedValues["sex"] = userData.sex?.rawValue
+        keyedValues["age"] = userData.age
+        keyedValues["height"] = userData.height
+        keyedValues["weight"] = userData.weight
+        keyedValues["activityType"] = userData.activityFrequency?.rawValue
+        print(keyedValues)
+        storageService.setValuesForKeys(keyedValues)
     }
 
-    func userMetric(for key: String) -> Any? {
-        storageService.object(for: key)
+    func fetchUserData() -> UserData {
+        var sex: Sex? = nil
+        if let sexString = storageService.object(for: "sex") as? String {
+            sex = Sex(rawValue: sexString)
+        }
+
+        let age = storageService.object(for: "age") as? Int
+        let height = storageService.object(for: "height") as? Int
+        let weight = storageService.object(for: "weight") as? Int
+
+        var activityFrequency: ActivityFrequency? = nil
+        if let activityFrequencyString = storageService.object(for: "activityType") as? String {
+            activityFrequency = ActivityFrequency(rawValue: activityFrequencyString)
+        }
+
+        return UserData(sex: sex, age: age, height: height, weight: weight, activityFrequency: activityFrequency)
     }
 
     func save(meal: MealViewModel) {
@@ -110,6 +131,10 @@ actor StorageUseCase {
 
     func deleteAll() {
         storageService.deleteAll()
+    }
+
+    private func userMetric(for key: String) -> Any? {
+        storageService.object(for: key)
     }
 
 }

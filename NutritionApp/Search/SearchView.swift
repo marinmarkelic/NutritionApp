@@ -31,12 +31,9 @@ struct SearchView: View {
         .background(Color.background)
         .toolbarBackground(.hidden, for: .tabBar)
         .dismissKeyboardOnTap()
-//        .onChange(of: presenter.meal) { newValue in
-//            print("--- \(newValue)")
+//        .onAppear {
+//            presenter.search(query: "")
 //        }
-        .onAppear {
-            presenter.search(query: "")
-        }
     }
 
     var actionsView: some View {
