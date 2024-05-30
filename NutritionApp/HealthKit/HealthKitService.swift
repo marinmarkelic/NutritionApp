@@ -1,17 +1,26 @@
+import Combine
 import HealthKit
 import Dependencies
 
 class HealthKitService {
 
     private let store = HKHealthStore()
-
     private let dataTypes: Set = [
         HKQuantityType(.height),
         HKQuantityType(.bodyMass),
+        HKQuantityType(.basalEnergyBurned),
         HKQuantityType(.activeEnergyBurned),
         HKCharacteristicType(.biologicalSex),
         HKCharacteristicType(.dateOfBirth),
     ]
+
+    private var basalEnergyQuery: HKObserverQuery?
+    private var activeEnergyQuery: HKObserverQuery?
+    private var burntCaloriesSubject: CurrentValueSubject<Double?, Never> = CurrentValueSubject(nil)
+
+    var burntCaloriesPublisher: AnyPublisher<Double?, Never> {
+        burntCaloriesSubject.eraseToAnyPublisher()
+    }
 
     private var canAccessData: Bool {
         HKHealthStore.isHealthDataAvailable()
@@ -19,6 +28,87 @@ class HealthKitService {
 
     init() {
         requestAccess()
+        createCalorieQueries()
+    }
+
+    deinit {
+        guard
+            let activeEnergyQuery,
+            let basalEnergyQuery
+        else { return }
+
+        store.stop(activeEnergyQuery)
+        store.stop(basalEnergyQuery)
+    }
+
+    func createCalorieQueries() {
+        let activeEnergyType = HKQuantityType(.activeEnergyBurned)
+        let activeEnergyQuery = HKObserverQuery(sampleType: activeEnergyType, predicate: nil) { query, completionHandler, error in
+            Task { [weak self] in
+                guard let self else { return }
+
+                readBurnedEnergy()
+            }
+        }
+        self.activeEnergyQuery = activeEnergyQuery
+
+        let basalEnergyType = HKQuantityType(.basalEnergyBurned)
+        let basalEnergyQuery = HKObserverQuery(sampleType: basalEnergyType, predicate: nil) { query, completionHandler, error in
+            Task { [weak self] in
+                guard let self else { return }
+
+                readBurnedEnergy()
+            }
+        }
+        self.basalEnergyQuery = basalEnergyQuery
+
+        store.execute(basalEnergyQuery)
+    }
+
+    func readBurnedEnergy() {
+        let dispatchGroup = DispatchGroup()
+        let startOfDay = Calendar.current.startOfDay(for: .now)
+        let predicate = HKQuery.predicateForSamples(withStart: startOfDay, end: .now, options: .strictStartDate)
+
+        var basalEnergyBurned: Double?
+        var activeEnergyBurned: Double?
+
+        dispatchGroup.enter()
+        let basalEnergyType = HKQuantityType(.basalEnergyBurned)
+        let basalEnergyQuery = HKStatisticsQuery(quantityType: basalEnergyType, quantitySamplePredicate: predicate, options: .cumulativeSum) { (_, result, _) in
+            guard let result = result?.sumQuantity() else {
+                dispatchGroup.leave()
+                return
+            }
+
+            basalEnergyBurned = result.doubleValue(for: HKUnit.kilocalorie())
+            dispatchGroup.leave()
+        }
+        store.execute(basalEnergyQuery)
+
+        dispatchGroup.enter()
+        let activeEnergyType = HKQuantityType(.activeEnergyBurned)
+        let activeEnergyQuery = HKStatisticsQuery(quantityType: activeEnergyType, quantitySamplePredicate: predicate, options: .cumulativeSum) { (_, result, _) in
+            guard let result = result?.sumQuantity() else {
+                dispatchGroup.leave()
+                return
+            }
+
+            activeEnergyBurned = result.doubleValue(for: HKUnit.kilocalorie())
+            dispatchGroup.leave()
+        }
+        store.execute(activeEnergyQuery)
+
+        dispatchGroup.notify(queue: .main) { [weak self] in
+            guard
+                let self,
+                let basalEnergyBurned,
+                let activeEnergyBurned
+            else { return }
+
+            let energy = basalEnergyBurned + activeEnergyBurned
+            burntCaloriesSubject.send(energy)
+        }
     }
 
     func fetchSex() -> HKBiologicalSex? {

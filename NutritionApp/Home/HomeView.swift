@@ -111,7 +111,7 @@ extension HomeView {
 
                 Spacer()
                     .overlay {
-                        calorieInfoCell(with: 0, title: "Burned")
+                        calorieInfoCell(with: presenter.burnedCalories ?? .zero, title: "Burned")
                     }
             }
         }

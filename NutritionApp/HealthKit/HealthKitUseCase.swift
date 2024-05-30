@@ -1,10 +1,15 @@
+import Combine
 import Foundation
 import Dependencies
 
-actor HealthKitUseCase {
+class HealthKitUseCase {
 
     @Dependency(\.healthKitService)
     private var service: HealthKitService
+
+    var burntCaloriesPublisher: AnyPublisher<Double?, Never> {
+        service.burntCaloriesPublisher
+    }
 
     func userData() async -> HealthKitUserData {
         let biologicalSex = service.fetchSex()
