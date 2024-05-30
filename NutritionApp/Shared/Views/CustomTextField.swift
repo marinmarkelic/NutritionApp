@@ -3,11 +3,19 @@ import SwiftUI
 struct CustomTextField: View {
 
     private let action: (String) -> Void
+    private let icon: BundleImage
+    private let imageSize: CGFloat = 24
+
     private var text: Binding<String>
     private var isEnabled: Binding<Bool>
 
-    init(text: Binding<String>, isEnabled: Binding<Bool> = .constant(true), action: @escaping (String) -> Void) {
+    init(
+        text: Binding<String>,
+        icon: BundleImage,
+        isEnabled: Binding<Bool> = .constant(true),
+        action: @escaping (String) -> Void) {
         self.text = text
+        self.icon = icon
         self.isEnabled = isEnabled
         self.action = action
     }
@@ -16,10 +24,11 @@ struct CustomTextField: View {
         VStack {
             HStack {
                 TextField("Search", text: text)
+                    .autocorrectionDisabled()
 
-                Circle()
-                    .foregroundStyle(isEnabled.wrappedValue ? Color.yellow : Color.gray)
-                    .frame(width: 30, height: 30)
+                Image(from: icon)
+                    .resizable()
+                    .size(with: imageSize)
                     .onTapGesture {
                         guard isEnabled.wrappedValue else { return }
 
@@ -27,7 +36,6 @@ struct CustomTextField: View {
                     }
             }
             .padding(16)
-            .background(Color.gray.opacity(0.2))
         }
 
     }

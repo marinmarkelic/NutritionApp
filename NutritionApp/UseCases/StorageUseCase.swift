@@ -8,12 +8,33 @@ actor StorageUseCase {
     @Dependency(\.energyExpenditureService)
     private var energyExpenditureService: EnergyExpenditureService
 
-    func save(userMetric: Any?, for key: String) {
-        storageService.save(value: userMetric, for: key)
+    func save(userData: UserData) {
+        var keyedValues: [String : Any] = [:]
+        keyedValues["sex"] = userData.sex?.rawValue
+        keyedValues["age"] = userData.age
+        keyedValues["height"] = userData.height
+        keyedValues["weight"] = userData.weight
+        keyedValues["activityType"] = userData.activityFrequency?.rawValue
+        print(keyedValues)
+        storageService.setValuesForKeys(keyedValues)
     }
 
-    func userMetric(for key: String) -> Any? {
-        storageService.object(for: key)
+    func fetchUserData() -> UserData {
+        var sex: Sex? = nil
+        if let sexString = storageService.object(for: "sex") as? String {
+            sex = Sex(rawValue: sexString)
+        }
+
+        let age = storageService.object(for: "age") as? Int
+        let height = storageService.object(for: "height") as? Int
+        let weight = storageService.object(for: "weight") as? Int
+
+        var activityFrequency: ActivityFrequency? = nil
+        if let activityFrequencyString = storageService.object(for: "activityType") as? String {
+            activityFrequency = ActivityFrequency(rawValue: activityFrequencyString)
+        }
+
+        return UserData(sex: sex, age: age, height: height, weight: weight, activityFrequency: activityFrequency)
     }
 
     func save(meal: MealViewModel) {
@@ -38,28 +59,43 @@ actor StorageUseCase {
 
     func fetchNecessaryCalories() -> DailyTarget? {
         guard
-            let sexStr = userMetric(for: "sex") as? String,
-            let sex = Sex(rawValue: sexStr),
-            let phisicalActivityStr = userMetric(for: "activityType") as? String,
-            let phisicalActivity = ActivityFrequency(rawValue: phisicalActivityStr),
+            let sexString = userMetric(for: "sex") as? String,
+            let sex = Sex(rawValue: sexString),
+            let phisicalActivityString = userMetric(for: "activityType") as? String,
+            let phisicalActivity = ActivityFrequency(rawValue: phisicalActivityString),
             let age = userMetric(for: "age") as? Int,
             let height = userMetric(for: "height") as? Int,
-            let weight = userMetric(for: "weight") as? Int
+            let weight = userMetric(for: "weight") as? Float
         else { return nil }
 
-        let enEx = energyExpenditureService
+        let calories = energyExpenditureService
             .totalDailyEnergyExpenditure(
                 for: sex,
                 age: age,
                 height: height,
-                weight: weight,
+                weight: Int(weight),
                 phisicalActivity: phisicalActivity)
 
-        let protein = energyExpenditureService.gramsOfProtein(for: userMetric(for: "weight") as? Float ?? 0)
-        let fat = energyExpenditureService.gramsOfFat(for: enEx)
-        let carbs = energyExpenditureService.gramsOfCarbs(for: enEx, gramsOfProtein: protein, gramsOfFat: fat)
+        let protein = energyExpenditureService.gramsOfProtein(for: weight)
+        let fat = energyExpenditureService.gramsOfFat(for: calories)
+        let carbs = energyExpenditureService.gramsOfCarbs(for: calories, gramsOfProtein: protein, gramsOfFat: fat)
+        let sodium = energyExpenditureService.milligramsOfSodium()
+        let cholesterol = energyExpenditureService.milligramsOfCholesterol()
+        let potassium = energyExpenditureService.milligramsOfPotassium(for: sex)
+        let fiber = energyExpenditureService.gramsOfFiber(for: calories)
+        let sugar = energyExpenditureService.gramsOfSugar(for: calories)
 
-        return DailyTarget(calories: enEx, gramsOfProtein: protein, gramsOfFat: fat, gramsOfCarbs: carbs)
+        var nutrients: NutrientValues = .empty
+        nutrients[.protein_g] = protein
+        nutrients[.fat_total_g] = fat
+        nutrients[.carbohydrates_total_g] = carbs
+        nutrients[.sodium_mg] = sodium
+        nutrients[.cholesterol_mg] = cholesterol
+        nutrients[.potassium_mg] = potassium
+        nutrients[.fiber_g] = fiber
+        nutrients[.sugar_g] = sugar
+
+        return DailyTarget(calories: calories, nutrients: nutrients)
      }
 
     func fetchCalories(from daysAgo: Int) -> [(Int, DailyNutrition)] {
@@ -95,6 +131,10 @@ actor StorageUseCase {
 
     func deleteAll() {
         storageService.deleteAll()
+    }
+
+    private func userMetric(for key: String) -> Any? {
+        storageService.object(for: key)
     }
 
 }

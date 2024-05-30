@@ -77,3 +77,17 @@ class NutritionalItemStorageViewModel: Object {
     }
 
 }
+
+extension NutritionalItemStorageViewModel {
+
+    override var description: String {
+"""
+Name: \(name)
+\(serving_size_g)g \(serving_size_baseline_g)g,
+\(protein_g)g of protein,
+\(fat_total_g)g of fat,
+\(carbohydrates_total_g)g of carbs
+"""
+    }
+
+}

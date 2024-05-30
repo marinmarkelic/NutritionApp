@@ -17,6 +17,12 @@ class ChatsUseCase {
         client.conversationPublisher
     }
 
+    init() {
+        Task {
+            await Swift.print(fetchDailyMealsInstructions())
+        }
+    }
+
     func update(_ conversation: ConversationViewModel) async {
         await storageUseCase.save(conversation: conversation)
     }
@@ -31,7 +37,7 @@ class ChatsUseCase {
 
     func send(text: String, conversationId: String?) async {
         let instructions = await fetchDailyMealsInstructions()
-        print("--- \(instructions)")
+//        print("--- \(instructions)")
 
         guard let conversationId else {
             await client.send(text: text, conversationId: conversationId, instructions: instructions)
@@ -81,6 +87,7 @@ class ChatsUseCase {
                 instruction.append(" Meal: \(meal.name), ingredients:")
 
                 meal.items.forEach { ingredient in
+                    print(ingredient.serving_size_g)
                     instruction.append(" \(ingredient.serving_size_g) g of \(ingredient.name),")
                 }
             }
@@ -88,7 +95,7 @@ class ChatsUseCase {
             instruction.removeLast()
             instruction.append(";")
         }
-        print("---1 \(instruction)")
+
         if !instruction.isEmpty {
             instruction.removeLast()
         }
