@@ -251,27 +251,30 @@ struct GraphViewModelData {
 
 struct GraphViewModel {
 
-    static let evaluatedNutrients = Nutrient.allCases
-
     let data: [GraphViewModelData]
 
     fileprivate init(from model: MealViewModel) {
         var progress: CGFloat = 0
         var sum: CGFloat = 0
-        GraphViewModel.evaluatedNutrients.forEach { nutrient in
-            sum += CGFloat(model.value(for: nutrient) * nutrient.unit.multiplier)
+        model.nutrients.forEach { nutrient, value in
+            sum += CGFloat(value * nutrient.unit.multiplier)
         }
 
         var data = [GraphViewModelData]()
-        GraphViewModel.evaluatedNutrients.forEach { nutrient in
-            data.append(
-                GraphViewModelData(
-                    color: nutrient.color,
-                    previousCompleton: progress,
-                    completion: CGFloat(model.value(for: nutrient) * nutrient.unit.multiplier) / sum))
+        model
+            .nutrients
+            .sorted { (first, second) in
+                first.value > second.value
+            }
+            .forEach { nutrient, value in
+                data.append(
+                    GraphViewModelData(
+                        color: nutrient.color,
+                        previousCompleton: progress,
+                        completion: CGFloat(value * nutrient.unit.multiplier) / sum))
 
-            progress += CGFloat(model.value(for: nutrient) * nutrient.unit.multiplier) / sum
-        }
+                progress += CGFloat(value * nutrient.unit.multiplier) / sum
+            }
 
         self.data = data
     }

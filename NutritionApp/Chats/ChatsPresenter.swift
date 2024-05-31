@@ -32,7 +32,7 @@ class ChatsPresenter: ObservableObject {
         Task {
             menuConversations = await chatsUseCase.fetchConversations()
         }
-        conversation = mockChats()
+//        conversation = mockChats()
     }
 
     @MainActor
@@ -158,7 +158,6 @@ asdasdasd
             .init(id: "41", createdAt: 0, role: .assistant, text: "Hello"),
             .init(id: "51", createdAt: 0, role: .user, text: "Hello"),
             .init(id: "61", createdAt: 0, role: .assistant, text: "Hello"),
-            .init(id: "71", createdAt: 0, role: .user, text: "Hello"),
         ]
         return Conversation(id: "", assistantId: "", messages: messages)
     }

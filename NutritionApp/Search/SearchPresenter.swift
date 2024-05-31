@@ -22,9 +22,9 @@ class SearchPresenter: ObservableObject {
         Task { [weak self] in
             guard let self else { return }
 
-            meal = await searchUseCase.search(for: query)
+//            meal = await searchUseCase.search(for: query)
 //            // TODO: remove onAppear
-//            meal = mockMeal()
+            meal = mockMeal()
         }
     }
 

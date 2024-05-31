@@ -23,11 +23,12 @@ struct ChatsView: View {
                         .padding(.top, headerHeight)
                 }
 
-                CustomTextField(text: $presenter.query, icon: .send, isEnabled: $presenter.canSend) { _ in
+                CustomTextField(text: $presenter.query, placeholder: "Type something", icon: .send, isEnabled: $presenter.canSend) { _ in
                     presenter.send()
                 }
                 .background(Material.bar)
             }
+            .maxSize()
 
             VStack {
                 header
@@ -51,6 +52,7 @@ struct ChatsView: View {
             topSafeArea = insets.top
         }
         .background(Color.background)
+        .dismissKeyboardOnTap()
         .toolbarBackground(.hidden, for: .tabBar)
         .animation(.easeInOut, value: presenter.isMenuShown)
         .onAppear(perform: presenter.onAppear)
@@ -73,18 +75,25 @@ struct ChatsView: View {
         .background(Material.bar)
     }
 
+    @State private var scrollViewHeight: CGFloat = .zero
     private var scrollView: some View {
         ScrollView(.vertical) {
-            Color
-                .clear
-                .frame(height: topSafeArea + headerHeight)
+            VStack {
+                Color
+                    .clear
+                    .frame(height: topSafeArea + headerHeight)
 
-            textsStack
-                .maxWidth()
+                textsStack
+                    .maxWidth()
 
-            Color
-                .clear
-                .frame(height: 4)
+                Color
+                    .clear
+                    .frame(height: 4)
+            }
+            .frame(minHeight: scrollViewHeight, alignment: .bottom)
+        }
+        .onSizeChange { size in
+            scrollViewHeight = size.height
         }
         .scrollBounceBehavior(.basedOnSize)
         .defaultScrollAnchor(.bottom)
@@ -123,7 +132,6 @@ struct ChatsView: View {
                 .contentShape(Rectangle())
                 .onTapGesture(perform: presenter.toggleMenuVisibility)
         }
-
         .opacity(presenter.isMenuShown ? 1 : 0)
         .maxWidth()
     }

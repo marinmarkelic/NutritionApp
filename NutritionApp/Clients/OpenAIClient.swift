@@ -34,12 +34,6 @@ class OpenAIClient {
         secretsClient.nutritionAssistantId
     }()
 
-//    init() {
-//        Task {
-//            try await OpenAIAPI.message()
-//        }
-//    }
-
     func send(text: String, conversationId: String?, instructions: String? = nil) async {
         queryStatusSubject.send(.running)
         appendSentMessage(text: text)
@@ -102,13 +96,14 @@ class OpenAIClient {
         var counter = 0
         var runStatus = run.status
         while runStatus != "completed" {
-            guard counter <= 5 else {
+            guard counter <= 10 else {
                 queryStatusSubject.send(.failed)
                 return
             }
 
             let run = try? await service.retrieveRun(threadID: threadId, runID: run.id)
             runStatus = run?.status ?? ""
+            print("--- \(runStatus)")
             counter += 1
         }
 
@@ -116,6 +111,7 @@ class OpenAIClient {
         queryStatusSubject.send(.available)
     }
 
+//    private func queueRun
 }
 
 extension OpenAIClient: DependencyKey {

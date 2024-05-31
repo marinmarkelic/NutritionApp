@@ -3,6 +3,7 @@ import SwiftUI
 struct CustomTextField: View {
 
     private let action: (String) -> Void
+    private let placeholder: String
     private let icon: BundleImage
     private let imageSize: CGFloat = 24
 
@@ -11,10 +12,13 @@ struct CustomTextField: View {
 
     init(
         text: Binding<String>,
+        placeholder: String,
         icon: BundleImage,
         isEnabled: Binding<Bool> = .constant(true),
-        action: @escaping (String) -> Void) {
+        action: @escaping (String) -> Void
+    ) {
         self.text = text
+        self.placeholder = placeholder
         self.icon = icon
         self.isEnabled = isEnabled
         self.action = action
@@ -23,7 +27,7 @@ struct CustomTextField: View {
     var body: some View {
         VStack {
             HStack {
-                TextField("Search", text: text)
+                TextField(placeholder, text: text)
                     .autocorrectionDisabled()
 
                 Image(from: icon)

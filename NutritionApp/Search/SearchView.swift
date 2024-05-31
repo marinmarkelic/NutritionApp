@@ -5,35 +5,48 @@ struct SearchView: View {
     @ObservedObject private var presenter = SearchPresenter()
 
     @State private var query: String = ""
+    @FocusState private var focus: String?
 
     var body: some View {
-        ZStack {
-            if presenter.meal.items.count > 0 {
-                ScrollView {
-                    Text("\(presenter.meal.name.capitalized)")
-                        .color(emphasis: .high)
-                        .font(.title)
-                        .shiftLeft()
+        VStack(spacing: .zero) {
+                ScrollViewReader { proxy in
+                    ScrollView {
+                        if presenter.meal.items.count > 0 {
+                            Text("\(presenter.meal.name.capitalized)")
+                                .color(emphasis: .high)
+                                .font(.title)
+                                .shiftLeft()
 
-                    MealInformationView(meal: presenter.meal, query: presenter.query, updateServingSize: presenter.update)
+                            Text("\(presenter.meal.calories.toInt()) calories")
+                                .color(emphasis: .medium)
+                                .shiftLeft()
 
-                    actionsView
+                            MealInformationView(meal: presenter.meal, query: presenter.query, focus: $focus, updateServingSize: presenter.update)
+
+                            actionsView
+                        }
+                    }
+                    .background(Color.background)
+                    .padding([.leading, .top, .trailing], 8)
+                    .dismissKeyboardOnTap()
+                    .onChange(of: focus) { _, value in
+                        guard let value else { return }
+
+                        proxy.scrollTo(value, anchor: .bottom)
+                    }
                 }
-                .background(Color.background)
-                .padding([.leading, .top, .trailing], 8)
-            }
 
-            CustomTextField(text: $query, icon: .search, action: presenter.search)
-                .background(Material.bar)
-                .shiftDown()
+            if focus == nil {
+                CustomTextField(text: $query, placeholder: "Search", icon: .search, action: presenter.search)
+                    .background(Material.bar)
+            }
         }
         .maxWidth()
         .background(Color.background)
         .toolbarBackground(.hidden, for: .tabBar)
-        .dismissKeyboardOnTap()
-//        .onAppear {
-//            presenter.search(query: "")
-//        }
+        .onAppear {
+            presenter.search(query: "")
+        }
     }
 
     var actionsView: some View {
@@ -71,9 +84,12 @@ struct MealInformationView: View {
     private let query: String
     private let updateServingSize: (String, NutritionalItemViewModel) -> Void
 
-    init(meal: MealViewModel, query: String, updateServingSize: @escaping (String, NutritionalItemViewModel) -> Void) {
+    private var focus: FocusState<String?>.Binding
+
+    init(meal: MealViewModel, query: String, focus: FocusState<String?>.Binding, updateServingSize: @escaping (String, NutritionalItemViewModel) -> Void) {
         self.meal = meal
         self.query = query
+        self.focus = focus
         self.updateServingSize = updateServingSize
     }
 
@@ -88,8 +104,9 @@ struct MealInformationView: View {
                         .shiftLeft()
 
                     ForEach(meal.items, id: \.name) { item in
-                        NutritionInformationView(item: item, input: item.serving_size_g, updateServingSize: updateServingSize)
+                        NutritionInformationView(item: item, input: item.serving_size_g, focus: focus, updateServingSize: updateServingSize)
                             .maxWidth()
+                            .tag(item.name)
                     }
                 }
                 .padding()
@@ -106,10 +123,17 @@ struct NutritionInformationView: View {
 
     @State private var input: String
     @State private var textWidth: CGFloat = .zero
+    private var focus: FocusState<String?>.Binding
 
-    init(item: NutritionalItemViewModel, input: Float, updateServingSize: @escaping (String, NutritionalItemViewModel) -> Void) {
+    init(
+        item: NutritionalItemViewModel,
+        input: Float,
+        focus: FocusState<String?>.Binding,
+        updateServingSize: @escaping (String, NutritionalItemViewModel) -> Void
+    ) {
         self.item = item
         self.updateServingSize = updateServingSize
+        self.focus = focus
         _input = State(initialValue: "\(input)")
     }
 
@@ -121,6 +145,7 @@ struct NutritionInformationView: View {
 
             HStack {
                 TextField("", text: $input)
+                    .focused(focus, equals: item.name)
                     .foregroundStyle(Color.text(emphasis: .medium))
                     .keyboardType(.numberPad)
                     .onChange(of: input) { value in
@@ -147,9 +172,6 @@ struct NutritionCircleGraph: View {
     var body: some View {
         VStack {
             MealGraphView(meal: meal)
-
-            Text("\(meal.calories.toInt()) calories")
-                .color(emphasis: .medium)
         }
     }
 
