@@ -41,6 +41,11 @@
 		9CA3E7722C04C57600F38B16 /* MealGraphNutrientCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CA3E7712C04C57600F38B16 /* MealGraphNutrientCell.swift */; };
 		9CA3E7742C06072200F38B16 /* Images.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CA3E7732C06072200F38B16 /* Images.swift */; };
 		9CA3E7772C06367700F38B16 /* RoundedCorner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CA3E7762C06367700F38B16 /* RoundedCorner.swift */; };
+		9CA3E77B2C089CE600F38B16 /* HealthKitService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CA3E77A2C089CE600F38B16 /* HealthKitService.swift */; };
+		9CA3E77F2C08B08000F38B16 /* HealthKitUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CA3E77E2C08B08000F38B16 /* HealthKitUseCase.swift */; };
+		9CA3E7812C08B11800F38B16 /* HealthKitUserData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CA3E7802C08B11800F38B16 /* HealthKitUserData.swift */; };
+		9CA3E7832C08B27400F38B16 /* Int+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CA3E7822C08B27300F38B16 /* Int+Extensions.swift */; };
+		9CA3E7852C08B34500F38B16 /* ProfileModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CA3E7842C08B34500F38B16 /* ProfileModels.swift */; };
 		9CB5EE982BD3E4F600059A24 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CB5EE972BD3E4F600059A24 /* Models.swift */; };
 		9CBB0A852B2DC8E50064EFCC /* SearchUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CBB0A842B2DC8E50064EFCC /* SearchUseCase.swift */; };
 		9CBB0A872B2DC9AD0064EFCC /* BaseClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CBB0A862B2DC9AD0064EFCC /* BaseClient.swift */; };
@@ -87,6 +92,12 @@
 		9CA3E7712C04C57600F38B16 /* MealGraphNutrientCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealGraphNutrientCell.swift; sourceTree = "<group>"; };
 		9CA3E7732C06072200F38B16 /* Images.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Images.swift; sourceTree = "<group>"; };
 		9CA3E7762C06367700F38B16 /* RoundedCorner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedCorner.swift; sourceTree = "<group>"; };
+		9CA3E7782C08841200F38B16 /* NutritionApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = NutritionApp.entitlements; sourceTree = "<group>"; };
+		9CA3E77A2C089CE600F38B16 /* HealthKitService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitService.swift; sourceTree = "<group>"; };
+		9CA3E77E2C08B08000F38B16 /* HealthKitUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitUseCase.swift; sourceTree = "<group>"; };
+		9CA3E7802C08B11800F38B16 /* HealthKitUserData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitUserData.swift; sourceTree = "<group>"; };
+		9CA3E7822C08B27300F38B16 /* Int+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+Extensions.swift"; sourceTree = "<group>"; };
+		9CA3E7842C08B34500F38B16 /* ProfileModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileModels.swift; sourceTree = "<group>"; };
 		9CB5EE972BD3E4F600059A24 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
 		9CBB0A842B2DC8E50064EFCC /* SearchUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchUseCase.swift; sourceTree = "<group>"; };
 		9CBB0A862B2DC9AD0064EFCC /* BaseClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseClient.swift; sourceTree = "<group>"; };
@@ -168,6 +179,7 @@
 			children = (
 				9C8458242BCC3C06005EE698 /* ProfileView.swift */,
 				9C3336012BD1537C00BC94D0 /* ProfilePresenter.swift */,
+				9CA3E7842C08B34500F38B16 /* ProfileModels.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -209,12 +221,14 @@
 		9C9B567F2AFA7F9000A4B2BC /* NutritionApp */ = {
 			isa = PBXGroup;
 			children = (
+				9C9B56802AFA7F9000A4B2BC /* NutritionApp.swift */,
+				9CA3E7782C08841200F38B16 /* NutritionApp.entitlements */,
+				9CA3E7792C089CD000F38B16 /* HealthKit */,
 				9C8458232BCC3B96005EE698 /* Profile */,
 				9C93F96B2B3B04850033E0BC /* Shared */,
 				9CBB0A8C2B2DF9DB0064EFCC /* Storage */,
 				9CBB0A832B2DC8D20064EFCC /* UseCases */,
 				9C60157E2B249BC7005A62C7 /* Clients */,
-				9C9B56802AFA7F9000A4B2BC /* NutritionApp.swift */,
 				9C1FD3C12B445F1300D8C6FD /* Chats */,
 				9C60156D2B24868E005A62C7 /* Home */,
 				9C6015792B249877005A62C7 /* Search */,
@@ -238,6 +252,16 @@
 				9CA3E7762C06367700F38B16 /* RoundedCorner.swift */,
 			);
 			path = Shapes;
+			sourceTree = "<group>";
+		};
+		9CA3E7792C089CD000F38B16 /* HealthKit */ = {
+			isa = PBXGroup;
+			children = (
+				9CA3E77A2C089CE600F38B16 /* HealthKitService.swift */,
+				9CA3E77E2C08B08000F38B16 /* HealthKitUseCase.swift */,
+				9CA3E7802C08B11800F38B16 /* HealthKitUserData.swift */,
+			);
+			path = HealthKit;
 			sourceTree = "<group>";
 		};
 		9CBB0A832B2DC8D20064EFCC /* UseCases */ = {
@@ -266,6 +290,7 @@
 			children = (
 				9CEA12A22BE415B800178EA1 /* CustomTextField.swift */,
 				9C71541F2BF9F65B0057B0F7 /* Float+Extensions.swift */,
+				9CA3E7822C08B27300F38B16 /* Int+Extensions.swift */,
 				9CD90C9D2BFCF1D300BF244B /* CircularProgressView.swift */,
 			);
 			path = Views;
@@ -362,7 +387,10 @@
 				9CBB0A872B2DC9AD0064EFCC /* BaseClient.swift in Sources */,
 				9CA3E76E2C047AF400F38B16 /* HomeModels.swift in Sources */,
 				9C48CF172BA722FD00ABA072 /* HomePresenter.swift in Sources */,
+				9CA3E77B2C089CE600F38B16 /* HealthKitService.swift in Sources */,
 				9C1FD3C92B4467A000D8C6FD /* OpenAIClient.swift in Sources */,
+				9CA3E77F2C08B08000F38B16 /* HealthKitUseCase.swift in Sources */,
+				9CA3E7852C08B34500F38B16 /* ProfileModels.swift in Sources */,
 				9C93F96D2B3B048E0033E0BC /* Colors.swift in Sources */,
 				9CD90CA02BFCF1F100BF244B /* MealCell.swift in Sources */,
 				9CA3E7742C06072200F38B16 /* Images.swift in Sources */,
@@ -379,6 +407,7 @@
 				9C34C40E2BE7E4D800BA16F8 /* ChatsModels.swift in Sources */,
 				9CEA12A32BE415B800178EA1 /* CustomTextField.swift in Sources */,
 				9CBB0A8B2B2DF9500064EFCC /* StorageUseCase.swift in Sources */,
+				9CA3E7812C08B11800F38B16 /* HealthKitUserData.swift in Sources */,
 				9C1FD3C72B4466D300D8C6FD /* ChatsUseCase.swift in Sources */,
 				9CEA12A02BE40B7700178EA1 /* ChatsPresenter.swift in Sources */,
 				9CBB0A952B2DFC240064EFCC /* StorageService.swift in Sources */,
@@ -392,6 +421,7 @@
 				9C8458252BCC3C06005EE698 /* ProfileView.swift in Sources */,
 				9C1FD3CD2B44930100D8C6FD /* CGFloat+Extensions.swift in Sources */,
 				9CA3E7702C04C47F00F38B16 /* MealGraphView.swift in Sources */,
+				9CA3E7832C08B27400F38B16 /* Int+Extensions.swift in Sources */,
 				9CB5EE982BD3E4F600059A24 /* Models.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -523,12 +553,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = NutritionApp/NutritionApp.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"NutritionApp/Preview Content\"";
-				DEVELOPMENT_TEAM = 4H6CZ7Q64Z;
+				DEVELOPMENT_TEAM = AWWVAQ2M2R;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "We use your health data to provide you detailed insights about calorie expenditure. ";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -553,12 +585,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = NutritionApp/NutritionApp.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"NutritionApp/Preview Content\"";
-				DEVELOPMENT_TEAM = 4H6CZ7Q64Z;
+				DEVELOPMENT_TEAM = AWWVAQ2M2R;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "We use your health data to provide you detailed insights about calorie expenditure. ";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

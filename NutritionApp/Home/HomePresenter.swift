@@ -1,5 +1,6 @@
 import Combine
 import Dependencies
+import Foundation
 
 class HomePresenter: ObservableObject {
 
@@ -8,15 +9,25 @@ class HomePresenter: ObservableObject {
     @Published var meals: [MealViewModel] = []
     @Published var dailyNutrition: [(Int, DailyNutrition)]?
     @Published var dailyTarget: DailyTarget?
+    @Published var burnedCalories: Int?
     @Published var dailyStats: DailyCalorieStats?
     @Published var chartHeight: Int = 0
 
-    @Dependency(\.storageUseCase) private var storageUseCase
+    @Dependency(\.storageUseCase) 
+    private var storageUseCase: StorageUseCase
+    @Dependency(\.healthKitUseCase)
+    private var healthKitUseCase: HealthKitUseCase
+
+    private var disposables = Set<AnyCancellable>()
 
     var nutritionForToday: DailyNutrition? {
         guard let nutrition = dailyNutrition?.first(where: { $0.0 == 0 }) else { return nil }
 
         return nutrition.1
+    }
+
+    init() {
+        bindUseCase()
     }
 
     @MainActor
@@ -44,6 +55,19 @@ class HomePresenter: ObservableObject {
             calories: nutritionForToday.calories,
             targetCalories: dailyTarget.calories,
             burnedCalores: 0)
+    }
+
+    private func bindUseCase() {
+        healthKitUseCase
+            .burntCaloriesPublisher
+            .removeDuplicates()
+            .receive(on: RunLoop.main)
+            .sink { [weak self] value in
+                guard let self, let value else { return }
+
+                burnedCalories = Int(value)
+            }
+            .store(in: &disposables)
     }
 
 }

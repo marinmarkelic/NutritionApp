@@ -13,6 +13,10 @@ class SearchPresenter: ObservableObject {
     @Dependency(\.storageUseCase)
     private var storageUseCase: StorageUseCase
 
+    init() {
+        let hks = HealthKitService()
+    }
+
     @MainActor
     func search(query: String) {
         Task { [weak self] in
