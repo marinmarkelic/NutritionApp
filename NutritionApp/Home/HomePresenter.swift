@@ -60,6 +60,7 @@ class HomePresenter: ObservableObject {
     private func bindUseCase() {
         healthKitUseCase
             .burntCaloriesPublisher
+            .removeDuplicates()
             .receive(on: RunLoop.main)
             .sink { [weak self] value in
                 guard let self, let value else { return }

@@ -111,7 +111,9 @@ extension HomeView {
 
                 Spacer()
                     .overlay {
-                        calorieInfoCell(with: presenter.burnedCalories ?? .zero, title: "Burned")
+                        if let calories = presenter.burnedCalories {
+                            calorieInfoCell(with: calories, title: "Burned")
+                        }
                     }
             }
         }

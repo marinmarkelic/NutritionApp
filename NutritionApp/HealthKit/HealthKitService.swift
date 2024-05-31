@@ -43,25 +43,18 @@ class HealthKitService {
 
     func createCalorieQueries() {
         let activeEnergyType = HKQuantityType(.activeEnergyBurned)
-        let activeEnergyQuery = HKObserverQuery(sampleType: activeEnergyType, predicate: nil) { query, completionHandler, error in
-            Task { [weak self] in
-                guard let self else { return }
-
-                readBurnedEnergy()
-            }
+        let activeEnergyQuery = HKObserverQuery(sampleType: activeEnergyType, predicate: nil) { [weak self] _, _, _ in
+            self?.readBurnedEnergy()
         }
         self.activeEnergyQuery = activeEnergyQuery
 
         let basalEnergyType = HKQuantityType(.basalEnergyBurned)
-        let basalEnergyQuery = HKObserverQuery(sampleType: basalEnergyType, predicate: nil) { query, completionHandler, error in
-            Task { [weak self] in
-                guard let self else { return }
-
-                readBurnedEnergy()
-            }
+        let basalEnergyQuery = HKObserverQuery(sampleType: basalEnergyType, predicate: nil) { [weak self] _, _, _ in
+            self?.readBurnedEnergy()
         }
         self.basalEnergyQuery = basalEnergyQuery
 
+        store.execute(activeEnergyQuery)
         store.execute(basalEnergyQuery)
     }
 
