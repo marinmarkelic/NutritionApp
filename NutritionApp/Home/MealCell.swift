@@ -15,16 +15,16 @@ struct MealCell: View {
 
                 label(
                     boldedText: "\(Int(meal.calories))",
-                    normalText: " calories, \(meal.date.formatted(date: .omitted, time: .shortened))")
+                    normalText: Strings.caloriesWithDate.formatted(meal.date.formatted(date: .omitted, time: .shortened)))
 
                 if isExpanded {
-                    label(boldedText: "\(meal.value(for: .protein_g).toInt())", normalText: " grams of protein")
+                    label(boldedText: "\(meal.value(for: .protein_g).toInt())", normalText: Strings.gramsOfProtein.rawValue)
 
                     label(
                         boldedText: "\(meal.value(for: .carbohydrates_total_g).toInt())",
-                        normalText: " grams of carbs")
+                        normalText: Strings.gramsOfCarbs.rawValue)
 
-                    label(boldedText: "\(meal.value(for: .fat_total_g).toInt())", normalText: " grams of fat")
+                    label(boldedText: "\(meal.value(for: .fat_total_g).toInt())", normalText: Strings.gramsOfFat.rawValue)
                 }
             }
 

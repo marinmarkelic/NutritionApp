@@ -3,12 +3,41 @@ import Dependencies
 actor SearchUseCase {
 
     @Dependency(\.nutritionClient)
-    private var client: NutritionClient
+    private var nutritionClient: NutritionClient
+    @Dependency(\.openAIClient)
+    private var openAIClient: OpenAIClient
+    @Dependency(\.storageUseCase)
+    private var storageUseCase: StorageUseCase
 
     func search(for query: String) async -> MealViewModel {
-        let viewModel = await (try? client.getNutritionalInformation(for: query)) ?? MealNetworkViewModel(items: [])
+        let viewModel = await (try? nutritionClient.getNutritionalInformation(for: query)) ?? MealNetworkViewModel(items: [])
 
         return MealViewModel(from: viewModel, with: query)
+    }
+
+    func fetchOpinion(for meal: MealViewModel) async -> String? {
+        let instructions = await fetchDailyMealsInstructions() + meal.name
+        return await openAIClient.sendSingleMessage(text: instructions)
+    }
+
+    private func fetchDailyMealsInstructions() async -> String {
+        let meals = await storageUseCase.fetchMeals(from: 0)
+
+        var instruction = ""
+        meals.forEach { meal in
+            instruction.append(" Meal: \(meal.name), ingredients:")
+
+            meal.items.forEach { ingredient in
+                print(ingredient.serving_size_g)
+                instruction.append(" \(ingredient.serving_size_g) g of \(ingredient.name),")
+            }
+        }
+
+        if instruction.isEmpty {
+            return Strings.nutritionSearchInstructions.rawValue + "Eaten meals: none"
+        } else {
+            return Strings.nutritionSearchInstructions.rawValue + "Eaten meals: " + instruction
+        }
     }
 
 }

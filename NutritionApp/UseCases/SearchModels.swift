@@ -87,6 +87,10 @@ Name: \(name)
         return MealViewModel(name: name, date: date, items: items)
     }
 
+    func update(date: Date) -> MealViewModel {
+        return MealViewModel(name: name, date: date, items: items)
+    }
+
 }
 
 extension MealViewModel {
@@ -112,11 +116,6 @@ struct NutritionalItemViewModel: Equatable {
     let serving_size_baseline_g: Float
     let calories_baseline: Float
     private let nutrients: [Nutrient : Float]
-
-    // Temp
-    var totalG: Float {
-        nutrients[.carbohydrates_total_g]! + nutrients[.fat_total_g]! + nutrients[.protein_g]!
-    }
 
     var serving_size_multiplier: Float {
         serving_size_g / serving_size_baseline_g
@@ -219,8 +218,6 @@ extension NutritionalItemViewModel {
             }
         }
         self.nutrients = nutrients
-
-//        print("--- from storage \(self.description)")
     }
 
 }

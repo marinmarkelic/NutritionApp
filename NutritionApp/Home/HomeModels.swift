@@ -17,11 +17,11 @@ struct DailyCalorieStats {
 
     var ratioString: String {
         if calorieRatio < 100 {
-            return "Deficit"
+            return Strings.deficit.capitalized
         } else if calorieRatio > 100 {
-            return "Surplus"
+            return Strings.surplus.capitalized
         } else {
-            return "At target"
+            return Strings.atTarget.rawValue
         }
     }
 

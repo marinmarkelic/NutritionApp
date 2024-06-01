@@ -23,7 +23,12 @@ struct ChatsView: View {
                         .padding(.top, headerHeight)
                 }
 
-                CustomTextField(text: $presenter.query, placeholder: "Type something", icon: .send, isEnabled: $presenter.canSend) { _ in
+                CustomTextField(
+                    text: $presenter.query,
+                    placeholder: Strings.typeSomething.rawValue,
+                    icon: .send,
+                    isEnabled: $presenter.canSend
+                ) { _ in
                     presenter.send()
                 }
                 .background(Material.bar)
@@ -34,7 +39,7 @@ struct ChatsView: View {
                 header
 
                 if presenter.status == .failed {
-                    Text("An error occured. Please try again.")
+                    Text(Strings.anErrorOccured)
                         .padding()
                         .background(Color.overlay())
                         .border(Color.black, width: 1)
@@ -65,7 +70,7 @@ struct ChatsView: View {
                 .frame(width: 30, height: 30)
                 .onTapGesture(perform: presenter.toggleMenuVisibility)
 
-            Text("Assistant")
+            Text(Strings.assistant.capitalized)
 
             Spacer()
         }
@@ -105,7 +110,7 @@ struct ChatsView: View {
         HStack {
             ScrollView {
                 VStack {
-                    Text("New chat")
+                    Text(Strings.newChat)
                         .color(emphasis: .high)
                         .onTapGesture(perform: presenter.newConversation)
 
@@ -146,7 +151,7 @@ struct ChatsView: View {
                 VStack {
                     Spacer()
 
-                    Text("Write something to start a conversation")
+                    Text(Strings.writeSomethingConversation)
                 }
                 .padding()
             }

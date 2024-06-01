@@ -37,7 +37,6 @@ class ChatsUseCase {
 
     func send(text: String, conversationId: String?) async {
         let instructions = await fetchDailyMealsInstructions()
-//        print("--- \(instructions)")
 
         guard let conversationId else {
             await client.send(text: text, conversationId: conversationId, instructions: instructions)
@@ -100,21 +99,7 @@ class ChatsUseCase {
             instruction.removeLast()
         }
 
-        return instruction.isEmpty ? nil : nutritionInstructions + instruction
-    }
-
-}
-
-extension ChatsUseCase {
-
-    var nutritionInstructions: String {
-"""
-Act as a nutritionist. You will be provided with a list of meals that the user ate for the last few days. You should tell the user about how healthy their diet is and give some recommendations if it isn't.
-
-Be concise, write a few sentences for each day, be more descriptive about days with unhealthy diets.
-
-Make sure to answer any followup questions in a matter that a nutritionist would.
-"""
+        return instruction.isEmpty ? nil : Strings.nutritionChatInstructions.rawValue + instruction
     }
 
 }

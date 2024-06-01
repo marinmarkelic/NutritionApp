@@ -5,44 +5,53 @@ import Dependencies
 class SearchPresenter: ObservableObject {
 
     let query: String = ""
-
-    @Published var meal = MealViewModel(name: "mock", date: .now, items: [])
+    @Published var meal: MealViewModel?
+    @Published var opinion: String?
 
     @Dependency(\.searchUseCase)
     private var searchUseCase: SearchUseCase
     @Dependency(\.storageUseCase)
     private var storageUseCase: StorageUseCase
 
-    init() {
-        let hks = HealthKitService()
-    }
-
     @MainActor
     func search(query: String) {
         Task { [weak self] in
             guard let self else { return }
 
-//            meal = await searchUseCase.search(for: query)
+            meal = await searchUseCase.search(for: query)
+            opinion = await searchUseCase.fetchOpinion(for: meal!)
 //            // TODO: remove onAppear
-            meal = mockMeal()
+//            meal = mockMeal()
         }
     }
 
     func save() {
         Task { [weak self] in
-            guard let self else { return }
+            guard 
+                let self,
+                let meal
+            else { return }
 
             await storageUseCase.save(meal: meal)
         }
     }
 
     func update(servingSize: String, for nutritionItem: NutritionalItemViewModel) {
+        guard let meal else { return }
+
         let value = Float(servingSize) ?? 0
 
-        meal = meal.update(servingSize: value, for: nutritionItem)
+        self.meal = meal.update(servingSize: value, for: nutritionItem)
     }
 
-    func print() {}
+    func update(date: Date) {
+        guard let meal else { return }
+
+        self.meal = meal.update(date: date)
+    }
+
+    func print() {
+    }
 
     func clearAll() {
         Task {

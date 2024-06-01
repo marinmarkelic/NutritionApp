@@ -21,7 +21,7 @@ struct HomeView: View {
                 }
 
                 HStack {
-                    Text("Today")
+                    Text(Strings.today.capitalized)
                         .color(emphasis: .high)
                         .font(.title)
 
@@ -47,7 +47,7 @@ struct HomeView: View {
     var mealsCard: some View {
         if !presenter.meals.isEmpty {
             VStack(spacing: 8) {
-                Text("Eaten meals")
+                Text(Strings.eatenMeals)
                     .color(emphasis: .high)
                     .shiftLeft()
 
@@ -92,7 +92,7 @@ extension HomeView {
 
     func dailyCalorieCard(for dailyStats: DailyCalorieStats) -> some View {
         VStack {
-            Text("Calories")
+            Text(Strings.calories.capitalized)
                 .color(emphasis: .medium)
                 .shiftLeft()
                 .padding(.bottom, 8)
@@ -101,9 +101,9 @@ extension HomeView {
                 Spacer()
                     .overlay {
                         VStack {
-                            calorieInfoCell(with: dailyStats.calories.toInt(), title: "Consumed")
+                            calorieInfoCell(with: dailyStats.calories.toInt(), title: Strings.consumed.capitalized)
 
-                            calorieInfoCell(with: dailyStats.targetCalories.toInt(), title: "Target")
+                            calorieInfoCell(with: dailyStats.targetCalories.toInt(), title: Strings.target.capitalized)
                         }
                     }
 
@@ -112,7 +112,7 @@ extension HomeView {
                 Spacer()
                     .overlay {
                         if let calories = presenter.burnedCalories {
-                            calorieInfoCell(with: calories, title: "Burned")
+                            calorieInfoCell(with: calories, title: Strings.burned.capitalized)
                         }
                     }
             }
@@ -156,7 +156,7 @@ extension HomeView {
                     Text(title)
                         .color(emphasis: .medium)
 
-                    Text("\(Int(currentValue)) / \(Int(targetValue))")
+                    Text(Strings.intDividedByInt.formatted(Int(currentValue), Int(targetValue)))
                         .color(emphasis: .disabled)
                 }
             }

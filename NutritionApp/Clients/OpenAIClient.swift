@@ -34,6 +34,15 @@ class OpenAIClient {
         secretsClient.nutritionAssistantId
     }()
 
+    func sendSingleMessage(text: String) async -> String? {
+        let parameters = ChatCompletionParameters(messages: [.init(role: .user, content: .text(text))], model: .gpt35Turbo)
+        let chat = try? await service.startChat(parameters: parameters)
+
+        guard let message = chat?.choices.first?.message else { return nil }
+
+        return message.content
+    }
+
     func send(text: String, conversationId: String?, instructions: String? = nil) async {
         queryStatusSubject.send(.running)
         appendSentMessage(text: text)
@@ -111,7 +120,6 @@ class OpenAIClient {
         queryStatusSubject.send(.available)
     }
 
-//    private func queueRun
 }
 
 extension OpenAIClient: DependencyKey {

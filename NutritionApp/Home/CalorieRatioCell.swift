@@ -22,7 +22,7 @@ struct CalorieRatioCell: View {
                 .color(emphasis: .medium)
                 .bold()
 
-            Text("\(value)%")
+            Text(Strings.intPercent.formatted(value))
                 .color(emphasis: .disabled)
 
             ZStack(alignment: .leading) {

@@ -61,23 +61,23 @@ enum Nutrient: String, CaseIterable, Identifiable {
     var title: String {
         switch self {
         case .fat_total_g:
-            "Fat"
+            Strings.fat.rawValue
         case .fat_saturated_g:
-            "Saturated Fat"
+            Strings.fatSaturated.rawValue
         case .protein_g:
-            "Protein"
+            Strings.protein.rawValue
         case .sodium_mg:
-            "Sodium"
+            Strings.sodium.rawValue
         case .potassium_mg:
-            "Potassium"
+            Strings.potassium.rawValue
         case .cholesterol_mg:
-            "Cholesterol"
+            Strings.cholesterol.rawValue
         case .carbohydrates_total_g:
-            "Carbohydrates"
+            Strings.carbohydrates.rawValue
         case .fiber_g:
-            "Fiber"
+            Strings.fiber.rawValue
         case .sugar_g:
-            "Sugar"
+            Strings.sugar.rawValue
         }
     }
 
