@@ -39,20 +39,21 @@ class HomePresenter: ObservableObject {
     func fetchCalories() async {
         dailyNutrition = await storageUseCase.fetchCalories(from: 3).sorted { $0.0 > $1.0 }
         dailyTarget = await storageUseCase.fetchNecessaryCalories()
-        calculateDailyStats()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
+            self?.calculateDailyStats()
+        }
 
         let maxCalorieValue = Int(dailyNutrition?.map { $0.1.calories }.max() ?? 0)
         chartHeight = max(maxCalorieValue, Int(dailyTarget?.calories ?? 0)) + chartHeightOffset
     }
 
     private func calculateDailyStats() {
-        guard 
-            let nutritionForToday,
-            let dailyTarget
-        else { return }
+        print("--- \(nutritionForToday) \(dailyTarget)")
+
+        guard let dailyTarget else { return }
 
         dailyStats = DailyCalorieStats(
-            calories: nutritionForToday.calories,
+            calories: nutritionForToday?.calories ?? .zero,
             targetCalories: dailyTarget.calories,
             burnedCalores: 0)
     }

@@ -49,7 +49,7 @@ enum Strings: String {
 
     case nutritionChatInstructions = "Act as a nutritionist. You will be provided with a list of meals that the user ate for the last few days. You should tell the user about how healthy their diet is and give some recommendations if it isn't. Be concise, write a few sentences for each day, be more descriptive about days with unhealthy diets. Make sure to answer any followup questions in a matter that a nutritionist would."
 
-    case nutritionSearchInstructions = "You will be provided with a list of meals that the user ate today which could be empty and a meal that the user wants to eat. You should inform the user about the healthiness of the chosen meal. The answer should be short and consise. Do not mention the eaten meals in the reply."
+    case nutritionSearchInstructions = "You will be provided with a list of meals that the user ate today which could be empty and a meal that the user wants to eat. You should inform the user about the healthiness of the chosen meal with the consideration of the previous meals that the user ate that day. The answer should be consise. Do not mention the eaten meals in the reply."
 
 }
 

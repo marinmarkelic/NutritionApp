@@ -16,12 +16,13 @@ actor SearchUseCase {
     }
 
     func fetchOpinion(for meal: MealViewModel) async -> String? {
-        let instructions = await fetchDailyMealsInstructions() + meal.name
+        let instructions = await fetchDailyMealsInstructions() + "Meal that the user wants to eat: \(meal.name)"
+        print("--- " + instructions)
         return await openAIClient.sendSingleMessage(text: instructions)
     }
 
     private func fetchDailyMealsInstructions() async -> String {
-        let meals = await storageUseCase.fetchMeals(from: 0)
+        let meals = await storageUseCase.fetchMeals(from: 1)
 
         var instruction = ""
         meals.forEach { meal in

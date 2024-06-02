@@ -21,6 +21,7 @@ struct SearchView: View {
             }
         }
         .maxWidth()
+        .animation(.easeInOut, value: presenter.opinion)
         .background(Color.background)
         .toolbarBackground(.hidden, for: .tabBar)
     }
@@ -48,10 +49,8 @@ struct SearchView: View {
                         .color(emphasis: .medium)
                         .shiftLeft()
 
-                    if let opinion = presenter.opinion {
-                        Text(opinion)
-                            .shiftLeft()
-                    }
+                    Text(presenter.opinion ?? "")
+                        .shiftLeft()
 
                     MealInformationView(
                         meal: meal,
@@ -61,7 +60,7 @@ struct SearchView: View {
                         updateDate: presenter.update)
 
                     Button(Strings.save.rawValue) {
-                        presenter.print()
+                        presenter.save()
                     }
                     .padding(8)
                     .foregroundStyle(Color.background)
