@@ -48,6 +48,9 @@ struct MealInformationView: View {
                 .padding()
                 .background(Color.overlay())
             }
+            .onChange(of: date) { _, newValue in
+                updateDate(date)
+            }
     }
 
     private func element<Content: View>(title: String, content: @escaping () -> Content) -> some View {

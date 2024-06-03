@@ -47,6 +47,13 @@ class HomePresenter: ObservableObject {
         chartHeight = max(maxCalorieValue, Int(dailyTarget?.calories ?? 0)) + chartHeightOffset
     }
 
+    func delete(meal: MealViewModel) {
+        Task {
+            await storageUseCase.delete(meal: meal)
+            await fetchMeals()
+        }
+    }
+
     private func calculateDailyStats() {
         guard let dailyTarget else { return }
 

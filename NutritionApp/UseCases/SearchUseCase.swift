@@ -17,7 +17,6 @@ actor SearchUseCase {
 
     func fetchOpinion(for meal: MealViewModel) async -> String? {
         let instructions = await fetchDailyMealsInstructions() + "Meal that the user wants to eat: \(meal.name)"
-        print("--- " + instructions)
         return await openAIClient.sendSingleMessage(text: instructions)
     }
 

@@ -41,6 +41,10 @@ actor StorageUseCase {
         storageService.save(meal: meal)
     }
 
+    func delete(meal: MealViewModel) {
+        storageService.delete(meal: meal)
+    }
+
     func save(conversation: ConversationViewModel) {
         storageService.save(conversation: conversation)
     }

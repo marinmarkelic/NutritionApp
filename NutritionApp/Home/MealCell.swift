@@ -3,6 +3,7 @@ import SwiftUI
 struct MealCell: View {
 
     let meal: MealViewModel
+    let delete: (MealViewModel) -> Void
 
     @State private var isExpanded: Bool = false
 
@@ -29,6 +30,13 @@ struct MealCell: View {
             }
 
             Spacer()
+
+            Rectangle()
+                .fill(Color.yellow)
+                .frame(width: 30, height: 30)
+                .onTapGesture {
+                    delete(meal)
+                }
         }
         .maxWidth()
         .onTapGesture(perform: toggleExpansion)
@@ -38,7 +46,9 @@ struct MealCell: View {
         Text(boldedText)
             .color(emphasis: .disabled)
             .bold()
+
         +
+
         Text(normalText)
             .color(emphasis: .disabled)
     }

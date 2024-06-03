@@ -3,13 +3,10 @@ import SwiftUI
 
 struct MealViewModel: Equatable, CustomStringConvertible, Identifiable {
 
+    let id: String
     let name: String
     let date: Date
     let items: [NutritionalItemViewModel]
-
-    var id: String {
-        date.description
-    }
 
     var calories: Float {
         var calories: Float = 0
@@ -84,11 +81,11 @@ Name: \(name)
             }
         }
 
-        return MealViewModel(name: name, date: date, items: items)
+        return MealViewModel(id: id, name: name, date: date, items: items)
     }
 
     func update(date: Date) -> MealViewModel {
-        return MealViewModel(name: name, date: date, items: items)
+        return MealViewModel(id: id, name: name, date: date, items: items)
     }
 
 }
@@ -96,12 +93,14 @@ Name: \(name)
 extension MealViewModel {
 
     init(from model: MealNetworkViewModel, with name: String) {
+        self.id = UUID().uuidString
         self.name = name
-        date = Calendar.current.date(byAdding: .day, value: -1, to: .now)!
+        date = .now
         items = model.items.compactMap { NutritionalItemViewModel(from: $0) }
     }
 
     init(from model: MealStorageViewModel) {
+        id = model.id
         name = model.name
         date = model.date
         items = model.items.map { NutritionalItemViewModel(from: $0) }

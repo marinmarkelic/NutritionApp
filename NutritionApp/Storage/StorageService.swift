@@ -29,10 +29,11 @@ extension StorageService {
         }
     }
 
-    func save(meal: MealViewModel) {
+    func delete(meal: MealViewModel) {
+        guard let object = realm.object(ofType: MealStorageViewModel.self, forPrimaryKey: meal.id) else { return }
+
         try! realm.write {
-            let model = MealStorageViewModel(from: meal)
-            realm.add(model)
+            realm.delete(object)
         }
     }
 
@@ -70,12 +71,18 @@ extension StorageService {
     }
 
     func fetchMeals(from daysAgo: Int) -> [MealViewModel] {
-        let todayComponents = Calendar.current.dateComponents([.year, .month, .day], from: .now)
-        let beginningOfToday = Calendar.current.date(from: todayComponents)!
-        let beforeDate = Calendar.current.date(byAdding: .day, value: -1 * daysAgo, to: beginningOfToday)!
+        let calendar = Calendar.current
+        let startOfToday = calendar.startOfDay(for: .now)
+
+        guard 
+            let startDate = calendar.date(byAdding: .day, value: -(daysAgo - 1), to: startOfToday),
+            let endDate = calendar.date(byAdding: .second, value: 86399, to: startOfToday)
+        else { return [] }
+
+        Swift.print("--- \(startDate) \(endDate)")
 
         let meals = realm.objects(MealStorageViewModel.self).filter { meal in
-            meal.date >= beforeDate && meal.date <= beginningOfToday
+            meal.date >= startDate && meal.date <= endDate
         }
 
         return meals.map { MealViewModel(from: $0) }

@@ -27,13 +27,14 @@ class SearchPresenter: ObservableObject {
     }
 
     func save() {
-        Task { [weak self] in
-            guard 
+        Task.detached { [weak self] in
+            guard
                 let self,
                 let meal
             else { return }
 
             await storageUseCase.save(meal: meal)
+            self.meal = nil
         }
     }
 
@@ -95,6 +96,7 @@ extension SearchPresenter {
         ]
 
         return MealViewModel(
+            id: "1",
             name: "Eggs and bacon",
             date: .now,
             items: items)

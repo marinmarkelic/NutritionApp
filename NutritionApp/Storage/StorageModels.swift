@@ -21,6 +21,7 @@ class ConversationStorageViewModel: Object {
 
 class MealStorageViewModel: Object {
 
+    @Persisted(primaryKey: true) var id: String
     @Persisted var name: String
     @Persisted var date: Date
     @Persisted var items: List<NutritionalItemStorageViewModel>
@@ -30,6 +31,7 @@ class MealStorageViewModel: Object {
     convenience init(from model: MealViewModel) {
         self.init()
 
+        id = model.id
         name = model.name
         date = model.date
 

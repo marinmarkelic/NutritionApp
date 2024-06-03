@@ -53,7 +53,7 @@ struct HomeView: View {
 
                 VStack(spacing: .zero) {
                     ForEach(presenter.meals) { meal in
-                        MealCell(meal: meal)
+                        MealCell(meal: meal, delete: presenter.delete)
                             .padding(4)
 
                         Divider()
