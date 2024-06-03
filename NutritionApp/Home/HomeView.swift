@@ -17,7 +17,7 @@ struct HomeView: View {
         VStack {
             ScrollView {
                 if let dailyNutrition = presenter.dailyNutrition {
-                    chart(for: dailyNutrition)
+                    chart1(for: dailyNutrition)
                 }
 
                 HStack {
@@ -97,7 +97,7 @@ extension HomeView {
             HStack {
                 ForEach(Array(nutrition.nutrients.keys)) { nutrient in
                     macrosCard(
-                        title: nutrient.title,
+                        nutrient: nutrient,
                         currentValue: nutrition.nutrients[nutrient] ?? .zero,
                         targetValue: dailyTarget.nutrients[nutrient] ?? .zero,
                         color: nutrient.color)
@@ -108,17 +108,22 @@ extension HomeView {
     }
 
     @ViewBuilder
-    func macrosCard(title: String, currentValue: Float, targetValue: Float, color: Color) -> some View {
+    func macrosCard(nutrient: Nutrient, currentValue: Float, targetValue: Float, color: Color) -> some View {
         if targetValue != .zero {
             HStack {
                 CircularProgressView(progress: Double(currentValue / targetValue), color: color)
                     .frame(width: 60, height: 60)
 
                 VStack {
-                    Text(title)
+                    Text(nutrient.title)
                         .color(emphasis: .medium)
 
                     Text(Strings.intDividedByInt.formatted(Int(currentValue), Int(targetValue)))
+                        .color(emphasis: .disabled)
+
+                    +
+
+                    Text(nutrient.unit.shortened)
                         .color(emphasis: .disabled)
                 }
             }
@@ -193,6 +198,27 @@ struct DailyCalorieCard: View {
 
 // MARK: - Chart
 extension HomeView {
+
+    func chart1(for dailyNutrition: [(Int, DailyNutrition)]) -> some View {
+        Chart {
+            ForEach(dailyNutrition, id: \.0) { day, nutrition in
+                ForEach(nutrition.nutrients.sortedByValue(), id: \.0) { nutrient, value in
+                    BarMark(
+                        x: .value("Date", .dateWithAdded(days: day), unit: .day),
+                        y: .value("Calories", nutrient.baselineValue(for: value))
+                    )
+                    .foregroundStyle(nutrient.color)
+                }
+            }
+        }
+        .chartLegend(.visible)
+        .chartYVisibleDomain(length: chartYDomain)
+        .chartXVisibleDomain(length: chartXDomain)
+        .chartScrollableAxes(.horizontal)
+        .frame(height: chartHeight)
+        .frame(maxWidth: .infinity)
+        .padding()
+    }
 
     func chart(for dailyNutrition: [(Int, DailyNutrition)]) -> some View {
         Chart {

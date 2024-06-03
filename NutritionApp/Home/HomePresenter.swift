@@ -26,7 +26,9 @@ class HomePresenter: ObservableObject {
 
     @MainActor
     func fetchMeals() async {
-        meals = await storageUseCase.fetchMeals(from: .daysAgo(3))
+        meals = await storageUseCase.fetchMeals(from: .daysAgo(3)).sorted  { first, second in
+            first.date > second.date
+        }
     }
 
     @MainActor

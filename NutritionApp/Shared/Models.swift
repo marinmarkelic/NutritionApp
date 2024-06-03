@@ -113,6 +113,10 @@ enum Nutrient: String, CaseIterable, Identifiable {
         }
     }
 
+    func baselineValue(for value: Float) -> Float {
+        value * unit.multiplier
+    }
+
 }
 
 struct DailyNutrition {
