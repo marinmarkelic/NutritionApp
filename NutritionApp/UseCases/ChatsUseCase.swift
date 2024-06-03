@@ -47,7 +47,7 @@ class ChatsUseCase {
     }
 
     private func fetchDailyMealsInstructions() async -> String? {
-        let meals = await storageUseCase.fetchMeals(from: 3)
+        let meals = await storageUseCase.fetchMeals(from: .daysAgo(3))
 
         var mealsForDaysAgo: [Int: [MealViewModel]] = [:]
         meals.forEach { meal in

@@ -7,10 +7,10 @@ class HomePresenter: ObservableObject {
     private let chartHeightOffset: Int = 400
 
     @Published var meals: [MealViewModel] = []
+    @Published var nutritionForToday: DailyNutrition?
     @Published var dailyNutrition: [(Int, DailyNutrition)]?
     @Published var dailyTarget: DailyTarget?
     @Published var burnedCalories: Int?
-    @Published var dailyStats: DailyCalorieStats?
     @Published var chartHeight: Int = 0
 
     @Dependency(\.storageUseCase) 
@@ -20,28 +20,20 @@ class HomePresenter: ObservableObject {
 
     private var disposables = Set<AnyCancellable>()
 
-    var nutritionForToday: DailyNutrition? {
-        guard let nutrition = dailyNutrition?.first(where: { $0.0 == 0 }) else { return nil }
-
-        return nutrition.1
-    }
-
     init() {
         bindUseCase()
     }
 
     @MainActor
     func fetchMeals() async {
-        meals = await storageUseCase.fetchMeals(from: 1)
+        meals = await storageUseCase.fetchMeals(from: .daysAgo(3))
     }
 
     @MainActor
     func fetchCalories() async {
-        dailyNutrition = await storageUseCase.fetchCalories(from: 3).sorted { $0.0 > $1.0 }
+        dailyNutrition = await storageUseCase.fetchCalories(from: .daysAgo(3)).sorted { $0.0 > $1.0 }
+        nutritionForToday = await storageUseCase.fetchCalories(from: .today).first?.1
         dailyTarget = await storageUseCase.fetchNecessaryCalories()
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
-            self?.calculateDailyStats()
-        }
 
         let maxCalorieValue = Int(dailyNutrition?.map { $0.1.calories }.max() ?? 0)
         chartHeight = max(maxCalorieValue, Int(dailyTarget?.calories ?? 0)) + chartHeightOffset
@@ -51,17 +43,10 @@ class HomePresenter: ObservableObject {
         Task {
             await storageUseCase.delete(meal: meal)
             await fetchMeals()
+            await fetchCalories()
         }
     }
 
-    private func calculateDailyStats() {
-        guard let dailyTarget else { return }
-
-        dailyStats = DailyCalorieStats(
-            calories: nutritionForToday?.calories ?? .zero,
-            targetCalories: dailyTarget.calories,
-            burnedCalores: 0)
-    }
 
     private func bindUseCase() {
         healthKitUseCase

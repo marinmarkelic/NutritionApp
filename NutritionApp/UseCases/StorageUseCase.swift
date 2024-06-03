@@ -57,8 +57,8 @@ actor StorageUseCase {
         storageService.fetchMeals(with: date)
     }
 
-    func fetchMeals(from daysAgo: Int) -> [MealViewModel] {
-        storageService.fetchMeals(from: daysAgo)
+    func fetchMeals(from timeline: FetchTimeline) -> [MealViewModel] {
+        storageService.fetchMeals(from: timeline)
     }
 
     func fetchNecessaryCalories() -> DailyTarget? {
@@ -102,8 +102,8 @@ actor StorageUseCase {
         return DailyTarget(calories: calories, nutrients: nutrients)
      }
 
-    func fetchCalories(from daysAgo: Int) -> [(Int, DailyNutrition)] {
-        let meals = storageService.fetchMeals(from: daysAgo)
+    func fetchCalories(from timeline: FetchTimeline) -> [(Int, DailyNutrition)] {
+        let meals = storageService.fetchMeals(from: timeline)
 
         /// (Days ago, Calories)
         var caloriesForDaysAgo: [Int: DailyNutrition] = [:]

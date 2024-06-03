@@ -21,7 +21,7 @@ actor SearchUseCase {
     }
 
     private func fetchDailyMealsInstructions() async -> String {
-        let meals = await storageUseCase.fetchMeals(from: 1)
+        let meals = await storageUseCase.fetchMeals(from: .today)
 
         var instruction = ""
         meals.forEach { meal in

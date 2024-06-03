@@ -70,16 +70,14 @@ extension StorageService {
         return meals.map { MealViewModel(from: $0) }
     }
 
-    func fetchMeals(from daysAgo: Int) -> [MealViewModel] {
+    func fetchMeals(from timeline: FetchTimeline) -> [MealViewModel] {
         let calendar = Calendar.current
         let startOfToday = calendar.startOfDay(for: .now)
 
         guard 
-            let startDate = calendar.date(byAdding: .day, value: -(daysAgo - 1), to: startOfToday),
+            let startDate = calendar.date(byAdding: .day, value: -(timeline.days - 1), to: startOfToday),
             let endDate = calendar.date(byAdding: .second, value: 86399, to: startOfToday)
         else { return [] }
-
-        Swift.print("--- \(startDate) \(endDate)")
 
         let meals = realm.objects(MealStorageViewModel.self).filter { meal in
             meal.date >= startDate && meal.date <= endDate

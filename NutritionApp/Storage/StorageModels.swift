@@ -1,6 +1,25 @@
 import Foundation
 import RealmSwift
 
+enum FetchTimeline {
+
+    case today
+    case yesterday
+    case daysAgo(Int)
+
+    var days: Int {
+        switch self {
+        case .today:
+            return 1
+        case .yesterday:
+            return 2
+        case .daysAgo(let days):
+            return days
+        }
+    }
+
+}
+
 class ConversationStorageViewModel: Object {
 
     @Persisted(primaryKey: true) var id: String
