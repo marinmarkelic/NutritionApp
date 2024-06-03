@@ -6,73 +6,74 @@ struct ChatsView: View {
 
     @ObservedObject private var presenter: ChatsPresenter
 
-    @State private var containerSize: CGSize = .zero
+    @State private var scrollViewHeight: CGFloat = .zero
     @State private var topSafeArea: CGFloat = .zero
+    @State private var path: NavigationPath = .init()
 
     init(presenter: ChatsPresenter) {
         self.presenter = presenter
     }
 
     var body: some View {
-        ZStack {
-            VStack(spacing: 0) {
-                ZStack(alignment: .bottom) {
-                    scrollView
+        NavigationStack {
+            ZStack {
+                VStack(spacing: 0) {
+                    ZStack(alignment: .bottom) {
+                        scrollView
+                    }
 
-                    sideMenu
-                        .padding(.top, headerHeight)
+                    CustomTextField(
+                        text: $presenter.query,
+                        placeholder: Strings.typeSomething.rawValue,
+                        icon: .send,
+                        isEnabled: $presenter.canSend
+                    ) { _ in
+                        presenter.send()
+                    }
+                    .background(Material.bar)
                 }
+                .maxSize()
 
-                CustomTextField(
-                    text: $presenter.query,
-                    placeholder: Strings.typeSomething.rawValue,
-                    icon: .send,
-                    isEnabled: $presenter.canSend
-                ) { _ in
-                    presenter.send()
+                VStack {
+                    header
+
+                    if presenter.status == .failed {
+                        Text(Strings.anErrorOccured)
+                            .padding()
+                            .background(Color.overlay())
+                            .border(Color.black, width: 1)
+                            .transition(.move(edge: .top))
+                    }
+
+                    Spacer()
                 }
-                .background(Material.bar)
+                .maxSize()
             }
-            .maxSize()
-
-            VStack {
-                header
-
-                if presenter.status == .failed {
-                    Text(Strings.anErrorOccured)
-                        .padding()
-                        .background(Color.overlay())
-                        .border(Color.black, width: 1)
-                        .transition(.move(edge: .top))
-                }
-
-                Spacer()
+            .navigationBarTitleDisplayMode(.inline)
+            .onSafeAreaChanged { insets in
+                topSafeArea = insets.top
             }
-            .maxSize()
+            .background(Color.background)
+            .dismissKeyboardOnTap()
+            .toolbarBackground(.hidden, for: .tabBar)
+            .animation(.easeInOut, value: presenter.isMenuShown)
+            .onAppear(perform: presenter.onAppear)
         }
-        .onSizeChange { size in
-            self.containerSize = size
-        }
-        .onSafeAreaChanged { insets in
-            topSafeArea = insets.top
-        }
-        .background(Color.background)
-        .dismissKeyboardOnTap()
-        .toolbarBackground(.hidden, for: .tabBar)
-        .animation(.easeInOut, value: presenter.isMenuShown)
-        .onAppear(perform: presenter.onAppear)
     }
 
     private var header: some View {
         HStack {
-            Rectangle()
-                .foregroundStyle(Color.yellow)
-                .frame(width: 30, height: 30)
-                .onTapGesture(perform: presenter.toggleMenuVisibility)
-
             Text(Strings.assistant.capitalized)
+                .color(emphasis: .high)
+                .font(.title)
 
             Spacer()
+
+            NavigationLink(destination: historyMenu) {
+                Rectangle()
+                    .foregroundStyle(Color.yellow)
+                    .frame(width: 30, height: 30)
+            }
         }
         .padding(.horizontal, 8)
         .maxWidth()
@@ -80,7 +81,6 @@ struct ChatsView: View {
         .background(Material.bar)
     }
 
-    @State private var scrollViewHeight: CGFloat = .zero
     private var scrollView: some View {
         ScrollView(.vertical) {
             VStack {
@@ -106,39 +106,27 @@ struct ChatsView: View {
         .ignoresSafeArea(edges: .top)
     }
 
-    private var sideMenu: some View {
-        HStack {
-            ScrollView {
-                VStack {
-                    Text(Strings.newChat)
-                        .color(emphasis: .high)
-                        .onTapGesture(perform: presenter.newConversation)
+    private var historyMenu: some View {
+        ScrollView {
+            VStack {
+                Text(Strings.newChat)
+                    .color(emphasis: .high)
+                    .onTapGesture(perform: presenter.newConversation)
 
-                    ForEach(presenter.menuConversations) { conversation in
-                        Text(conversation.lastMessage)
-                            .color(emphasis: .high)
-                            .lineLimit(3)
-                            .padding()
-                            .onTapGesture {
-                                presenter.switchConversation(for: conversation.id)
-                            }
-                    }
+                ForEach(presenter.menuConversations) { conversation in
+                    Text(conversation.lastMessage)
+                        .color(emphasis: .high)
+                        .lineLimit(3)
+                        .padding()
+                        .onTapGesture {
+                            presenter.switchConversation(for: conversation.id)
+                        }
                 }
             }
-            .padding()
-            .ignoresSafeArea()
-            .frame(width: containerSize.width * 2/3)
-            .background(Color.background)
-            .transition(.move(edge: .leading))
-
-            Color
-                .clear
-                .maxWidth()
-                .contentShape(Rectangle())
-                .onTapGesture(perform: presenter.toggleMenuVisibility)
+            .maxWidth()
         }
-        .opacity(presenter.isMenuShown ? 1 : 0)
-        .maxWidth()
+        .padding()
+        .background(Color.background)
     }
 
     private var textsStack: some View {
@@ -148,14 +136,19 @@ struct ChatsView: View {
                     TextCell(model: text)
                 }
             } else {
-                VStack {
-                    Spacer()
-
-                    Text(Strings.writeSomethingConversation)
-                }
-                .padding()
+                emptyView
             }
         }
+    }
+
+    private var emptyView: some View {
+        ZStack {
+            Text(Strings.writeSomethingConversation)
+                .color(emphasis: .disabled)
+                .multilineTextAlignment(.center)
+                .padding()
+        }
+        .maxSize()
     }
 
 }

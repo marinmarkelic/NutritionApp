@@ -16,7 +16,7 @@ struct SearchView: View {
             }
 
             if focus == nil {
-                CustomTextField(text: $query, placeholder: Strings.search.rawValue, icon: .search, action: presenter.search)
+                CustomTextField(text: $query, placeholder: Strings.search.capitalized, icon: .search, action: presenter.search)
                     .background(Material.bar)
             }
         }

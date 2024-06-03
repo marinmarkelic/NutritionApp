@@ -32,7 +32,7 @@ class HomePresenter: ObservableObject {
 
     @MainActor
     func fetchMeals() async {
-        meals = await storageUseCase.fetchMeals(from: 3)
+        meals = await storageUseCase.fetchMeals(from: 1)
     }
 
     @MainActor
@@ -48,8 +48,6 @@ class HomePresenter: ObservableObject {
     }
 
     private func calculateDailyStats() {
-        print("--- \(nutritionForToday) \(dailyTarget)")
-
         guard let dailyTarget else { return }
 
         dailyStats = DailyCalorieStats(
