@@ -22,10 +22,6 @@ class HealthKitService {
         burntCaloriesSubject.eraseToAnyPublisher()
     }
 
-    private var canAccessData: Bool {
-        HKHealthStore.isHealthDataAvailable()
-    }
-
     init() {
         requestAccess()
         createCalorieQueries()
@@ -68,7 +64,11 @@ class HealthKitService {
 
         dispatchGroup.enter()
         let basalEnergyType = HKQuantityType(.basalEnergyBurned)
-        let basalEnergyQuery = HKStatisticsQuery(quantityType: basalEnergyType, quantitySamplePredicate: predicate, options: .cumulativeSum) { (_, result, _) in
+        let basalEnergyQuery = HKStatisticsQuery(
+            quantityType: basalEnergyType,
+            quantitySamplePredicate: predicate,
+            options: .cumulativeSum
+        ) { (_, result, _) in
             guard let result = result?.sumQuantity() else {
                 dispatchGroup.leave()
                 return
@@ -81,7 +81,11 @@ class HealthKitService {
 
         dispatchGroup.enter()
         let activeEnergyType = HKQuantityType(.activeEnergyBurned)
-        let activeEnergyQuery = HKStatisticsQuery(quantityType: activeEnergyType, quantitySamplePredicate: predicate, options: .cumulativeSum) { (_, result, _) in
+        let activeEnergyQuery = HKStatisticsQuery(
+            quantityType: activeEnergyType,
+            quantitySamplePredicate: predicate,
+            options: .cumulativeSum
+        ) { (_, result, _) in
             guard let result = result?.sumQuantity() else {
                 dispatchGroup.leave()
                 return
@@ -132,8 +136,8 @@ class HealthKitService {
     }
 
     private func requestAccess() {
-        if canAccessData {
-            store.requestAuthorization(toShare: nil, read: dataTypes) {_,_ in }
+        if HKHealthStore.isHealthDataAvailable() {
+            store.requestAuthorization(toShare: nil, read: dataTypes) { _,_ in }
         }
     }
 

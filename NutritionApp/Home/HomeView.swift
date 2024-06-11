@@ -9,10 +9,6 @@ struct HomeView: View {
 
     @ObservedObject var presenter = HomePresenter()
 
-    private var graphGradient: Gradient {
-        Gradient(colors: [Color.accentColor, Color.accentColor.opacity(0.1)])
-    }
-
     var body: some View {
         VStack {
             ScrollView {
@@ -202,7 +198,7 @@ extension HomeView {
     func chart1(for dailyNutrition: [(Int, DailyNutrition)]) -> some View {
         Chart {
             ForEach(dailyNutrition, id: \.0) { day, nutrition in
-                ForEach(nutrition.nutrients.sortedByValue(), id: \.0) { nutrient, value in
+                ForEach(nutrition.nutrients.sortedByValue(andScaledTo: nutrition.calories), id: \.0) { nutrient, value in
                     BarMark(
                         x: .value("Date", .dateWithAdded(days: day), unit: .day),
                         y: .value("Calories", nutrient.baselineValue(for: value))
@@ -218,97 +214,6 @@ extension HomeView {
         .frame(height: chartHeight)
         .frame(maxWidth: .infinity)
         .padding()
-    }
-
-    func chart(for dailyNutrition: [(Int, DailyNutrition)]) -> some View {
-        Chart {
-            ForEach(dailyNutrition, id: \.0) { day, nutrition in
-                if let targetCalories = presenter.dailyTarget?.calories {
-                    LineMark(
-                        x: .value("Date", .dateWithAdded(days: day), unit: .day),
-                        y: .value("Calories", targetCalories),
-                        series: .value("type", "Target Calories"))
-                    .symbol(.circle)
-                    .foregroundStyle(.blue)
-                }
-
-                LineMark(
-                    x: .value("Date", .dateWithAdded(days: day), unit: .day),
-                    y: .value("Calories", nutrition.calories),
-                    series: .value("type", "Eaten calories"))
-                .symbol(.circle)
-                .interpolationMethod(.catmullRom)
-                .foregroundStyle(.yellow)
-            }
-        }
-        .chartYAxis {
-            AxisMarks(values: .automatic(desiredCount: 5)) {
-                AxisValueLabel()
-                    .foregroundStyle(Color.white)
-
-                AxisGridLine()
-                    .foregroundStyle(Color.white.opacity(0.2))
-            }
-        }
-        .chartXAxis {
-            AxisMarks() {
-                AxisValueLabel(centered: true)
-                    .foregroundStyle(Color.white)
-
-                AxisGridLine()
-                    .foregroundStyle(Color.white.opacity(0.2))
-            }
-        }
-        .chartLegend(.visible)
-        .chartYVisibleDomain(length: chartYDomain)
-        .chartXVisibleDomain(length: chartXDomain)
-        .chartYScale(domain: 0 ... presenter.chartHeight)
-        .chartScrollableAxes(.horizontal)
-        .frame(height: chartHeight)
-        .frame(maxWidth: .infinity)
-        .padding()
-        .background(Color.overlay())
-    }
-
-    func chart(for calories: [(Int, Int)]) -> some View {
-        Chart {
-            ForEach(calories, id: \.0) { day, calories in
-                LineMark(
-                    x: .value("Date2", .dateWithAdded(days: day), unit: .day),
-                    y: .value("Calories", calories),
-                    series: .value("type", "Eaten calories"))
-                .symbol(.circle)
-                .interpolationMethod(.catmullRom)
-                .foregroundStyle(.yellow)
-            }
-        }
-        .chartYAxis {
-            AxisMarks(values: .automatic(desiredCount: 5)) {
-                AxisValueLabel()
-                    .foregroundStyle(Color.white)
-
-                AxisGridLine()
-                    .foregroundStyle(Color.white.opacity(0.2))
-            }
-        }
-        .chartXAxis {
-            AxisMarks() {
-                AxisValueLabel(centered: true)
-                    .foregroundStyle(Color.white)
-
-                AxisGridLine()
-                    .foregroundStyle(Color.white.opacity(0.2))
-            }
-        }
-        .chartLegend(.visible)
-        .chartYVisibleDomain(length: chartYDomain)
-        .chartXVisibleDomain(length: chartXDomain)
-        .chartYScale(domain: 0 ... presenter.chartHeight)
-        .chartScrollableAxes(.horizontal)
-        .frame(height: chartHeight)
-        .frame(maxWidth: .infinity)
-        .padding()
-        .background(Color.overlay())
     }
 
 }

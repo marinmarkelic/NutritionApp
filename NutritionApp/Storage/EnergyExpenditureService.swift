@@ -54,15 +54,15 @@ class EnergyExpenditureService {
         weight: Int,
         phisicalActivity: ActivityFrequency
     ) -> Float {
-        let bmr: Float
+        let ree: Float
         switch sex {
         case .female:
-            bmr = 655.1 + (9.563 * Float(weight)) + (1.850 * Float(height)) - (4.676 * Float(age))
+            ree = 10.0 * Float(weight) + 6.25 * Float(height) - Float(5 * age) + 5.0
         case .male:
-            bmr = 66.5 + (13.75 * Float(weight)) + (5.003 * Float(height)) - (6.75 * Float(age))
+            ree = 10.0 * Float(weight) + 6.25 * Float(height) - Float(5 * age) - 161.0
         }
 
-        return bmr * phisicalActivity.activityFactor
+        return ree * phisicalActivity.activityFactor
     }
 
     func gramsOfProtein(for weight: Float) -> Float {

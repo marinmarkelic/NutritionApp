@@ -16,7 +16,7 @@ extension Date {
     func distance(from date: Date, only component: Calendar.Component, calendar: Calendar = .current) -> Int {
         let days1 = calendar.component(component, from: self)
         let days2 = calendar.component(component, from: date)
-        return days1 - days2 + 1
+        return days1 - days2 // Possible crash, I deleted: + 1
     }
 
 //    func hasSame(_ component: Calendar.Component, as date: Date) -> Bool {

@@ -15,6 +15,25 @@ extension NutrientValues {
         }
     }
 
+    func sortedByValue(andScaledTo calories: Float, ascending: Bool = true) -> [(Nutrient, Float)] {
+        var totalAmount: Float = .zero
+        self.forEach { (key, value) in
+            totalAmount += value * key.unit.multiplier
+        }
+
+        var newArray: [(Nutrient, Float)]
+        if ascending {
+            newArray = self.sorted { $0.value * $0.key.unit.multiplier < $1.value * $1.key.unit.multiplier }
+        } else {
+            newArray = self.sorted { $0.value * $0.key.unit.multiplier > $1.value * $1.key.unit.multiplier }
+        }
+
+        return newArray.map { (key, value) in
+            let newValue = calories * value / totalAmount
+            return (key, newValue)
+        }
+    }
+
 }
 
 enum MeasuringUnit: String {

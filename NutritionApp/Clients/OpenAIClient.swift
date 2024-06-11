@@ -35,7 +35,9 @@ class OpenAIClient {
     }()
 
     func sendSingleMessage(text: String) async -> String? {
-        let parameters = ChatCompletionParameters(messages: [.init(role: .user, content: .text(text))], model: .gpt35Turbo)
+        let parameters = ChatCompletionParameters(
+            messages: [.init(role: .user, content: .text(text))], 
+            model: .gpt35Turbo)
         let chat = try? await service.startChat(parameters: parameters)
 
         guard let message = chat?.choices.first?.message else { return nil }
@@ -75,8 +77,10 @@ class OpenAIClient {
     private func sendMessage(text: String, conversationId: String, instructions: String? = nil) async {
         let message = MessageParameter(role: .user, content: text)
         let _ = try? await service.createMessage(threadID: conversationId, parameters: message)
-        let parameters = RunParameter(assistantID: nutritionAssistantId, instructions: instructions)
 
+        await retreiveMessages(for: conversationId)
+
+        let parameters = RunParameter(assistantID: nutritionAssistantId, instructions: instructions)
         guard let run = try? await service.createRun(threadID: conversationId, parameters: parameters) else {
             queryStatusSubject.send(.failed)
             return
@@ -97,7 +101,10 @@ class OpenAIClient {
         else { return }
 
         let conversationMessages = messages.data.map { Message(from: $0) }
-        let conversation = Conversation(id: conversationId, assistantId: nutritionAssistantId, messages: conversationMessages)
+        let conversation = Conversation(
+            id: conversationId,
+            assistantId: nutritionAssistantId,
+            messages: conversationMessages)
         conversationSubject.send(conversation)
     }
 
