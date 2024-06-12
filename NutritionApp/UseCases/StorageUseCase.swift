@@ -80,12 +80,12 @@ actor StorageUseCase {
                 weight: Int(weight),
                 phisicalActivity: phisicalActivity)
 
-        let protein = energyExpenditureService.gramsOfProtein(for: weight)
-        let fat = energyExpenditureService.gramsOfFat(for: calories)
-        let carbs = energyExpenditureService.gramsOfCarbs(for: calories, gramsOfProtein: protein, gramsOfFat: fat)
-        let sodium = energyExpenditureService.milligramsOfSodium()
-        let cholesterol = energyExpenditureService.milligramsOfCholesterol()
-        let potassium = energyExpenditureService.milligramsOfPotassium(for: sex)
+        let protein = energyExpenditureService.gramsOfProtein(for: weight, and: age)
+        let fat = energyExpenditureService.gramsOfFat(for: age, and: calories)
+        let carbs = energyExpenditureService.gramsOfCarbs()
+        let sodium = energyExpenditureService.milligramsOfSodium(for: age)
+//        let cholesterol = energyExpenditureService.milligramsOfCholesterol()
+        let potassium = energyExpenditureService.milligramsOfPotassium(for: age, and: sex)
         let fiber = energyExpenditureService.gramsOfFiber(for: calories)
         let sugar = energyExpenditureService.gramsOfSugar(for: calories)
 
@@ -94,7 +94,7 @@ actor StorageUseCase {
         nutrients[.fat_total_g] = fat
         nutrients[.carbohydrates_total_g] = carbs
         nutrients[.sodium_mg] = sodium
-        nutrients[.cholesterol_mg] = cholesterol
+//        nutrients[.cholesterol_mg] = cholesterol
         nutrients[.potassium_mg] = potassium
         nutrients[.fiber_g] = fiber
         nutrients[.sugar_g] = sugar

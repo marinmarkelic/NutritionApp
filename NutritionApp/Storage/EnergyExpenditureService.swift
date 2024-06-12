@@ -65,46 +65,82 @@ class EnergyExpenditureService {
         return ree * phisicalActivity.activityFactor
     }
 
-    func gramsOfProtein(for weight: Float) -> Float {
-        weight * 0.8
-    }
-
-    func gramsOfFat(for dailyCalories: Float) -> Float {
-        let kCalsOfFat = dailyCalories * 0.25
-        return kCalsOfFat / 9
-    }
-
-    func gramsOfCarbs(for dailyCalories: Float, gramsOfProtein: Float, gramsOfFat: Float) -> Float {
-        let kcalsOfProtein = gramsOfProtein * 4
-        let kcalsOfFat = gramsOfFat * 9
-        let kcalsOfCarbs = dailyCalories - kcalsOfProtein - kcalsOfFat
-
-        return kcalsOfCarbs / 4
-    }
-
-    func milligramsOfSodium() -> Float {
-        2300
-    }
-
-    func milligramsOfCholesterol() -> Float {
-        300
-    }
-
-    func milligramsOfPotassium(for sex: Sex) -> Float {
-        switch sex {
-        case .male:
-            return 3250
-        case .female:
-            return 2750
+    func gramsOfProtein(for weight: Float, and age: Int) -> Float {
+        switch age {
+        case 1...3:
+            return weight * 1.05
+        case 4...13:
+            return weight * 0.95
+        case 14...18:
+            return weight * 0.85
+        case 19...:
+            return weight * 0.8
+        default:
+            return .zero
         }
     }
 
+    func gramsOfCarbs() -> Float {
+        130
+    }
+
+    func gramsOfFat(for age: Int, and dailyCalories: Float) -> Float {
+        let factor: Float
+        switch age {
+        case 1...3:
+            factor = 0.35
+        case 4...:
+            factor = 0.275
+        default:
+            factor = .zero
+        }
+
+        let kCalsOfFat = dailyCalories * factor
+        return kCalsOfFat / 9
+    }
+
     func gramsOfFiber(for calories: Float) -> Float {
-        14 * calories / 1000
+        calories * 14 / 1000
     }
 
     func gramsOfSugar(for calories: Float) -> Float {
-        calories * 0.1 / 4
+        130
+    }
+
+    func milligramsOfSodium(for age: Int) -> Float {
+        switch age {
+        case 1...3:
+            return 800
+        case 4...8:
+            return 1000
+        case 9...18:
+            return 1500
+        case 19...:
+            return 2300
+        default:
+            return .zero
+        }
+    }
+
+//    func milligramsOfCholesterol() -> Float {
+//        300
+//    }
+
+    func milligramsOfPotassium(for age: Int, and sex: Sex) -> Float {
+        switch age {
+        case 1...3:
+            return 2000
+        case 4...8:
+            return 2300
+        case 9...13:
+            return sex == .female ? 2300 : 2300
+        case 14...18:
+            return sex == .female ? 3000 : 2300
+        case 19...:
+            return sex == .female ? 3400 : 2600
+        default:
+            return .zero
+        }
     }
 
 }
