@@ -38,12 +38,12 @@ class ChatsUseCase {
     func send(text: String, conversationId: String?) async {
         let instructions = await fetchDailyMealsInstructions()
 
-        guard let conversationId else {
-            await client.send(text: text, conversationId: conversationId, instructions: instructions)
-            return
-        }
+//        guard let conversationId else {
+//            await client.initiateMessageSending(text: text, conversationId: conversationId, instructions: instructions)
+//            return
+//        }
 
-        await client.send(text: text, conversationId: conversationId, instructions: instructions)
+        await client.initiateMessageSending(text: text, conversationId: conversationId, instructions: instructions)
     }
 
     private func fetchDailyMealsInstructions() async -> String? {

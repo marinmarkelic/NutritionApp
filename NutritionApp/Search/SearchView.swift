@@ -16,7 +16,7 @@ struct SearchView: View {
             }
 
             if focus == nil {
-                CustomTextField(text: $query, placeholder: Strings.search.capitalized, icon: .search, action: presenter.search)
+                CustomTextField(text: $query, placeholder: Strings.search.capitalized, icon: .magniflyingGlass, action: presenter.search)
                     .background(Material.bar)
             }
         }
@@ -28,12 +28,16 @@ struct SearchView: View {
 
     private var emptyView: some View {
         ZStack {
+            Color
+                .clear
+                .maxSize()
+
             Text(Strings.lookUpDesiredMeal.rawValue)
                 .color(emphasis: .disabled)
                 .multilineTextAlignment(.center)
                 .padding()
         }
-        .maxSize()
+        .dismissKeyboardOnTap()
     }
 
     private func contentView(for meal: MealViewModel) -> some View{
@@ -59,13 +63,8 @@ struct SearchView: View {
                         updateServingSize: presenter.update,
                         updateDate: presenter.update)
 
-                    Button(Strings.save.rawValue) {
-                        presenter.save()
-                    }
-                    .padding(8)
-                    .foregroundStyle(Color.background)
-                    .background(Color.action)
-                    .shiftLeft()
+                    ActionButton(title: Strings.save.capitalized, action: presenter.save)
+                        .shiftRight()
                 }
             }
             .background(Color.background)

@@ -32,11 +32,12 @@ class ChatsPresenter: ObservableObject {
         Task {
             menuConversations = await chatsUseCase.fetchConversations()
         }
-//        conversation = mockChats()
     }
 
     @MainActor
     func send() {
+        guard !query.isEmpty else { return }
+
         let queryToSend = query
         query = ""
         Task {
@@ -45,13 +46,16 @@ class ChatsPresenter: ObservableObject {
     }
 
     func toggleMenuVisibility() {
-        isMenuShown.toggle()
+        DispatchQueue.main.async { [weak self] in
+            self?.isMenuShown.toggle()
+        }
     }
 
     func newConversation() {
         conversation = nil
     }
 
+    @MainActor
     func switchConversation(for id: String) {
         toggleMenuVisibility()
 

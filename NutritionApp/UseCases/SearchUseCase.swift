@@ -16,11 +16,12 @@ actor SearchUseCase {
     }
 
     func fetchOpinion(for meal: MealViewModel) async -> String? {
-        let instructions = await fetchDailyMealsInstructions() + "Meal that the user wants to eat: \(meal.name)"
+        let instructions = await fetchDailyMealsInstructions(with: meal.name)
+        print("--- inst \(instructions)")
         return await openAIClient.sendSingleMessage(text: instructions)
     }
 
-    private func fetchDailyMealsInstructions() async -> String {
+    private func fetchDailyMealsInstructions(with newMeal: String) async -> String {
         let meals = await storageUseCase.fetchMeals(from: .today)
 
         var instruction = ""
@@ -33,11 +34,7 @@ actor SearchUseCase {
             }
         }
 
-        if instruction.isEmpty {
-            return Strings.nutritionSearchInstructions.rawValue + "Eaten meals: none"
-        } else {
-            return Strings.nutritionSearchInstructions.rawValue + "Eaten meals: " + instruction
-        }
+        return Strings.nutritionSearchInstructions1.formatted((instruction.isEmpty ? "none" : instruction), newMeal)
     }
 
 }

@@ -21,6 +21,7 @@ struct ChatsView: View {
                     ZStack(alignment: .bottom) {
                         scrollView
                     }
+                    .dismissKeyboardOnTap()
 
                     CustomTextField(
                         text: $presenter.query,
@@ -54,7 +55,6 @@ struct ChatsView: View {
                 topSafeArea = insets.top
             }
             .background(Color.background)
-            .dismissKeyboardOnTap()
             .toolbarBackground(.hidden, for: .tabBar)
             .animation(.easeInOut, value: presenter.isMenuShown)
             .onAppear(perform: presenter.onAppear)
@@ -69,10 +69,17 @@ struct ChatsView: View {
 
             Spacer()
 
-            NavigationLink(destination: historyMenu) {
-                Rectangle()
-                    .foregroundStyle(Color.yellow)
-                    .frame(width: 30, height: 30)
+            NavigationLink(
+                destination: HistoryView(
+                    conversations: presenter.menuConversations,
+                    newConversation: presenter.newConversation,
+                    switchConversation: presenter.switchConversation)
+            ) {
+                Image(with: .history)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .foregroundColor(Color.icon)
+                    .frame(width: 24, height: 24)
             }
         }
         .padding(.horizontal, 8)
@@ -104,29 +111,6 @@ struct ChatsView: View {
         .defaultScrollAnchor(.bottom)
         .background(Color.background)
         .ignoresSafeArea(edges: .top)
-    }
-
-    private var historyMenu: some View {
-        ScrollView {
-            VStack {
-                Text(Strings.newChat)
-                    .color(emphasis: .high)
-                    .onTapGesture(perform: presenter.newConversation)
-
-                ForEach(presenter.menuConversations) { conversation in
-                    Text(conversation.lastMessage)
-                        .color(emphasis: .high)
-                        .lineLimit(3)
-                        .padding()
-                        .onTapGesture {
-                            presenter.switchConversation(for: conversation.id)
-                        }
-                }
-            }
-            .maxWidth()
-        }
-        .padding()
-        .background(Color.background)
     }
 
     private var textsStack: some View {

@@ -12,6 +12,7 @@ class HomePresenter: ObservableObject {
     @Published var dailyTarget: DailyTarget?
     @Published var burnedCalories: Int?
     @Published var chartHeight: Int = 0
+    @Published var isChartLegendVisible: Bool = false
 
     @Dependency(\.storageUseCase) 
     private var storageUseCase: StorageUseCase
@@ -47,6 +48,10 @@ class HomePresenter: ObservableObject {
             await fetchMeals()
             await fetchCalories()
         }
+    }
+
+    func toggleLegendVisibility() {
+        isChartLegendVisible.toggle()
     }
 
 

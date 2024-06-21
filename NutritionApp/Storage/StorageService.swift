@@ -13,10 +13,6 @@ class StorageService {
         return realm
     }
 
-    private lazy var defaults: UserDefaults = {
-        UserDefaults.standard
-    }()
-
 }
 
 // MARK: - Realm
@@ -124,19 +120,15 @@ extension StorageService {
 extension StorageService {
 
     func save(value: Any?, for key: String) {
-        defaults.setValue(value, forKey: key)
+        UserDefaults.standard.setValue(value, forKey: key)
     }
 
     func setValuesForKeys(_ keyedValues: [String : Any]) {
-        defaults.setValuesForKeys(keyedValues)
+        UserDefaults.standard.setValuesForKeys(keyedValues)
     }
 
     func object(for key: String) -> Any? {
-//        defaults.object(forKey: key)
-        let value = defaults.value(forKey: key)
-
-        Swift.print("Reading key \(key): \(value)")
-        return value
+        UserDefaults.standard.object(forKey: key)
     }
 
 }

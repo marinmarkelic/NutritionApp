@@ -1,4 +1,5 @@
 import Foundation
+import Charts
 import SwiftUI
 
 typealias NutrientValues = [Nutrient: Float]
@@ -61,7 +62,7 @@ enum MeasuringUnit: String {
 
 }
 
-enum Nutrient: String, CaseIterable, Identifiable {
+enum Nutrient: String, CaseIterable, Identifiable, Plottable {
 
     case fat_total_g
     case fat_saturated_g
@@ -75,6 +76,10 @@ enum Nutrient: String, CaseIterable, Identifiable {
 
     var id: String {
         self.rawValue
+    }
+
+    var primitivePlottable: String {
+        title
     }
 
     var title: String {
@@ -131,6 +136,32 @@ enum Nutrient: String, CaseIterable, Identifiable {
             return Color.sugar
         }
     }
+
+    init?(primitivePlottable: String) {
+        switch primitivePlottable {
+        case Strings.fat.rawValue:
+            self = .fat_total_g
+        case Strings.fatSaturated.rawValue:
+            self = .fat_saturated_g
+        case Strings.protein.rawValue:
+            self = .protein_g
+        case Strings.sodium.rawValue:
+            self = .sodium_mg
+        case Strings.potassium.rawValue:
+            self = .potassium_mg
+        case Strings.cholesterol.rawValue:
+            self = .cholesterol_mg
+        case Strings.carbohydrates.rawValue:
+            self = .carbohydrates_total_g
+        case Strings.fiber.rawValue:
+            self = .fiber_g
+        case Strings.sugar.rawValue:
+            self = .sugar_g
+        default:
+            return nil
+        }
+    }
+
 
     func baselineValue(for value: Float) -> Float {
         value * unit.multiplier

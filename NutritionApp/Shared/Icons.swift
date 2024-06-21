@@ -1,8 +1,20 @@
-//
-//  Icons.swift
-//  NutritionApp
-//
-//  Created by Marin on 21.06.2024..
-//
+import SwiftUI
 
-import Foundation
+enum Icon: String {
+
+    case trash
+    case magniflyingGlass = "magnifyingglass"
+    case send = "arrow.turn.right.up"
+    case history = "gobackward"
+    case visible = "eye.fill"
+    case hidden = "eye.slash.fill"
+
+}
+
+extension Image {
+
+    init(with icon: Icon) {
+        self.init(systemName: icon.rawValue)
+    }
+
+}

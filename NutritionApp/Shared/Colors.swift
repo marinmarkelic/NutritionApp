@@ -8,6 +8,8 @@ extension Color {
     static let background = Color(hex: 0x121212)
     static let action = Color(hex: 0xBB86FC)
     static let chatBubble = Color(hex: 0xFFFBE6)
+    static let icon = Color.white.opacity(0.6)
+    static let iconDisabled = Color.white.opacity(0.38)
 
     static func overlay(opacity: CGFloat = 0.05) -> Color {
         white.opacity(opacity)
@@ -23,6 +25,9 @@ extension Color {
         case medium = 0.6
         case disabled = 0.38
     }
+
+    static let chatTextQuestion = Color.black.opacity(0.8)
+    static let chatTextResponse = Color.white.opacity(0.8)
 
     static func text(emphasis: ColorEmphasis = .high) -> Color {
         white.opacity(emphasis.rawValue)

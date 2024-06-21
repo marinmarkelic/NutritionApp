@@ -13,7 +13,28 @@ struct HomeView: View {
         VStack {
             ScrollView {
                 if let dailyNutrition = presenter.dailyNutrition {
-                    chart1(for: dailyNutrition)
+                    VStack {
+                        chart(for: dailyNutrition, isLegendVisible: presenter.isChartLegendVisible)
+
+                        HStack {
+                            Text(Strings.legend.capitalized)
+                                .color(emphasis: .medium)
+
+                            Image(with: presenter.isChartLegendVisible ? .visible : .hidden)
+                                .aspectRatio(contentMode: .fit)
+                                .foregroundColor(Color.icon)
+                                .frame(width: 24, height: 24)
+                        }
+                        .padding(6)
+                        .background(Color.overlay())
+                        .roundCorners(radius: 8)
+                        .onTapGesture {
+                            withAnimation {
+                                presenter.toggleLegendVisibility()
+                            }
+                        }
+                        .shiftRight()
+                    }
                 }
 
                 HStack {
@@ -195,24 +216,41 @@ struct DailyCalorieCard: View {
 // MARK: - Chart
 extension HomeView {
 
-    func chart1(for dailyNutrition: [(Int, DailyNutrition)]) -> some View {
+    func chart(for dailyNutrition: [(Int, DailyNutrition)], isLegendVisible: Bool) -> some View {
         Chart {
             ForEach(dailyNutrition, id: \.0) { day, nutrition in
-                ForEach(nutrition.nutrients.sortedByValue(andScaledTo: nutrition.calories), id: \.0) { nutrient, value in
+                ForEach(
+                    nutrition.nutrients.sortedByValue(andScaledTo: nutrition.calories), 
+                    id: \.0
+                ) { nutrient, value in
                     BarMark(
                         x: .value("Date", .dateWithAdded(days: day), unit: .day),
-                        y: .value("Calories", nutrient.baselineValue(for: value))
-                    )
-                    .foregroundStyle(nutrient.color)
+                        y: .value("Calories", nutrient.baselineValue(for: value)))
+                                        .foregroundStyle(by: .value(nutrient.title, nutrient))
                 }
+
+                /// The purpose of this is to sort the legend items from highest to lowest
+//                ForEach(
+//                    nutrition.nutrients.sortedByValue(andScaledTo: nutrition.calories, ascending: false), 
+//                    id: \.0
+//                ) { nutrient, value in
+//                    BarMark(
+//                        x: .value("Date", .dateWithAdded(days: day), unit: .day),
+//                        y: .value("Empty", .zero))
+//                    .foregroundStyle(by: .value(nutrient.title, nutrient))
+//                }
             }
         }
-        .chartLegend(.visible)
         .chartYVisibleDomain(length: chartYDomain)
         .chartXVisibleDomain(length: chartXDomain)
         .chartScrollableAxes(.horizontal)
         .frame(height: chartHeight)
         .frame(maxWidth: .infinity)
+        .chartLegend(isLegendVisible ? .visible : .hidden)
+        .chartLegend(position: .trailing, alignment: .leading)
+        .chartForegroundStyleScale { (nutrient: Nutrient) in
+            nutrient.color
+        }
         .padding()
     }
 

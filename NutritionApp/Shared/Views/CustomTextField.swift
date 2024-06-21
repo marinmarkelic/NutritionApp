@@ -4,7 +4,7 @@ struct CustomTextField: View {
 
     private let action: (String) -> Void
     private let placeholder: String
-    private let icon: BundleImage
+    private let icon: Icon
     private let imageSize: CGFloat = 24
 
     private var text: Binding<String>
@@ -13,7 +13,7 @@ struct CustomTextField: View {
     init(
         text: Binding<String>,
         placeholder: String,
-        icon: BundleImage,
+        icon: Icon,
         isEnabled: Binding<Bool> = .constant(true),
         action: @escaping (String) -> Void
     ) {
@@ -30,8 +30,10 @@ struct CustomTextField: View {
                 TextField(placeholder, text: text)
                     .autocorrectionDisabled()
 
-                Image(from: icon)
+                Image(with: icon)
                     .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .foregroundStyle(isEnabled.wrappedValue ? Color.icon : Color.iconDisabled)
                     .size(with: imageSize)
                     .onTapGesture {
                         guard isEnabled.wrappedValue else { return }

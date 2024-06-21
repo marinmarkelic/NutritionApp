@@ -31,9 +31,11 @@ struct MealCell: View {
 
             Spacer()
 
-            Rectangle()
-                .fill(Color.yellow)
-                .frame(width: 30, height: 30)
+            Image(with: .trash)
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .foregroundStyle(Color.icon)
+                .frame(width: 24, height: 24)
                 .onTapGesture {
                     delete(meal)
                 }

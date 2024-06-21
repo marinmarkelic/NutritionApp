@@ -18,6 +18,8 @@ enum Strings: String {
     case target
     case burned
     case assistant
+    case history
+    case legend
     case newChat = "New chat"
     case userSettings = "User settings"
     case howOftenDoYouWorkout = "How often do you workout?"
@@ -49,7 +51,33 @@ enum Strings: String {
 
     case nutritionChatInstructions = "Act as a nutritionist. You will be provided with a list of meals that the user ate for the last few days. You should tell the user about how healthy their diet is and give some recommendations if it isn't. Be concise, write a few sentences for each day, be more descriptive about days with unhealthy diets. Make sure to answer any followup questions in a matter that a nutritionist would."
 
-    case nutritionSearchInstructions = "You will be provided with a list of meals that the user ate today which could be empty and a meal that the user wants to eat. You should inform the user about the healthiness of the chosen meal with the consideration of the previous meals that the user ate that day. The answer should be consise. Do not mention the eaten meals in the reply."
+    case nutritionSearchInstructions = "You will be provided with a list of meals that the user ate today which could be empty and a meal that the user wants to eat. You should inform the user about the healthiness of the chosen meal with the consideration of the previous meals that the user ate that day. The answer should be consise and short for healthy meals and longer for unhealthy ones with an explanation. You cannot mention the consumed meals in the reply and also take into account the weight of the meal when determining the healthiness."
+    case nutritionSearchInstructions1 =
+"""
+    ### Instructions ###
+    Your task is to evaluate the healthiness of a meal that the user wants to eat. Keep the answers short for healthy meals and more descriptive for unhealthy ones.
+    I'm going to tip $1000 if you don't mention consumed meals or the serving size.
+
+    ### Guidelines ###
+    1. Determine the healthiness of a meal based on its name.
+    2. Consider the serving size and its impact on health. Small quantities of otherwise unhealthy foods may have a negligible impact.
+    3. Prioritize providing feedback that helps the user make informed dietary choices.
+    4. Combine the information and return it in a friendly manner.
+
+    ### Examples ###
+    New meal: "50g of sugar"
+    This meal is unhealthy due to high sugar content.
+
+    New meal: "tea"
+    This meal is healthy, providing hydration and antioxidants.
+
+    New meal: "20kg of meat"
+    This meal is unhealthy due to excessive quantity, which can lead to various health issues.
+
+    ### Provided data ###
+    Consumed meals: %@
+    New meal: %@
+"""
 
 }
 

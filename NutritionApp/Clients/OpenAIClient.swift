@@ -45,7 +45,7 @@ class OpenAIClient {
         return message.content
     }
 
-    func send(text: String, conversationId: String?, instructions: String? = nil) async {
+    func initiateMessageSending(text: String, conversationId: String?, instructions: String? = nil) async {
         queryStatusSubject.send(.running)
         appendSentMessage(text: text)
 
@@ -62,18 +62,6 @@ class OpenAIClient {
         await sendMessage(text: text, conversationId: newThreadId, instructions: instructions)
     }
 
-    private func appendSentMessage(text: String) {
-        let conversation = conversationSubject.value ?? Conversation(id: "", assistantId: "", messages: [])
-        let message = Message(id: UUID().uuidString, createdAt: 0, role: .user, text: text)
-        conversationSubject.send(conversation.add(message: message))
-    }
-
-    private func createNewThread() async -> String? {
-        let parameters = CreateThreadParameters()
-        let thread = try? await service.createThread(parameters: parameters)
-        return thread?.id
-    }
-
     private func sendMessage(text: String, conversationId: String, instructions: String? = nil) async {
         let message = MessageParameter(role: .user, content: text)
         let _ = try? await service.createMessage(threadID: conversationId, parameters: message)
@@ -88,6 +76,19 @@ class OpenAIClient {
 
         await observeRun(run: run, threadId: conversationId)
     }
+
+    private func appendSentMessage(text: String) {
+        let conversation = conversationSubject.value ?? Conversation(id: "", assistantId: "", messages: [])
+        let message = Message(id: UUID().uuidString, createdAt: 0, role: .user, text: text)
+        conversationSubject.send(conversation.add(message: message))
+    }
+
+    private func createNewThread() async -> String? {
+        let parameters = CreateThreadParameters()
+        let thread = try? await service.createThread(parameters: parameters)
+        return thread?.id
+    }
+
 
     func retreiveMessages(for conversationId: String) async {
         guard
