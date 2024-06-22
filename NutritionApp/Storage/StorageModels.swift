@@ -18,6 +18,15 @@ enum FetchTimeline {
         }
     }
 
+    var date: Date? {
+        Calendar.current.date(byAdding: .day, value: -days, to: Date())
+    }
+
+    init(date: Date) {
+        let days = Calendar.current.dateComponents([.day], from: date, to: Date()).day ?? 0
+        self = .daysAgo(days)
+    }
+
 }
 
 class ConversationStorageViewModel: Object {

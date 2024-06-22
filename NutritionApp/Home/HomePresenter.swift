@@ -6,18 +6,16 @@ class HomePresenter: ObservableObject {
 
     private let chartHeightOffset: Int = 400
 
-    @Published var meals: [MealViewModel] = []
-    @Published var nutritionForToday: DailyNutrition?
-    @Published var dailyNutrition: [(Int, DailyNutrition)]?
-    @Published var dailyTarget: DailyTarget?
-    @Published var burnedCalories: Int?
     @Published var chartHeight: Int = 0
     @Published var isChartLegendVisible: Bool = false
 
-    @Dependency(\.storageUseCase) 
-    private var storageUseCase: StorageUseCase
-    @Dependency(\.healthKitUseCase)
-    private var healthKitUseCase: HealthKitUseCase
+    @Published var dailyNutritions: [(Int, DailyNutrition)] = []
+    @Published var selectedDay: FetchTimeline = .today
+    @Published var selectedDayNutrition: SelectedDayViewModel?
+    @Published var selectedDayMeals: [MealViewModel] = []
+
+    @Dependency(\.homeUseCase)
+    private var homeUseCase: HomeUseCase
 
     private var disposables = Set<AnyCancellable>()
 
@@ -25,28 +23,16 @@ class HomePresenter: ObservableObject {
         bindUseCase()
     }
 
-    @MainActor
-    func fetchMeals() async {
-        meals = await storageUseCase.fetchMeals(from: .daysAgo(3)).sorted  { first, second in
-            first.date > second.date
+    func updateDate(with date: Date) {
+        Task {
+            let day = FetchTimeline(date: date)
+            await homeUseCase.fetchSelectedDay(day: day)
         }
-    }
-
-    @MainActor
-    func fetchCalories() async {
-        dailyNutrition = await storageUseCase.fetchCalories(from: .daysAgo(3)).sorted { $0.0 > $1.0 }
-        nutritionForToday = await storageUseCase.fetchCalories(from: .today).first?.1
-        dailyTarget = await storageUseCase.fetchNecessaryCalories()
-
-        let maxCalorieValue = Int(dailyNutrition?.map { $0.1.calories }.max() ?? 0)
-        chartHeight = max(maxCalorieValue, Int(dailyTarget?.calories ?? 0)) + chartHeightOffset
     }
 
     func delete(meal: MealViewModel) {
         Task {
-            await storageUseCase.delete(meal: meal)
-            await fetchMeals()
-            await fetchCalories()
+//            await storageUseCase.delete(meal: meal)
         }
     }
 
@@ -54,16 +40,35 @@ class HomePresenter: ObservableObject {
         isChartLegendVisible.toggle()
     }
 
+    func onAppear() async {
+        await homeUseCase.fetchSelectedDay(day: selectedDay)
+        await homeUseCase.fetchDailyNutritions()
+    }
 
     private func bindUseCase() {
-        healthKitUseCase
-            .burntCaloriesPublisher
-            .removeDuplicates()
+        homeUseCase
+            .dailyNuturitonsPublisher
             .receive(on: RunLoop.main)
-            .sink { [weak self] value in
-                guard let self, let value else { return }
+            .sink { [weak self] dailyNutritions in
+                self?.dailyNutritions = dailyNutritions
+            }
+            .store(in: &disposables)
 
-                burnedCalories = Int(value)
+        homeUseCase
+            .selectedDayPublisher
+            .receive(on: RunLoop.main)
+            .sink { [weak self] selectedDay in
+                guard let self, let selectedDay else { return }
+
+                selectedDayNutrition = selectedDay
+            }
+            .store(in: &disposables)
+
+        homeUseCase
+            .dailyMealsPublisher
+            .receive(on: RunLoop.main)
+            .sink { [weak self] meals in
+                self?.selectedDayMeals = meals
             }
             .store(in: &disposables)
     }

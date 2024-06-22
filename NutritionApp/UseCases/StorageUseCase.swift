@@ -102,6 +102,15 @@ actor StorageUseCase {
         return DailyTarget(calories: calories, nutrients: nutrients)
      }
 
+    func fetchCalories(for date: Date) -> DailyNutrition? {
+        let meals = storageService.fetchMeals(with: date)
+        var nutrition = DailyNutrition()
+        for meal in meals {
+            nutrition = nutrition.add(meal)
+        }
+        return nutrition
+    }
+
     func fetchCalories(from timeline: FetchTimeline) -> [(Int, DailyNutrition)] {
         let meals = storageService.fetchMeals(from: timeline)
 

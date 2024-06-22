@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9C0CCBF92C2741620012F37A /* HomeUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C0CCBF82C2741620012F37A /* HomeUseCase.swift */; };
 		9C1FD3C32B445F2E00D8C6FD /* ChatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C1FD3C22B445F2E00D8C6FD /* ChatsView.swift */; };
 		9C1FD3C72B4466D300D8C6FD /* ChatsUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C1FD3C62B4466D300D8C6FD /* ChatsUseCase.swift */; };
 		9C1FD3C92B4467A000D8C6FD /* OpenAIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C1FD3C82B4467A000D8C6FD /* OpenAIClient.swift */; };
@@ -68,6 +69,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		9C0CCBF82C2741620012F37A /* HomeUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeUseCase.swift; sourceTree = "<group>"; };
 		9C1FD3C22B445F2E00D8C6FD /* ChatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatsView.swift; sourceTree = "<group>"; };
 		9C1FD3C62B4466D300D8C6FD /* ChatsUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatsUseCase.swift; sourceTree = "<group>"; };
 		9C1FD3C82B4467A000D8C6FD /* OpenAIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenAIClient.swift; sourceTree = "<group>"; };
@@ -285,6 +287,7 @@
 				9CBB0A882B2DD2FF0064EFCC /* SearchModels.swift */,
 				9CBB0A8A2B2DF9500064EFCC /* StorageUseCase.swift */,
 				9C1FD3C62B4466D300D8C6FD /* ChatsUseCase.swift */,
+				9C0CCBF82C2741620012F37A /* HomeUseCase.swift */,
 			);
 			path = UseCases;
 			sourceTree = "<group>";
@@ -433,6 +436,7 @@
 				9CA3E7892C0B675300F38B16 /* MealInformationView.swift in Sources */,
 				9C93F96F2B3B05D70033E0BC /* View+Extensions.swift in Sources */,
 				9C34C40E2BE7E4D800BA16F8 /* ChatsModels.swift in Sources */,
+				9C0CCBF92C2741620012F37A /* HomeUseCase.swift in Sources */,
 				9CEA12A32BE415B800178EA1 /* CustomTextField.swift in Sources */,
 				9CBB0A8B2B2DF9500064EFCC /* StorageUseCase.swift in Sources */,
 				9CA3E7812C08B11800F38B16 /* HealthKitUserData.swift in Sources */,

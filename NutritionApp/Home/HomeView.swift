@@ -12,9 +12,9 @@ struct HomeView: View {
     var body: some View {
         VStack {
             ScrollView {
-                if let dailyNutrition = presenter.dailyNutrition {
+//                if let dailyNutritions = presenter.dailyNutritions {
                     VStack {
-                        chart(for: dailyNutrition, isLegendVisible: presenter.isChartLegendVisible)
+                        chart(for: presenter.dailyNutritions, isLegendVisible: presenter.isChartLegendVisible)
 
                         HStack {
                             Text(Strings.legend.capitalized)
@@ -35,7 +35,7 @@ struct HomeView: View {
                         }
                         .shiftRight()
                     }
-                }
+//                }
 
                 HStack {
                     Text(Strings.today.capitalized)
@@ -55,28 +55,27 @@ struct HomeView: View {
         .background(Color.background)
         .toolbarBackground(.visible, for: .tabBar)
         .task {
-            await presenter.fetchMeals()
-            await presenter.fetchCalories()
+            await presenter.onAppear()
         }
     }
 
     @ViewBuilder
     var mealsCard: some View {
-        if !presenter.meals.isEmpty {
+        if !presenter.selectedDayMeals.isEmpty {
             VStack(spacing: 8) {
                 Text(Strings.eatenMeals)
                     .color(emphasis: .high)
                     .shiftLeft()
 
                 VStack(spacing: .zero) {
-                    ForEach(presenter.meals) { meal in
+                    ForEach(presenter.selectedDayMeals) { meal in
                         MealCell(meal: meal, delete: presenter.delete)
                             .padding(4)
 
                         Divider()
                             .frame(maxHeight: 1)
                             .overlay(Color.gray)
-                            .opacity(presenter.meals.last == meal ? 0 : 1)
+                            .opacity(presenter.selectedDayMeals.last == meal ? 0 : 1)
                     }
                 }
                 .padding(8)
@@ -93,16 +92,15 @@ extension HomeView {
     @ViewBuilder
     var todayCard: some View {
         if
-            let dailyTarget = presenter.dailyTarget,
-            let nutritionForToday = presenter.nutritionForToday
+            let selectedDayNutrition = presenter.selectedDayNutrition
         {
             VStack(spacing: 16) {
                 DailyCalorieCard(
-                    consumedCalories: nutritionForToday.calories,
-                    targetCalories: dailyTarget.calories,
-                    burnedCalories: presenter.burnedCalories)
+                    consumedCalories: selectedDayNutrition.nutrition.calories,
+                    targetCalories: selectedDayNutrition.dailyTarget.calories,
+                    burnedCalories: selectedDayNutrition.burnedCalories)
 
-                dailyMacros(for: dailyTarget, nutrition: nutritionForToday)
+                dailyMacros(for: selectedDayNutrition.dailyTarget, nutrition: selectedDayNutrition.nutrition)
             }
             .padding(8)
             .background(Color.overlay())
@@ -226,7 +224,7 @@ extension HomeView {
                     BarMark(
                         x: .value("Date", .dateWithAdded(days: day), unit: .day),
                         y: .value("Calories", nutrient.baselineValue(for: value)))
-                                        .foregroundStyle(by: .value(nutrient.title, nutrient))
+                    .foregroundStyle(by: .value(nutrient.title, nutrient))
                 }
 
                 /// The purpose of this is to sort the legend items from highest to lowest
@@ -241,9 +239,29 @@ extension HomeView {
 //                }
             }
         }
+        .chartOverlay { proxy in
+            GeometryReader { geometry in
+                Rectangle()
+                    .fill(.clear)
+                    .contentShape(Rectangle())
+                    .onTapGesture { location in
+                        guard let frame = proxy.plotFrame else { return }
+
+                        let origin = geometry[frame].origin
+
+                        guard let date = proxy.value(atX: location.x - origin.x, as: Date.self) else { return }
+
+                        print(" ---1 \(date)")
+
+                        presenter.updateDate(with: date)
+                    }
+            }
+        }
         .chartYVisibleDomain(length: chartYDomain)
         .chartXVisibleDomain(length: chartXDomain)
         .chartScrollableAxes(.horizontal)
+//        .chartScrollPosition(initialX: Date.dateWithAdded(days: -1))
+        .chartScrollPosition(initialX: Date.dateWithAdded(days: -1))
         .frame(height: chartHeight)
         .frame(maxWidth: .infinity)
         .chartLegend(isLegendVisible ? .visible : .hidden)
