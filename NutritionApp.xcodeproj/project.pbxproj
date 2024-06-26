@@ -246,13 +246,13 @@
 				9C9B56802AFA7F9000A4B2BC /* NutritionApp.swift */,
 				9CA3E7782C08841200F38B16 /* NutritionApp.entitlements */,
 				9CA3E7792C089CD000F38B16 /* HealthKit */,
-				9C8458232BCC3B96005EE698 /* Profile */,
 				9C93F96B2B3B04850033E0BC /* Shared */,
 				9CBB0A8C2B2DF9DB0064EFCC /* Storage */,
 				9CBB0A832B2DC8D20064EFCC /* UseCases */,
-				9C1FD3C12B445F1300D8C6FD /* Chats */,
 				9C60156D2B24868E005A62C7 /* Home */,
 				9C6015792B249877005A62C7 /* Search */,
+				9C1FD3C12B445F1300D8C6FD /* Chats */,
+				9C8458232BCC3B96005EE698 /* Profile */,
 				9C9B56842AFA7F9200A4B2BC /* Assets.xcassets */,
 				9C9B56862AFA7F9200A4B2BC /* Preview Content */,
 			);
@@ -279,7 +279,6 @@
 			isa = PBXGroup;
 			children = (
 				9CA3E77A2C089CE600F38B16 /* HealthKitService.swift */,
-				9CA3E77E2C08B08000F38B16 /* HealthKitUseCase.swift */,
 				9CA3E7802C08B11800F38B16 /* HealthKitUserData.swift */,
 			);
 			path = HealthKit;
@@ -288,6 +287,7 @@
 		9CBB0A832B2DC8D20064EFCC /* UseCases */ = {
 			isa = PBXGroup;
 			children = (
+				9CA3E77E2C08B08000F38B16 /* HealthKitUseCase.swift */,
 				9CBB0A842B2DC8E50064EFCC /* SearchUseCase.swift */,
 				9CBB0A8A2B2DF9500064EFCC /* NutritionDataUseCase.swift */,
 				9C1FD3C62B4466D300D8C6FD /* ChatsUseCase.swift */,
