@@ -43,7 +43,7 @@ struct SearchView: View {
     private func contentView(for meal: MealViewModel) -> some View{
         ScrollViewReader { proxy in
             ScrollView {
-                if meal.items.count > 0 {
+                VStack(spacing: 8) {
                     Text(meal.name.capitalized)
                         .color(emphasis: .high)
                         .font(.title)
@@ -66,6 +66,7 @@ struct SearchView: View {
                     ActionButton(title: Strings.save.capitalized, action: presenter.save)
                         .shiftRight()
                 }
+                .padding(.bottom, 8)
             }
             .background(Color.background)
             .padding([.leading, .top, .trailing], 8)

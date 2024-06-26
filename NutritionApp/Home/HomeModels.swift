@@ -15,3 +15,16 @@ struct DailyCalorieStats {
 
 
 }
+
+struct SelectedDayViewModel {
+
+    let nutrition: DailyNutrition
+    let meals: [MealViewModel]
+    let dailyTarget: DailyTarget
+    let burnedCalories: Int?
+
+    func update(burnedCalories: Int) -> SelectedDayViewModel {
+        .init(nutrition: nutrition, meals: meals, dailyTarget: dailyTarget, burnedCalories: burnedCalories)
+    }
+
+}

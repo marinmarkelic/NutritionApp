@@ -32,7 +32,6 @@ actor SearchUseCase {
             instruction.append(" Meal: \(meal.name), ingredients:")
 
             meal.items.forEach { ingredient in
-                print(ingredient.serving_size_g)
                 instruction.append(" \(ingredient.serving_size_g) g of \(ingredient.name),")
             }
         }

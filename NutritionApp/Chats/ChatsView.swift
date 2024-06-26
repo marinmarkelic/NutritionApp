@@ -53,7 +53,6 @@ struct ChatsView: View {
             .background(Color.background)
             .toolbarBackground(.hidden, for: .tabBar)
             .animation(.easeInOut, value: presenter.isMenuShown)
-//            .onAppear(perform: presenter.onAppear)
             .task {
                 await presenter.onAppear()
             }

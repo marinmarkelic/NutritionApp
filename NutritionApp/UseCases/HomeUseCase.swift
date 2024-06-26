@@ -2,20 +2,6 @@ import Dependencies
 import Combine
 import Foundation
 
-struct SelectedDayViewModel {
-
-    let nutrition: DailyNutrition
-    let meals: [MealViewModel]
-    let dailyTarget: DailyTarget
-    let burnedCalories: Int?
-
-    func update(burnedCalories: Int) -> SelectedDayViewModel {
-        .init(nutrition: nutrition, meals: meals, dailyTarget: dailyTarget, burnedCalories: burnedCalories)
-    }
-
-}
-
-
 class HomeUseCase {
 
     var selectedDayPublisher: AnyPublisher<SelectedDayViewModel?, Never> {

@@ -2,7 +2,7 @@ import SwiftUI
 
 struct HistoryView: View {
 
-    let conversations: [ConversationViewModel]
+    let conversations: [ConversationHistoryEntry]
     let newConversation: () -> Void
     let switchConversation: (String) -> Void
 

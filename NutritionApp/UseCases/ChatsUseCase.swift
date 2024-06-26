@@ -17,11 +17,11 @@ class ChatsUseCase {
         languageModelInteractionService.conversationPublisher
     }
 
-    func update(_ conversation: ConversationViewModel) async {
+    func update(_ conversation: ConversationHistoryEntry) async {
         await nutritionDataUseCase.save(conversation: conversation)
     }
 
-    func fetchConversations() async -> [ConversationViewModel] {
+    func fetchConversations() async -> [ConversationHistoryEntry] {
         await nutritionDataUseCase.fetchCoversations()
     }
 
@@ -75,7 +75,6 @@ class ChatsUseCase {
                 instruction.append(" Meal: \(meal.name), ingredients:")
 
                 meal.items.forEach { ingredient in
-                    print(ingredient.serving_size_g)
                     instruction.append(" \(ingredient.serving_size_g) g of \(ingredient.name),")
                 }
             }

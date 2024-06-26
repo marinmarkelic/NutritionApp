@@ -6,8 +6,6 @@ typealias NutrientValues = [Nutrient: Float]
 
 extension NutrientValues {
 
-    // NutrientValues with all values of 0
-
     static let empty: NutrientValues = {
         var values: NutrientValues = [:]
         Nutrient.allCases.forEach { values[$0] = .zero }
@@ -214,6 +212,50 @@ extension DailyNutrition {
         calories = model.calories.rounded()
         nutrients = model.nutrients
         items = [model.name]
+    }
+
+}
+
+enum ActivityFrequency: String, CaseIterable, Identifiable {
+
+    case sedentary = "secentary"
+    case lightlyActive = "lightlyActive"
+    case moderatelyActive = "moderatelyActive"
+    case veryActive = "veryActive"
+    case extraActive = "extraActive"
+
+    var id: String {
+        self.rawValue
+    }
+
+    var activityFactor: Float {
+        switch self {
+        case .sedentary:
+            return 1.2
+        case .lightlyActive:
+            return 1.375
+        case .moderatelyActive:
+            return 1.55
+        case .veryActive:
+            return 1.725
+        case .extraActive:
+            return 1.9
+        }
+    }
+
+    var description: String {
+        switch self {
+        case .sedentary:
+            return "Little or no exercise."
+        case .lightlyActive:
+            return "1-3 days per week."
+        case .moderatelyActive:
+            return "3-5 days per week."
+        case .veryActive:
+            return "6-7 days per week."
+        case .extraActive:
+            return "Very hard exercise/sports & a physical job."
+        }
     }
 
 }

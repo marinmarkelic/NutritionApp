@@ -15,7 +15,6 @@ actor NutritionDataUseCase {
         keyedValues["height"] = userData.height
         keyedValues["weight"] = userData.weight
         keyedValues["activityType"] = userData.activityFrequency?.rawValue
-        print(keyedValues)
         storageService.setValuesForKeys(keyedValues)
     }
 
@@ -45,11 +44,11 @@ actor NutritionDataUseCase {
         storageService.delete(meal: meal)
     }
 
-    func save(conversation: ConversationViewModel) {
+    func save(conversation: ConversationHistoryEntry) {
         storageService.save(conversation: conversation)
     }
 
-    func fetchCoversations() -> [ConversationViewModel] {
+    func fetchCoversations() -> [ConversationHistoryEntry] {
         storageService.fetchConversations()
     }
 
@@ -84,7 +83,6 @@ actor NutritionDataUseCase {
         let fat = energyExpenditureService.gramsOfFat(for: age, and: calories)
         let carbs = energyExpenditureService.gramsOfCarbs()
         let sodium = energyExpenditureService.milligramsOfSodium(for: age)
-//        let cholesterol = energyExpenditureService.milligramsOfCholesterol()
         let potassium = energyExpenditureService.milligramsOfPotassium(for: age, and: sex)
         let fiber = energyExpenditureService.gramsOfFiber(for: calories)
         let sugar = energyExpenditureService.gramsOfSugar(for: calories)
@@ -94,7 +92,6 @@ actor NutritionDataUseCase {
         nutrients[.fat_total_g] = fat
         nutrients[.carbohydrates_total_g] = carbs
         nutrients[.sodium_mg] = sodium
-//        nutrients[.cholesterol_mg] = cholesterol
         nutrients[.potassium_mg] = potassium
         nutrients[.fiber_g] = fiber
         nutrients[.sugar_g] = sugar
@@ -136,14 +133,6 @@ actor NutritionDataUseCase {
         }
 
         return calorieArray
-    }
-
-    func printAll() {
-        storageService.print()
-    }
-
-    func deleteAll() {
-        storageService.deleteAll()
     }
 
     private func userMetric(for key: String) -> Any? {

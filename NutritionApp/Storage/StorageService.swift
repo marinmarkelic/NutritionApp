@@ -33,7 +33,7 @@ extension StorageService {
         }
     }
 
-    func save(conversation: ConversationViewModel) {
+    func save(conversation: ConversationHistoryEntry) {
         let conversations = realm.objects(ConversationStorageViewModel.self).filter { conversation.id == $0.id }
         guard let oldConversation = conversations.first else {
             try! realm.write {
@@ -43,19 +43,16 @@ extension StorageService {
             return
         }
 
-        Swift.print("*** old \(oldConversation)")
-
         try! realm.write {
             oldConversation.lastMessage = conversation.lastMessage
             oldConversation.time = conversation.time
-            Swift.print("*** new \(oldConversation)")
         }
     }
 
-    func fetchConversations() -> [ConversationViewModel] {
+    func fetchConversations() -> [ConversationHistoryEntry] {
         let meals = realm.objects(ConversationStorageViewModel.self)
 
-        return meals.map { ConversationViewModel(from: $0) }
+        return meals.map { ConversationHistoryEntry(from: $0) }
     }
 
     func fetchMeals(with date: Date) -> [MealViewModel] {
@@ -88,20 +85,6 @@ extension StorageService {
         }
 
         return meals.map { MealViewModel(from: $0) }
-    }
-
-    func print() {
-        let meals = realm.objects(MealStorageViewModel.self)
-
-        Swift.print(meals)
-    }
-
-    func deleteAll() {
-        try! realm.write {
-            realm.deleteAll()
-        }
-
-//        resetRealm()
     }
 
     private func resetRealm() {

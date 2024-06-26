@@ -60,7 +60,7 @@ class ConversationStorageViewModel: Object {
 
     override init() {}
 
-    convenience init(from model: ConversationViewModel) {
+    convenience init(from model: ConversationHistoryEntry) {
         self.init()
 
         id = model.id
