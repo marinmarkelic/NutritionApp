@@ -237,15 +237,14 @@ Name: \(name)
 }
 
 struct GraphViewModelData: Identifiable {
-    var id: Color {
-        self.color
-    }
 
-
-    // rename properties
+    let title: String
     let color: Color
-    let previousCompleton: CGFloat
-    let completion: CGFloat
+    let value: Float
+
+    var id: String {
+        title
+    }
 
 }
 
@@ -254,12 +253,6 @@ struct GraphViewModel {
     let data: [GraphViewModelData]
 
     fileprivate init(from model: MealViewModel) {
-        var progress: CGFloat = 0
-        var sum: CGFloat = 0
-        model.nutrients.forEach { nutrient, value in
-            sum += CGFloat(value * nutrient.unit.multiplier)
-        }
-
         var data = [GraphViewModelData]()
         model
             .nutrients
@@ -269,11 +262,9 @@ struct GraphViewModel {
             .forEach { nutrient, value in
                 data.append(
                     GraphViewModelData(
+                        title: nutrient.title,
                         color: nutrient.color,
-                        previousCompleton: progress,
-                        completion: CGFloat(value * nutrient.unit.multiplier) / sum))
-
-                progress += CGFloat(value * nutrient.unit.multiplier) / sum
+                        value: nutrient.baselineValue(for: value)))
             }
 
         self.data = data

@@ -46,7 +46,7 @@
 		9CA3E7812C08B11800F38B16 /* HealthKitUserData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CA3E7802C08B11800F38B16 /* HealthKitUserData.swift */; };
 		9CA3E7832C08B27400F38B16 /* Int+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CA3E7822C08B27300F38B16 /* Int+Extensions.swift */; };
 		9CA3E7852C08B34500F38B16 /* ProfileModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CA3E7842C08B34500F38B16 /* ProfileModels.swift */; };
-		9CA3E7872C0B670900F38B16 /* MultipleCircleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CA3E7862C0B670900F38B16 /* MultipleCircleView.swift */; };
+		9CA3E7872C0B670900F38B16 /* PieChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CA3E7862C0B670900F38B16 /* PieChartView.swift */; };
 		9CA3E7892C0B675300F38B16 /* MealInformationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CA3E7882C0B675300F38B16 /* MealInformationView.swift */; };
 		9CA3E78B2C0B676B00F38B16 /* NutritionInformationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CA3E78A2C0B676B00F38B16 /* NutritionInformationView.swift */; };
 		9CA3E78D2C0B6A8300F38B16 /* Strings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CA3E78C2C0B6A8300F38B16 /* Strings.swift */; };
@@ -106,7 +106,7 @@
 		9CA3E7802C08B11800F38B16 /* HealthKitUserData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitUserData.swift; sourceTree = "<group>"; };
 		9CA3E7822C08B27300F38B16 /* Int+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+Extensions.swift"; sourceTree = "<group>"; };
 		9CA3E7842C08B34500F38B16 /* ProfileModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileModels.swift; sourceTree = "<group>"; };
-		9CA3E7862C0B670900F38B16 /* MultipleCircleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultipleCircleView.swift; sourceTree = "<group>"; };
+		9CA3E7862C0B670900F38B16 /* PieChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PieChartView.swift; sourceTree = "<group>"; };
 		9CA3E7882C0B675300F38B16 /* MealInformationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealInformationView.swift; sourceTree = "<group>"; };
 		9CA3E78A2C0B676B00F38B16 /* NutritionInformationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NutritionInformationView.swift; sourceTree = "<group>"; };
 		9CA3E78C2C0B6A8300F38B16 /* Strings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Strings.swift; sourceTree = "<group>"; };
@@ -178,7 +178,7 @@
 				9CA3E7882C0B675300F38B16 /* MealInformationView.swift */,
 				9CA3E76F2C04C47F00F38B16 /* MealGraphView.swift */,
 				9CA3E7712C04C57600F38B16 /* MealGraphNutrientCell.swift */,
-				9CA3E7862C0B670900F38B16 /* MultipleCircleView.swift */,
+				9CA3E7862C0B670900F38B16 /* PieChartView.swift */,
 			);
 			path = Search;
 			sourceTree = "<group>";
@@ -458,7 +458,7 @@
 				9C9B56812AFA7F9000A4B2BC /* NutritionApp.swift in Sources */,
 				9C8458252BCC3C06005EE698 /* ProfileView.swift in Sources */,
 				9C1FD3CD2B44930100D8C6FD /* CGFloat+Extensions.swift in Sources */,
-				9CA3E7872C0B670900F38B16 /* MultipleCircleView.swift in Sources */,
+				9CA3E7872C0B670900F38B16 /* PieChartView.swift in Sources */,
 				9CA3E7702C04C47F00F38B16 /* MealGraphView.swift in Sources */,
 				9CA3E7832C08B27400F38B16 /* Int+Extensions.swift in Sources */,
 				9CB5EE982BD3E4F600059A24 /* Models.swift in Sources */,
