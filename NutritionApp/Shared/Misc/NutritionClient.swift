@@ -22,7 +22,10 @@ struct NutritionClient {
         request.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Content-Type")
         request.setValue(apiKey, forHTTPHeaderField: "X-Api-Key")
 
-        let (data, _) = try await URLSession.shared.data(for: request)
+        let (data, err) = try await URLSession.shared.data(for: request)
+
+        print(" --- \(try? JSONDecoder().decode(MealNetworkViewModel.self, from: data))")
+        print(" --- \(err)")
 
         return try JSONDecoder().decode(MealNetworkViewModel.self, from: data)
     }

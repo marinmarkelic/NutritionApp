@@ -16,27 +16,12 @@ actor SearchUseCase {
     }
 
     func fetchOpinion(for meal: MealViewModel) async -> String? {
-        let instructions = await fetchDailyMealsInstructions(with: meal.name)
-        return await languageModelInteractionService.sendSingleMessage(text: instructions)
+        let meals = await nutritionDataUseCase.fetchMeals(from: .today)
+        return await languageModelInteractionService.sendSingleMessage(meal: meal.name, meals: meals)
     }
 
     func save(meal: MealViewModel) async {
         await nutritionDataUseCase.save(meal: meal)
-    }
-
-    private func fetchDailyMealsInstructions(with newMeal: String) async -> String {
-        let meals = await nutritionDataUseCase.fetchMeals(from: .today)
-
-        var instruction = ""
-        meals.forEach { meal in
-            instruction.append(" Meal: \(meal.name), ingredients:")
-
-            meal.items.forEach { ingredient in
-                instruction.append(" \(ingredient.serving_size_g) g of \(ingredient.name),")
-            }
-        }
-
-        return Strings.nutritionSearchInstructions1.formatted((instruction.isEmpty ? "none" : instruction), newMeal)
     }
 
 }

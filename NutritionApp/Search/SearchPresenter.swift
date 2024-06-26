@@ -17,6 +17,7 @@ class SearchPresenter: ObservableObject {
             guard let self else { return }
 
             meal = await useCase.search(for: query)
+//            self.meal = meal
             opinion = nil
             opinion = await useCase.fetchOpinion(for: meal!)
         }

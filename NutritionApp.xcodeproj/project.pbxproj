@@ -10,7 +10,7 @@
 		9C0CCBF92C2741620012F37A /* HomeUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C0CCBF82C2741620012F37A /* HomeUseCase.swift */; };
 		9C1FD3C32B445F2E00D8C6FD /* ChatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C1FD3C22B445F2E00D8C6FD /* ChatsView.swift */; };
 		9C1FD3C72B4466D300D8C6FD /* ChatsUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C1FD3C62B4466D300D8C6FD /* ChatsUseCase.swift */; };
-		9C1FD3C92B4467A000D8C6FD /* OpenAIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C1FD3C82B4467A000D8C6FD /* OpenAIService.swift */; };
+		9C1FD3C92B4467A000D8C6FD /* LanguageModelInteractionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C1FD3C82B4467A000D8C6FD /* LanguageModelInteractionService.swift */; };
 		9C1FD3CB2B4484D200D8C6FD /* Date+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C1FD3CA2B4484D200D8C6FD /* Date+Extensions.swift */; };
 		9C1FD3CD2B44930100D8C6FD /* CGFloat+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C1FD3CC2B44930100D8C6FD /* CGFloat+Extensions.swift */; };
 		9C2E3CA32BB992A50099A6E0 /* PreferenceKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C2E3CA22BB992A50099A6E0 /* PreferenceKeys.swift */; };
@@ -62,6 +62,7 @@
 		9CCF58472C2C0E3100E1F891 /* ProfileUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CCF58462C2C0E3100E1F891 /* ProfileUseCase.swift */; };
 		9CCF584A2C2C468C00E1F891 /* OpenAIModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CCF58492C2C468C00E1F891 /* OpenAIModels.swift */; };
 		9CCF584C2C2C47D200E1F891 /* UserDefaultsKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CCF584B2C2C47D200E1F891 /* UserDefaultsKey.swift */; };
+		9CCF584E2C2C4E9D00E1F891 /* ModelInstructionsService .swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CCF584D2C2C4E9D00E1F891 /* ModelInstructionsService .swift */; };
 		9CD90C9E2BFCF1D300BF244B /* CircularProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CD90C9D2BFCF1D300BF244B /* CircularProgressView.swift */; };
 		9CD90CA02BFCF1F100BF244B /* MealCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CD90C9F2BFCF1F100BF244B /* MealCell.swift */; };
 		9CD90CA22BFCFB1400BF244B /* CalorieRatioCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CD90CA12BFCFB1400BF244B /* CalorieRatioCell.swift */; };
@@ -74,7 +75,7 @@
 		9C0CCBF82C2741620012F37A /* HomeUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeUseCase.swift; sourceTree = "<group>"; };
 		9C1FD3C22B445F2E00D8C6FD /* ChatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatsView.swift; sourceTree = "<group>"; };
 		9C1FD3C62B4466D300D8C6FD /* ChatsUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatsUseCase.swift; sourceTree = "<group>"; };
-		9C1FD3C82B4467A000D8C6FD /* OpenAIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenAIService.swift; sourceTree = "<group>"; };
+		9C1FD3C82B4467A000D8C6FD /* LanguageModelInteractionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageModelInteractionService.swift; sourceTree = "<group>"; };
 		9C1FD3CA2B4484D200D8C6FD /* Date+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extensions.swift"; sourceTree = "<group>"; };
 		9C1FD3CC2B44930100D8C6FD /* CGFloat+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGFloat+Extensions.swift"; sourceTree = "<group>"; };
 		9C2E3CA22BB992A50099A6E0 /* PreferenceKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferenceKeys.swift; sourceTree = "<group>"; };
@@ -123,6 +124,7 @@
 		9CCF58462C2C0E3100E1F891 /* ProfileUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileUseCase.swift; sourceTree = "<group>"; };
 		9CCF58492C2C468C00E1F891 /* OpenAIModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenAIModels.swift; sourceTree = "<group>"; };
 		9CCF584B2C2C47D200E1F891 /* UserDefaultsKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsKey.swift; sourceTree = "<group>"; };
+		9CCF584D2C2C4E9D00E1F891 /* ModelInstructionsService .swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ModelInstructionsService .swift"; sourceTree = "<group>"; };
 		9CD90C9D2BFCF1D300BF244B /* CircularProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircularProgressView.swift; sourceTree = "<group>"; };
 		9CD90C9F2BFCF1F100BF244B /* MealCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealCell.swift; sourceTree = "<group>"; };
 		9CD90CA12BFCFB1400BF244B /* CalorieRatioCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalorieRatioCell.swift; sourceTree = "<group>"; };
@@ -321,8 +323,9 @@
 		9CCF58482C2C467C00E1F891 /* OpenAI */ = {
 			isa = PBXGroup;
 			children = (
-				9C1FD3C82B4467A000D8C6FD /* OpenAIService.swift */,
+				9C1FD3C82B4467A000D8C6FD /* LanguageModelInteractionService.swift */,
 				9CCF58492C2C468C00E1F891 /* OpenAIModels.swift */,
+				9CCF584D2C2C4E9D00E1F891 /* ModelInstructionsService .swift */,
 			);
 			path = OpenAI;
 			sourceTree = "<group>";
@@ -432,7 +435,7 @@
 				9C48CF172BA722FD00ABA072 /* HomePresenter.swift in Sources */,
 				9CA3E77B2C089CE600F38B16 /* HealthKitService.swift in Sources */,
 				9CA3E78B2C0B676B00F38B16 /* NutritionInformationView.swift in Sources */,
-				9C1FD3C92B4467A000D8C6FD /* OpenAIService.swift in Sources */,
+				9C1FD3C92B4467A000D8C6FD /* LanguageModelInteractionService.swift in Sources */,
 				9CA3E77F2C08B08000F38B16 /* HealthKitUseCase.swift in Sources */,
 				9CA3E7852C08B34500F38B16 /* ProfileModels.swift in Sources */,
 				9C93F96D2B3B048E0033E0BC /* Colors.swift in Sources */,
@@ -475,6 +478,7 @@
 				9CCF584C2C2C47D200E1F891 /* UserDefaultsKey.swift in Sources */,
 				9CB5EE982BD3E4F600059A24 /* Models.swift in Sources */,
 				9CC04D832C25D29800F02447 /* ActionButton.swift in Sources */,
+				9CCF584E2C2C4E9D00E1F891 /* ModelInstructionsService .swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

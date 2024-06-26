@@ -6,6 +6,7 @@ import SwiftOpenAI
 class LanguageModelInteractionService {
 
     @Dependency(\.secretsService) private var secretsService
+    @Dependency(\.modelInstructionsService) private var modelInstructionsService
 
     private var queryStatusSubject = CurrentValueSubject<QueryStatus, Never>(.available)
     private var conversationSubject = CurrentValueSubject<Conversation?, Never>(nil)
@@ -26,9 +27,10 @@ class LanguageModelInteractionService {
         secretsService.nutritionAssistantId
     }()
 
-    func sendSingleMessage(text: String) async -> String? {
+    func sendSingleMessage(meal: String, meals: [MealViewModel]) async -> String? {
+        let instructions = await modelInstructionsService.generateDailyMealsInstructions(for: meal, meals: meals)
         let parameters = ChatCompletionParameters(
-            messages: [.init(role: .user, content: .text(text))], 
+            messages: [.init(role: .user, content: .text(instructions))], 
             model: .gpt35Turbo)
         let chat = try? await service.startChat(parameters: parameters)
 
@@ -37,9 +39,11 @@ class LanguageModelInteractionService {
         return message.content
     }
 
-    func initiateMessageSending(text: String, conversationId: String?, instructions: String? = nil) async {
+    func initiateMessageSending(text: String, conversationId: String?, meals: [MealViewModel]) async {
         queryStatusSubject.send(.running)
         appendSentMessage(text: text)
+
+        let instructions = modelInstructionsService.generateChatsInstructions(for: meals)
 
         if let conversationId {
             await sendMessage(text: text, conversationId: conversationId, instructions: instructions)
