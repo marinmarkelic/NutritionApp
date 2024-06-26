@@ -10,26 +10,26 @@ actor NutritionDataUseCase {
 
     func save(userData: UserData) {
         var keyedValues: [String : Any] = [:]
-        keyedValues["sex"] = userData.sex?.rawValue
-        keyedValues["age"] = userData.age
-        keyedValues["height"] = userData.height
-        keyedValues["weight"] = userData.weight
-        keyedValues["activityType"] = userData.activityFrequency?.rawValue
+        keyedValues[UserDefaultsKey.sex] = userData.sex?.rawValue
+        keyedValues[UserDefaultsKey.age] = userData.age
+        keyedValues[UserDefaultsKey.height] = userData.height
+        keyedValues[UserDefaultsKey.weight] = userData.weight
+        keyedValues[UserDefaultsKey.activityType] = userData.activityFrequency?.rawValue
         storageService.setValuesForKeys(keyedValues)
     }
 
     func fetchUserData() -> UserData {
         var sex: Sex? = nil
-        if let sexString = storageService.object(for: "sex") as? String {
+        if let sexString = storageService.object(for: UserDefaultsKey.sex) as? String {
             sex = Sex(rawValue: sexString)
         }
 
-        let age = storageService.object(for: "age") as? Int
-        let height = storageService.object(for: "height") as? Int
-        let weight = storageService.object(for: "weight") as? Int
+        let age = storageService.object(for: UserDefaultsKey.age) as? Int
+        let height = storageService.object(for: UserDefaultsKey.height) as? Int
+        let weight = storageService.object(for: UserDefaultsKey.weight) as? Int
 
         var activityFrequency: ActivityFrequency? = nil
-        if let activityFrequencyString = storageService.object(for: "activityType") as? String {
+        if let activityFrequencyString = storageService.object(for: UserDefaultsKey.activityType) as? String {
             activityFrequency = ActivityFrequency(rawValue: activityFrequencyString)
         }
 
@@ -62,13 +62,13 @@ actor NutritionDataUseCase {
 
     func fetchNecessaryCalories() -> DailyTarget? {
         guard
-            let sexString = userMetric(for: "sex") as? String,
+            let sexString = userMetric(for: UserDefaultsKey.sex) as? String,
             let sex = Sex(rawValue: sexString),
-            let phisicalActivityString = userMetric(for: "activityType") as? String,
+            let phisicalActivityString = userMetric(for: UserDefaultsKey.activityType) as? String,
             let phisicalActivity = ActivityFrequency(rawValue: phisicalActivityString),
-            let age = userMetric(for: "age") as? Int,
-            let height = userMetric(for: "height") as? Int,
-            let weight = userMetric(for: "weight") as? Float
+            let age = userMetric(for: UserDefaultsKey.age) as? Int,
+            let height = userMetric(for: UserDefaultsKey.height) as? Int,
+            let weight = userMetric(for: UserDefaultsKey.weight) as? Float
         else { return nil }
 
         let calories = energyExpenditureService
