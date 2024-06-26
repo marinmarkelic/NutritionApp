@@ -25,13 +25,15 @@ To use core features of the app you will need to obtain CalorieNinjas and OpenAI
 
 ## CalorieNinjas
 
-Once you have created an account and logged in on [CalorieNinjas website](https://calorieninjas.com) head over to "My Account". You can see the API key there when "Show API key" button is pressed.
+Once you have created an account and logged in on [CalorieNinjas website](https://calorieninjas.com) head over to "My Account". You can see the API key when "Show API key" button is pressed.
+
 <img width="2560" alt="image" src="https://github.com/marinmarkelic/NutritionApp/assets/101728747/89cdf600-fa16-4d36-87e3-5cff329b73f5">
 
 
 ## OpenAI
 
 Create an OpenAI account and visit their [Platform website](platform.openai.com). To view API keys you need to be on the "Dashboard" and select the option "API keys". From there you can create a new API key by pressing "Create new secret key".
+
 <img width="2560" alt="image" src="https://github.com/marinmarkelic/NutritionApp/assets/101728747/5b1c926f-ddf5-400d-b5bb-e230702df5dc">
 
 
@@ -45,3 +47,5 @@ The app also needs to have an assistant. On OpenAI Dashboard head to "Assistants
 To be able to run the app locally you need to pull this repository and open it with Xcode.
 
 Open `Secrets.plist`. This is a local file where all the private keys are stored. After pasting the keys, the app can now run with all its functionalities.
+
+<img width="1318" alt="image" src="https://github.com/marinmarkelic/NutritionApp/assets/101728747/abffc026-947e-4014-b035-cebad1305d9a">
