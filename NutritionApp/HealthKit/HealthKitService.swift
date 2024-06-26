@@ -22,10 +22,6 @@ class HealthKitService {
         burntCaloriesSubject.eraseToAnyPublisher()
     }
 
-    private var canAccessData: Bool {
-        HKHealthStore.isHealthDataAvailable()
-    }
-
     init() {
         requestAccess()
         createCalorieQueries()
@@ -58,17 +54,22 @@ class HealthKitService {
         store.execute(basalEnergyQuery)
     }
 
-    func readBurnedEnergy() {
+    func readBurnedEnergy(for date: Date = .now) {
         let dispatchGroup = DispatchGroup()
-        let startOfDay = Calendar.current.startOfDay(for: .now)
-        let predicate = HKQuery.predicateForSamples(withStart: startOfDay, end: .now, options: .strictStartDate)
+        let startOfDay = Calendar.current.startOfDay(for: date)
+        let endOfDay = Calendar.current.date(byAdding: .day, value: 1, to: startOfDay)!
+        let predicate = HKQuery.predicateForSamples(withStart: startOfDay, end: endOfDay, options: .strictStartDate)
 
         var basalEnergyBurned: Double?
         var activeEnergyBurned: Double?
 
         dispatchGroup.enter()
         let basalEnergyType = HKQuantityType(.basalEnergyBurned)
-        let basalEnergyQuery = HKStatisticsQuery(quantityType: basalEnergyType, quantitySamplePredicate: predicate, options: .cumulativeSum) { (_, result, _) in
+        let basalEnergyQuery = HKStatisticsQuery(
+            quantityType: basalEnergyType,
+            quantitySamplePredicate: predicate,
+            options: .cumulativeSum
+        ) { (_, result, _) in
             guard let result = result?.sumQuantity() else {
                 dispatchGroup.leave()
                 return
@@ -81,7 +82,11 @@ class HealthKitService {
 
         dispatchGroup.enter()
         let activeEnergyType = HKQuantityType(.activeEnergyBurned)
-        let activeEnergyQuery = HKStatisticsQuery(quantityType: activeEnergyType, quantitySamplePredicate: predicate, options: .cumulativeSum) { (_, result, _) in
+        let activeEnergyQuery = HKStatisticsQuery(
+            quantityType: activeEnergyType,
+            quantitySamplePredicate: predicate,
+            options: .cumulativeSum
+        ) { (_, result, _) in
             guard let result = result?.sumQuantity() else {
                 dispatchGroup.leave()
                 return
@@ -132,8 +137,8 @@ class HealthKitService {
     }
 
     private func requestAccess() {
-        if canAccessData {
-            store.requestAuthorization(toShare: nil, read: dataTypes) {_,_ in }
+        if HKHealthStore.isHealthDataAvailable() {
+            store.requestAuthorization(toShare: nil, read: dataTypes) { _,_ in }
         }
     }
 

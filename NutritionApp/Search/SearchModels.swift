@@ -3,13 +3,10 @@ import SwiftUI
 
 struct MealViewModel: Equatable, CustomStringConvertible, Identifiable {
 
+    let id: String
     let name: String
     let date: Date
     let items: [NutritionalItemViewModel]
-
-    var id: String {
-        date.description
-    }
 
     var calories: Float {
         var calories: Float = 0
@@ -84,7 +81,11 @@ Name: \(name)
             }
         }
 
-        return MealViewModel(name: name, date: date, items: items)
+        return MealViewModel(id: id, name: name, date: date, items: items)
+    }
+
+    func update(date: Date) -> MealViewModel {
+        return MealViewModel(id: id, name: name, date: date, items: items)
     }
 
 }
@@ -92,12 +93,14 @@ Name: \(name)
 extension MealViewModel {
 
     init(from model: MealNetworkViewModel, with name: String) {
+        self.id = UUID().uuidString
         self.name = name
-        date = Calendar.current.date(byAdding: .day, value: -1, to: .now)!
+        date = .now
         items = model.items.compactMap { NutritionalItemViewModel(from: $0) }
     }
 
     init(from model: MealStorageViewModel) {
+        id = model.id
         name = model.name
         date = model.date
         items = model.items.map { NutritionalItemViewModel(from: $0) }
@@ -112,11 +115,6 @@ struct NutritionalItemViewModel: Equatable {
     let serving_size_baseline_g: Float
     let calories_baseline: Float
     private let nutrients: [Nutrient : Float]
-
-    // Temp
-    var totalG: Float {
-        nutrients[.carbohydrates_total_g]! + nutrients[.fat_total_g]! + nutrients[.protein_g]!
-    }
 
     var serving_size_multiplier: Float {
         serving_size_g / serving_size_baseline_g
@@ -219,8 +217,6 @@ extension NutritionalItemViewModel {
             }
         }
         self.nutrients = nutrients
-
-//        print("--- from storage \(self.description)")
     }
 
 }
@@ -240,38 +236,36 @@ Name: \(name)
 
 }
 
-struct GraphViewModelData {
+struct GraphViewModelData: Identifiable {
 
-    // rename properties
+    let title: String
     let color: Color
-    let previousCompleton: CGFloat
-    let completion: CGFloat
+    let value: Float
+
+    var id: String {
+        title
+    }
 
 }
 
 struct GraphViewModel {
 
-    static let evaluatedNutrients = Nutrient.allCases
-
     let data: [GraphViewModelData]
 
     fileprivate init(from model: MealViewModel) {
-        var progress: CGFloat = 0
-        var sum: CGFloat = 0
-        GraphViewModel.evaluatedNutrients.forEach { nutrient in
-            sum += CGFloat(model.value(for: nutrient) * nutrient.unit.multiplier)
-        }
-
         var data = [GraphViewModelData]()
-        GraphViewModel.evaluatedNutrients.forEach { nutrient in
-            data.append(
-                GraphViewModelData(
-                    color: nutrient.color,
-                    previousCompleton: progress,
-                    completion: CGFloat(model.value(for: nutrient) * nutrient.unit.multiplier) / sum))
-
-            progress += CGFloat(model.value(for: nutrient) * nutrient.unit.multiplier) / sum
-        }
+        model
+            .nutrients
+            .sorted { (first, second) in
+                first.value > second.value
+            }
+            .forEach { nutrient, value in
+                data.append(
+                    GraphViewModelData(
+                        title: nutrient.title,
+                        color: nutrient.color,
+                        value: nutrient.baselineValue(for: value)))
+            }
 
         self.data = data
     }

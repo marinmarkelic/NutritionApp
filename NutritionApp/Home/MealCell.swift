@@ -3,6 +3,7 @@ import SwiftUI
 struct MealCell: View {
 
     let meal: MealViewModel
+    let delete: (MealViewModel) -> Void
 
     @State private var isExpanded: Bool = false
 
@@ -15,20 +16,29 @@ struct MealCell: View {
 
                 label(
                     boldedText: "\(Int(meal.calories))",
-                    normalText: " calories, \(meal.date.formatted(date: .omitted, time: .shortened))")
+                    normalText: Strings.caloriesWithDate.formatted(meal.date.formatted(date: .omitted, time: .shortened)))
 
                 if isExpanded {
-                    label(boldedText: "\(meal.value(for: .protein_g).toInt())", normalText: " grams of protein")
+                    label(boldedText: "\(meal.value(for: .protein_g).toInt())", normalText: Strings.gramsOfProtein.rawValue)
 
                     label(
                         boldedText: "\(meal.value(for: .carbohydrates_total_g).toInt())",
-                        normalText: " grams of carbs")
+                        normalText: Strings.gramsOfCarbs.rawValue)
 
-                    label(boldedText: "\(meal.value(for: .fat_total_g).toInt())", normalText: " grams of fat")
+                    label(boldedText: "\(meal.value(for: .fat_total_g).toInt())", normalText: Strings.gramsOfFat.rawValue)
                 }
             }
 
             Spacer()
+
+            Image(with: .trash)
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .foregroundStyle(Color.icon)
+                .frame(width: 24, height: 24)
+                .onTapGesture {
+                    delete(meal)
+                }
         }
         .maxWidth()
         .onTapGesture(perform: toggleExpansion)
@@ -38,7 +48,9 @@ struct MealCell: View {
         Text(boldedText)
             .color(emphasis: .disabled)
             .bold()
+
         +
+
         Text(normalText)
             .color(emphasis: .disabled)
     }

@@ -15,24 +15,28 @@ struct TextCell: View {
     private var container: some View {
         switch model.role {
         case .user:
-            cell
+            cell(with: .chatTextQuestion)
                 .background(Color.chatBubble)
-                .roundCorners(radius: cornerRadius)
+                .roundCorners(radius: cornerRadius, corners: .topLeft)
+                .roundCorners(radius: cornerRadius, corners: .topRight)
+                .roundCorners(radius: cornerRadius, corners: .bottomLeft)
                 .shiftRight()
                 .padding(.horizontal)
         case .assistant:
-            cell
+            cell(with: .chatTextResponse)
                 .background(Color.overlay(opacity: 0.2))
-                .roundCorners(radius: cornerRadius)
+                .roundCorners(radius: cornerRadius, corners: .topLeft)
+                .roundCorners(radius: cornerRadius, corners: .topRight)
+                .roundCorners(radius: cornerRadius, corners: .bottomRight)
                 .shiftLeft()
                 .padding(.horizontal)
         }
     }
 
-    private var cell: some View {
+    private func cell(with color: Color) -> some View {
         Text(model.text)
             .font(.title3)
-            .foregroundStyle(Color.gray)
+            .foregroundStyle(color)
             .padding(.horizontal, 8)
             .padding(.vertical, 4)
     }

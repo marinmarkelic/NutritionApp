@@ -1,7 +1,9 @@
 extension Float {
 
     func toInt() -> Int {
-        Int(self)
+        guard self.isNormal else { return .zero }
+
+        return Int(self)
     }
 
     func formatWithDecimalPoint() -> String {

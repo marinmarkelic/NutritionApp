@@ -13,10 +13,6 @@ class StorageService {
         return realm
     }
 
-    private lazy var defaults: UserDefaults = {
-        UserDefaults.standard
-    }()
-
 }
 
 // MARK: - Realm
@@ -26,12 +22,18 @@ extension StorageService {
         try! realm.write {
             let model = MealStorageViewModel(from: meal)
             realm.add(model)
-//            Swift.print("--- save")
-//            Swift.print(model.items.first?.description)
         }
     }
 
-    func save(conversation: ConversationViewModel) {
+    func delete(meal: MealViewModel) {
+        guard let object = realm.object(ofType: MealStorageViewModel.self, forPrimaryKey: meal.id) else { return }
+
+        try! realm.write {
+            realm.delete(object)
+        }
+    }
+
+    func save(conversation: ConversationHistoryEntry) {
         let conversations = realm.objects(ConversationStorageViewModel.self).filter { conversation.id == $0.id }
         guard let oldConversation = conversations.first else {
             try! realm.write {
@@ -41,53 +43,48 @@ extension StorageService {
             return
         }
 
-        Swift.print("*** old \(oldConversation)")
-
         try! realm.write {
             oldConversation.lastMessage = conversation.lastMessage
             oldConversation.time = conversation.time
-            Swift.print("*** new \(oldConversation)")
         }
     }
 
-    func fetchConversations() -> [ConversationViewModel] {
+    func fetchConversations() -> [ConversationHistoryEntry] {
         let meals = realm.objects(ConversationStorageViewModel.self)
 
-        return meals.map { ConversationViewModel(from: $0) }
+        return meals.map { ConversationHistoryEntry(from: $0) }
     }
 
     func fetchMeals(with date: Date) -> [MealViewModel] {
+        let targetDateComponents = Calendar.current.dateComponents([.day, .month, .year], from: date)
+
         let meals = realm.objects(MealStorageViewModel.self).filter {
-            Calendar.current.isDateInToday($0.date)
+            let mealDateComponents = Calendar.current.dateComponents([.day, .month, .year], from: $0.date)
+
+            let isConsumedOnTheSameDay = mealDateComponents.day == targetDateComponents.day &&
+                mealDateComponents.month == targetDateComponents.month &&
+                mealDateComponents.year == targetDateComponents.year
+
+            return isConsumedOnTheSameDay
         }
 
         return meals.map { MealViewModel(from: $0) }
     }
 
-    func fetchMeals(from daysAgo: Int) -> [MealViewModel] {
-        let todayComponents = Calendar.current.dateComponents([.year, .month, .day], from: .now)
-        let beginningOfToday = Calendar.current.date(from: todayComponents)!
-        let beforeDate = Calendar.current.date(byAdding: .day, value: -1 * daysAgo, to: beginningOfToday)!
+    func fetchMeals(from timeline: FetchTimeline) -> [MealViewModel] {
+        let calendar = Calendar.current
+        let startOfToday = calendar.startOfDay(for: .now)
+
+        guard 
+            let startDate = calendar.date(byAdding: .day, value: -(timeline.days - 1), to: startOfToday),
+            let endDate = calendar.date(byAdding: .second, value: 86399, to: startOfToday)
+        else { return [] }
 
         let meals = realm.objects(MealStorageViewModel.self).filter { meal in
-            meal.date >= beforeDate && meal.date <= beginningOfToday
+            meal.date >= startDate && meal.date <= endDate
         }
 
         return meals.map { MealViewModel(from: $0) }
-    }
-
-    func print() {
-        let meals = realm.objects(MealStorageViewModel.self)
-
-        Swift.print(meals)
-    }
-
-    func deleteAll() {
-        try! realm.write {
-            realm.deleteAll()
-        }
-
-//        resetRealm()
     }
 
     private func resetRealm() {
@@ -114,19 +111,15 @@ extension StorageService {
 extension StorageService {
 
     func save(value: Any?, for key: String) {
-        defaults.setValue(value, forKey: key)
+        UserDefaults.standard.setValue(value, forKey: key)
     }
 
     func setValuesForKeys(_ keyedValues: [String : Any]) {
-        defaults.setValuesForKeys(keyedValues)
+        UserDefaults.standard.setValuesForKeys(keyedValues)
     }
 
     func object(for key: String) -> Any? {
-//        defaults.object(forKey: key)
-        let value = defaults.value(forKey: key)
-
-        Swift.print("Reading key \(key): \(value)")
-        return value
+        UserDefaults.standard.object(forKey: key)
     }
 
 }

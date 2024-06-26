@@ -32,6 +32,10 @@ class HealthKitUseCase {
         return HealthKitUserData(sex: sex, age: age, height: height, weight: weight)
     }
 
+    func reloadBurnedEnergy(for date: Date) {
+        service.readBurnedEnergy(for: date)
+    }
+
     private func calculateAge(from date: Date?) -> Int? {
         guard let date else { return nil }
         let calendar = Calendar.current

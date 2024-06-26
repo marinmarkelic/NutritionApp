@@ -4,68 +4,87 @@ import Foundation
 
 class HomePresenter: ObservableObject {
 
+    enum HomeState {
+
+        case loading
+        case loaded
+        case empty
+
+    }
+
     private let chartHeightOffset: Int = 400
 
-    @Published var meals: [MealViewModel] = []
-    @Published var dailyNutrition: [(Int, DailyNutrition)]?
-    @Published var dailyTarget: DailyTarget?
-    @Published var burnedCalories: Int?
-    @Published var dailyStats: DailyCalorieStats?
     @Published var chartHeight: Int = 0
+    @Published var isChartLegendVisible: Bool = false
 
-    @Dependency(\.storageUseCase) 
-    private var storageUseCase: StorageUseCase
-    @Dependency(\.healthKitUseCase)
-    private var healthKitUseCase: HealthKitUseCase
+    @Published var state: HomeState = .loading
+    @Published var dailyNutritions: [(Int, DailyNutrition)] = []
+    @Published var selectedDay: FetchTimeline = .today
+    @Published var selectedDayNutrition: SelectedDayViewModel?
+    @Published var selectedDayMeals: [MealViewModel] = []
+
+    @Dependency(\.homeUseCase)
+    private var homeUseCase: HomeUseCase
 
     private var disposables = Set<AnyCancellable>()
-
-    var nutritionForToday: DailyNutrition? {
-        guard let nutrition = dailyNutrition?.first(where: { $0.0 == 0 }) else { return nil }
-
-        return nutrition.1
-    }
 
     init() {
         bindUseCase()
     }
 
-    @MainActor
-    func fetchMeals() async {
-        meals = await storageUseCase.fetchMeals(from: 3)
+    func updateDate(with date: Date) {
+        Task {
+            guard let day = FetchTimeline(date: date) else { return }
+
+            selectedDay = day
+            await homeUseCase.fetchSelectedDay(day: day)
+        }
     }
 
-    @MainActor
-    func fetchCalories() async {
-        dailyNutrition = await storageUseCase.fetchCalories(from: 3).sorted { $0.0 > $1.0 }
-        dailyTarget = await storageUseCase.fetchNecessaryCalories()
-        calculateDailyStats()
-
-        let maxCalorieValue = Int(dailyNutrition?.map { $0.1.calories }.max() ?? 0)
-        chartHeight = max(maxCalorieValue, Int(dailyTarget?.calories ?? 0)) + chartHeightOffset
+    func delete(meal: MealViewModel) {
+        Task {
+            await homeUseCase.delete(meal: meal)
+            await homeUseCase.fetchSelectedDay(day: selectedDay)
+            await homeUseCase.fetchDailyNutritions()
+        }
     }
 
-    private func calculateDailyStats() {
-        guard 
-            let nutritionForToday,
-            let dailyTarget
-        else { return }
+    func toggleLegendVisibility() {
+        isChartLegendVisible.toggle()
+    }
 
-        dailyStats = DailyCalorieStats(
-            calories: nutritionForToday.calories,
-            targetCalories: dailyTarget.calories,
-            burnedCalores: 0)
+    func onAppear() async {
+        await homeUseCase.fetchSelectedDay(day: selectedDay)
+        await homeUseCase.fetchDailyNutritions()
     }
 
     private func bindUseCase() {
-        healthKitUseCase
-            .burntCaloriesPublisher
-            .removeDuplicates()
+        homeUseCase
+            .dailyNuturitonsPublisher
             .receive(on: RunLoop.main)
-            .sink { [weak self] value in
-                guard let self, let value else { return }
+            .sink { [weak self] dailyNutritions in
+                guard let self else { return }
 
-                burnedCalories = Int(value)
+                self.state = dailyNutritions.isEmpty ? .empty : .loaded
+                self.dailyNutritions = dailyNutritions
+            }
+            .store(in: &disposables)
+
+        homeUseCase
+            .selectedDayPublisher
+            .receive(on: RunLoop.main)
+            .sink { [weak self] selectedDay in
+                guard let self, let selectedDay else { return }
+
+                selectedDayNutrition = selectedDay
+            }
+            .store(in: &disposables)
+
+        homeUseCase
+            .dailyMealsPublisher
+            .receive(on: RunLoop.main)
+            .sink { [weak self] meals in
+                self?.selectedDayMeals = meals
             }
             .store(in: &disposables)
     }

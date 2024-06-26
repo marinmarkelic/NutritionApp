@@ -1,15 +1,14 @@
 import Foundation
 import Dependencies
 
-// TODO: create base client that handles get, post, etc. requests and make this a class. This should only contain api keys.
 struct NutritionClient {
 
     private let apiUrl: String = "https://api.calorieninjas.com/v1/nutrition?query="
 
-    @Dependency(\.secretsClient) private var secretsClient
+    @Dependency(\.secretsService) private var secretsService
 
     private var apiKey: String {
-        secretsClient.nutritionKey
+        secretsService.nutritionKey
     }
 
     func getNutritionalInformation(for query: String) async throws -> MealNetworkViewModel {

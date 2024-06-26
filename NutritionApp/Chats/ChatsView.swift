@@ -4,68 +4,81 @@ struct ChatsView: View {
 
     private let headerHeight: CGFloat = 40
 
-    @ObservedObject private var presenter: ChatsPresenter
+    @ObservedObject private var presenter: ChatsPresenter = ChatsPresenter()
 
-    @State private var containerSize: CGSize = .zero
+    @State private var scrollViewHeight: CGFloat = .zero
     @State private var topSafeArea: CGFloat = .zero
-
-    init(presenter: ChatsPresenter) {
-        self.presenter = presenter
-    }
+    @State private var path: NavigationPath = .init()
 
     var body: some View {
-        ZStack {
-            VStack(spacing: 0) {
-                ZStack(alignment: .bottom) {
-                    scrollView
+        NavigationStack {
+            ZStack {
+                VStack(spacing: 0) {
+                    ZStack(alignment: .bottom) {
+                        scrollView
+                    }
+                    .dismissKeyboardOnTap()
 
-                    sideMenu
-                        .padding(.top, headerHeight)
+                    CustomTextField(
+                        text: $presenter.query,
+                        placeholder: Strings.typeSomething.rawValue,
+                        icon: .send,
+                        isEnabled: $presenter.canSend
+                    ) { _ in
+                        presenter.send()
+                    }
+                    .background(Material.bar)
                 }
+                .maxSize()
 
-                CustomTextField(text: $presenter.query, icon: .send, isEnabled: $presenter.canSend) { _ in
-                    presenter.send()
+                VStack {
+                    header
+
+                    if presenter.status == .failed {
+                        Text(Strings.anErrorOccured)
+                            .padding()
+                            .background(Color.overlay())
+                            .border(Color.black, width: 1)
+                            .transition(.move(edge: .top))
+                    }
+
+                    Spacer()
                 }
-                .background(Material.bar)
+                .maxSize()
             }
-
-            VStack {
-                header
-
-                if presenter.status == .failed {
-                    Text("An error occured. Please try again.")
-                        .padding()
-                        .background(Color.overlay())
-                        .border(Color.black, width: 1)
-                        .transition(.move(edge: .top))
-                }
-
-                Spacer()
+            .navigationBarTitleDisplayMode(.inline)
+            .onSafeAreaChanged { insets in
+                topSafeArea = insets.top
             }
-            .maxSize()
+            .background(Color.background)
+            .toolbarBackground(.hidden, for: .tabBar)
+            .animation(.easeInOut, value: presenter.isMenuShown)
+            .task {
+                await presenter.onAppear()
+            }
         }
-        .onSizeChange { size in
-            self.containerSize = size
-        }
-        .onSafeAreaChanged { insets in
-            topSafeArea = insets.top
-        }
-        .background(Color.background)
-        .toolbarBackground(.hidden, for: .tabBar)
-        .animation(.easeInOut, value: presenter.isMenuShown)
-        .onAppear(perform: presenter.onAppear)
     }
 
     private var header: some View {
         HStack {
-            Rectangle()
-                .foregroundStyle(Color.yellow)
-                .frame(width: 30, height: 30)
-                .onTapGesture(perform: presenter.toggleMenuVisibility)
-
-            Text("Assistant")
+            Text(Strings.assistant.capitalized)
+                .color(emphasis: .high)
+                .font(.title)
 
             Spacer()
+
+            NavigationLink(
+                destination: HistoryView(
+                    conversations: presenter.menuConversations,
+                    newConversation: presenter.newConversation,
+                    switchConversation: presenter.switchConversation)
+            ) {
+                Image(with: .history)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .foregroundColor(Color.icon)
+                    .frame(width: 24, height: 24)
+            }
         }
         .padding(.horizontal, 8)
         .maxWidth()
@@ -75,57 +88,27 @@ struct ChatsView: View {
 
     private var scrollView: some View {
         ScrollView(.vertical) {
-            Color
-                .clear
-                .frame(height: topSafeArea + headerHeight)
+            VStack {
+                Color
+                    .clear
+                    .frame(height: topSafeArea + headerHeight)
 
-            textsStack
-                .maxWidth()
+                textsStack
+                    .maxWidth()
 
-            Color
-                .clear
-                .frame(height: 4)
+                Color
+                    .clear
+                    .frame(height: 4)
+            }
+            .frame(minHeight: scrollViewHeight, alignment: .bottom)
+        }
+        .onSizeChange { size in
+            scrollViewHeight = size.height
         }
         .scrollBounceBehavior(.basedOnSize)
         .defaultScrollAnchor(.bottom)
         .background(Color.background)
         .ignoresSafeArea(edges: .top)
-    }
-
-    private var sideMenu: some View {
-        HStack {
-            ScrollView {
-                VStack {
-                    Text("New chat")
-                        .color(emphasis: .high)
-                        .onTapGesture(perform: presenter.newConversation)
-
-                    ForEach(presenter.menuConversations) { conversation in
-                        Text(conversation.lastMessage)
-                            .color(emphasis: .high)
-                            .lineLimit(3)
-                            .padding()
-                            .onTapGesture {
-                                presenter.switchConversation(for: conversation.id)
-                            }
-                    }
-                }
-            }
-            .padding()
-            .ignoresSafeArea()
-            .frame(width: containerSize.width * 2/3)
-            .background(Color.background)
-            .transition(.move(edge: .leading))
-
-            Color
-                .clear
-                .maxWidth()
-                .contentShape(Rectangle())
-                .onTapGesture(perform: presenter.toggleMenuVisibility)
-        }
-
-        .opacity(presenter.isMenuShown ? 1 : 0)
-        .maxWidth()
     }
 
     private var textsStack: some View {
@@ -135,14 +118,19 @@ struct ChatsView: View {
                     TextCell(model: text)
                 }
             } else {
-                VStack {
-                    Spacer()
-
-                    Text("Write something to start a conversation")
-                }
-                .padding()
+                emptyView
             }
         }
+    }
+
+    private var emptyView: some View {
+        ZStack {
+            Text(Strings.writeSomethingConversation)
+                .color(emphasis: .disabled)
+                .multilineTextAlignment(.center)
+                .padding()
+        }
+        .maxSize()
     }
 
 }

@@ -1,6 +1,57 @@
 import Foundation
 import RealmSwift
 
+enum FetchTimeline {
+
+    case today
+    case yesterday
+    case daysAgo(Int)
+
+    var days: Int {
+        switch self {
+        case .today:
+            return 0
+        case .yesterday:
+            return 1
+        case .daysAgo(let days):
+            return days
+        }
+    }
+
+    var date: Date? {
+        Calendar.current.date(byAdding: .day, value: -days, to: Date())
+    }
+
+    init?(date: Date) {
+        let startOfDay = Calendar.current.startOfDay(for: date)
+        let days = Calendar.current.dateComponents([.day], from: startOfDay, to: Date()).day ?? 0
+        guard days >= 0 else { return nil }
+
+        switch days {
+        case 0:
+            self = .today
+        case 1:
+            self = .yesterday
+        default:
+            self = .daysAgo(days)
+        }
+    }
+
+    var title: String {
+        switch self {
+        case .today:
+            return Strings.today.capitalized
+        case .yesterday:
+            return Strings.yesterday.capitalized
+        case .daysAgo:
+            let formatter = DateFormatter()
+            formatter.dateFormat = "dd MMM"
+            return formatter.string(from: date ?? Date())
+        }
+    }
+
+}
+
 class ConversationStorageViewModel: Object {
 
     @Persisted(primaryKey: true) var id: String
@@ -9,7 +60,7 @@ class ConversationStorageViewModel: Object {
 
     override init() {}
 
-    convenience init(from model: ConversationViewModel) {
+    convenience init(from model: ConversationHistoryEntry) {
         self.init()
 
         id = model.id
@@ -21,6 +72,7 @@ class ConversationStorageViewModel: Object {
 
 class MealStorageViewModel: Object {
 
+    @Persisted(primaryKey: true) var id: String
     @Persisted var name: String
     @Persisted var date: Date
     @Persisted var items: List<NutritionalItemStorageViewModel>
@@ -30,6 +82,7 @@ class MealStorageViewModel: Object {
     convenience init(from model: MealViewModel) {
         self.init()
 
+        id = model.id
         name = model.name
         date = model.date
 

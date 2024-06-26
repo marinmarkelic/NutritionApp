@@ -9,19 +9,53 @@ struct HomeView: View {
 
     @ObservedObject var presenter = HomePresenter()
 
-    private var graphGradient: Gradient {
-        Gradient(colors: [Color.accentColor, Color.accentColor.opacity(0.1)])
+    var body: some View {
+        ZStack {
+            switch presenter.state {
+            case .loading:
+                EmptyView()
+            case .loaded:
+                content
+            case .empty:
+                emptyView
+            }
+        }
+        .maxSize()
+        .background(Color.background)
+        .toolbarBackground(.visible, for: .tabBar)
+        .task {
+            await presenter.onAppear()
+        }
     }
 
-    var body: some View {
+    private var content: some View {
         VStack {
             ScrollView {
-                if let dailyNutrition = presenter.dailyNutrition {
-                    chart(for: dailyNutrition)
+                VStack {
+                    chart(for: presenter.dailyNutritions, isLegendVisible: presenter.isChartLegendVisible)
+
+                    HStack {
+                        Text(Strings.legend.capitalized)
+                            .color(emphasis: .medium)
+
+                        Image(with: presenter.isChartLegendVisible ? .visible : .hidden)
+                            .aspectRatio(contentMode: .fit)
+                            .foregroundColor(Color.icon)
+                            .frame(width: 24, height: 24)
+                    }
+                    .padding(6)
+                    .background(Color.overlay())
+                    .roundCorners(radius: 8)
+                    .onTapGesture {
+                        withAnimation {
+                            presenter.toggleLegendVisibility()
+                        }
+                    }
+                    .shiftRight()
                 }
 
                 HStack {
-                    Text("Today")
+                    Text(presenter.selectedDay.title)
                         .color(emphasis: .high)
                         .font(.title)
 
@@ -33,33 +67,26 @@ struct HomeView: View {
                 mealsCard
             }
         }
-        .maxSize()
         .padding([.leading, .top, .trailing], 8)
-        .background(Color.background)
-        .toolbarBackground(.visible, for: .tabBar)
-        .task {
-            await presenter.fetchMeals()
-            await presenter.fetchCalories()
-        }
     }
 
     @ViewBuilder
     var mealsCard: some View {
-        if !presenter.meals.isEmpty {
+        if !presenter.selectedDayMeals.isEmpty {
             VStack(spacing: 8) {
-                Text("Eaten meals")
+                Text(Strings.eatenMeals)
                     .color(emphasis: .high)
                     .shiftLeft()
 
                 VStack(spacing: .zero) {
-                    ForEach(presenter.meals) { meal in
-                        MealCell(meal: meal)
+                    ForEach(presenter.selectedDayMeals) { meal in
+                        MealCell(meal: meal, delete: presenter.delete)
                             .padding(4)
 
                         Divider()
                             .frame(maxHeight: 1)
                             .overlay(Color.gray)
-                            .opacity(presenter.meals.last == meal ? 0 : 1)
+                            .opacity(presenter.selectedDayMeals.last == meal ? 0 : 1)
                     }
                 }
                 .padding(8)
@@ -76,23 +103,96 @@ extension HomeView {
     @ViewBuilder
     var todayCard: some View {
         if
-            let dailyStats = presenter.dailyStats,
-            let dailyTarget = presenter.dailyTarget,
-            let nutritionForToday = presenter.nutritionForToday
+            let selectedDayNutrition = presenter.selectedDayNutrition
         {
             VStack(spacing: 16) {
-                dailyCalorieCard(for: dailyStats)
+                DailyCalorieCard(
+                    consumedCalories: selectedDayNutrition.nutrition.calories,
+                    targetCalories: selectedDayNutrition.dailyTarget.calories,
+                    burnedCalories: selectedDayNutrition.burnedCalories)
 
-                dailyMacros(for: dailyTarget, nutrition: nutritionForToday)
+                dailyMacros(for: selectedDayNutrition.dailyTarget, nutrition: selectedDayNutrition.nutrition)
             }
             .padding(8)
             .background(Color.overlay())
         }
     }
 
-    func dailyCalorieCard(for dailyStats: DailyCalorieStats) -> some View {
+    func dailyMacros(for dailyTarget: DailyTarget, nutrition: DailyNutrition) -> some View {
+        ScrollView(.horizontal) {
+            HStack {
+                ForEach(Array(nutrition.nutrients.keys)) { nutrient in
+                    macrosCard(
+                        nutrient: nutrient,
+                        currentValue: nutrition.nutrients[nutrient] ?? .zero,
+                        targetValue: dailyTarget.nutrients[nutrient] ?? .zero,
+                        color: nutrient.color)
+                }
+            }
+        }
+        .scrollIndicators(.hidden)
+    }
+
+    @ViewBuilder
+    func macrosCard(nutrient: Nutrient, currentValue: Float, targetValue: Float, color: Color) -> some View {
+        if targetValue != .zero {
+            HStack {
+                CircularProgressView(progress: Double(currentValue / targetValue), color: color)
+                    .frame(width: 60, height: 60)
+
+                VStack {
+                    Text(nutrient.title)
+                        .color(emphasis: .medium)
+
+                    Text(Strings.intDividedByInt.formatted(Int(currentValue), Int(targetValue)))
+                        .color(emphasis: .disabled)
+
+                    +
+
+                    Text(nutrient.unit.shortened)
+                        .color(emphasis: .disabled)
+                }
+            }
+            .padding()
+            .background(Color.overlay())
+        }
+    }
+
+    private var emptyView: some View {
+        ZStack {
+            Text(Strings.enterAMeal)
+                .color(emphasis: .disabled)
+                .multilineTextAlignment(.center)
+                .padding()
+        }
+        .maxSize()
+    }
+
+}
+
+struct DailyCalorieCard: View {
+
+    let consumedCalories: Float
+    let targetCalories: Float
+    let burnedCalories: Int?
+
+    private var calorieRatio: Float {
+        ((consumedCalories / targetCalories) - 1) * 100
+    }
+
+    private var ratioString: String {
+        if calorieRatio < 100 {
+            return Strings.deficit.capitalized
+        } else if calorieRatio > 100 {
+            return Strings.surplus.capitalized
+        } else {
+            return Strings.atTarget.rawValue
+        }
+    }
+
+    var body: some View {
         VStack {
-            Text("Calories")
+            Text(Strings.calories.capitalized)
                 .color(emphasis: .medium)
                 .shiftLeft()
                 .padding(.bottom, 8)
@@ -101,18 +201,18 @@ extension HomeView {
                 Spacer()
                     .overlay {
                         VStack {
-                            calorieInfoCell(with: dailyStats.calories.toInt(), title: "Consumed")
+                            calorieInfoCell(with: consumedCalories.toInt(), title: Strings.consumed.capitalized)
 
-                            calorieInfoCell(with: dailyStats.targetCalories.toInt(), title: "Target")
+                            calorieInfoCell(with: targetCalories.toInt(), title: Strings.target.capitalized)
                         }
                     }
 
-                CalorieRatioCell(title: dailyStats.ratioString, value: dailyStats.calorieRatio.toInt())
+                CalorieRatioCell(title: ratioString, value: calorieRatio.toInt())
 
                 Spacer()
                     .overlay {
-                        if let calories = presenter.burnedCalories {
-                            calorieInfoCell(with: calories, title: "Burned")
+                        if let burnedCalories {
+                            calorieInfoCell(with: burnedCalories, title: Strings.burned.capitalized)
                         }
                     }
             }
@@ -130,135 +230,53 @@ extension HomeView {
         }
     }
 
-    func dailyMacros(for dailyTarget: DailyTarget, nutrition: DailyNutrition) -> some View {
-        ScrollView(.horizontal) {
-            HStack {
-                ForEach(Array(nutrition.nutrients.keys)) { nutrient in
-                    macrosCard(
-                        title: nutrient.title,
-                        currentValue: nutrition.nutrients[nutrient] ?? .zero,
-                        targetValue: dailyTarget.nutrients[nutrient] ?? .zero,
-                        color: nutrient.color)
-                }
-            }
-        }
-        .scrollIndicators(.hidden)
-    }
-
-    @ViewBuilder
-    func macrosCard(title: String, currentValue: Float, targetValue: Float, color: Color) -> some View {
-        if targetValue != .zero {
-            HStack {
-                CircularProgressView(progress: Double(currentValue / targetValue), color: color)
-                    .frame(width: 60, height: 60)
-
-                VStack {
-                    Text(title)
-                        .color(emphasis: .medium)
-
-                    Text("\(Int(currentValue)) / \(Int(targetValue))")
-                        .color(emphasis: .disabled)
-                }
-            }
-            .padding()
-            .background(Color.overlay())
-        }
-    }
-
 }
 
 // MARK: - Chart
 extension HomeView {
 
-    func chart(for dailyNutrition: [(Int, DailyNutrition)]) -> some View {
+    func chart(for dailyNutrition: [(Int, DailyNutrition)], isLegendVisible: Bool) -> some View {
         Chart {
             ForEach(dailyNutrition, id: \.0) { day, nutrition in
-                if let targetCalories = presenter.dailyTarget?.calories {
-                    LineMark(
+                ForEach(
+                    nutrition.nutrients.sortedByValue(andScaledTo: nutrition.calories),
+                    id: \.0
+                ) { nutrient, value in
+                    BarMark(
                         x: .value("Date", .dateWithAdded(days: day), unit: .day),
-                        y: .value("Calories", targetCalories),
-                        series: .value("type", "Target Calories"))
-                    .symbol(.circle)
-                    .foregroundStyle(.blue)
+                        y: .value("Calories", nutrient.baselineValue(for: value)))
+                    .foregroundStyle(by: .value(nutrient.title, nutrient))
                 }
-
-                LineMark(
-                    x: .value("Date", .dateWithAdded(days: day), unit: .day),
-                    y: .value("Calories", nutrition.calories),
-                    series: .value("type", "Eaten calories"))
-                .symbol(.circle)
-                .interpolationMethod(.catmullRom)
-                .foregroundStyle(.yellow)
             }
         }
-        .chartYAxis {
-            AxisMarks(values: .automatic(desiredCount: 5)) {
-                AxisValueLabel()
-                    .foregroundStyle(Color.white)
+        .chartOverlay { proxy in
+            GeometryReader { geometry in
+                Rectangle()
+                    .fill(.clear)
+                    .contentShape(Rectangle())
+                    .onTapGesture { location in
+                        guard let frame = proxy.plotFrame else { return }
 
-                AxisGridLine()
-                    .foregroundStyle(Color.white.opacity(0.2))
+                        let origin = geometry[frame].origin
+
+                        guard let date = proxy.value(atX: location.x - origin.x, as: Date.self) else { return }
+
+                        presenter.updateDate(with: date)
+                    }
             }
         }
-        .chartXAxis {
-            AxisMarks() {
-                AxisValueLabel(centered: true)
-                    .foregroundStyle(Color.white)
-
-                AxisGridLine()
-                    .foregroundStyle(Color.white.opacity(0.2))
-            }
-        }
-        .chartLegend(.visible)
         .chartYVisibleDomain(length: chartYDomain)
         .chartXVisibleDomain(length: chartXDomain)
-        .chartYScale(domain: 0 ... presenter.chartHeight)
         .chartScrollableAxes(.horizontal)
+        .chartScrollPosition(initialX: Date.dateWithAdded(days: -1))
         .frame(height: chartHeight)
         .frame(maxWidth: .infinity)
+        .chartLegend(isLegendVisible ? .visible : .hidden)
+        .chartLegend(position: .trailing, alignment: .leading)
+        .chartForegroundStyleScale { (nutrient: Nutrient) in
+            nutrient.color
+        }
         .padding()
-        .background(Color.overlay())
-    }
-
-    func chart(for calories: [(Int, Int)]) -> some View {
-        Chart {
-            ForEach(calories, id: \.0) { day, calories in
-                LineMark(
-                    x: .value("Date2", .dateWithAdded(days: day), unit: .day),
-                    y: .value("Calories", calories),
-                    series: .value("type", "Eaten calories"))
-                .symbol(.circle)
-                .interpolationMethod(.catmullRom)
-                .foregroundStyle(.yellow)
-            }
-        }
-        .chartYAxis {
-            AxisMarks(values: .automatic(desiredCount: 5)) {
-                AxisValueLabel()
-                    .foregroundStyle(Color.white)
-
-                AxisGridLine()
-                    .foregroundStyle(Color.white.opacity(0.2))
-            }
-        }
-        .chartXAxis {
-            AxisMarks() {
-                AxisValueLabel(centered: true)
-                    .foregroundStyle(Color.white)
-
-                AxisGridLine()
-                    .foregroundStyle(Color.white.opacity(0.2))
-            }
-        }
-        .chartLegend(.visible)
-        .chartYVisibleDomain(length: chartYDomain)
-        .chartXVisibleDomain(length: chartXDomain)
-        .chartYScale(domain: 0 ... presenter.chartHeight)
-        .chartScrollableAxes(.horizontal)
-        .frame(height: chartHeight)
-        .frame(maxWidth: .infinity)
-        .padding()
-        .background(Color.overlay())
     }
 
 }

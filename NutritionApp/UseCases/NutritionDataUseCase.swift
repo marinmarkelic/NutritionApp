@@ -1,7 +1,7 @@
 import Foundation
 import Dependencies
 
-actor StorageUseCase {
+actor NutritionDataUseCase {
 
     @Dependency(\.storageService)
     private var storageService: StorageService
@@ -15,7 +15,6 @@ actor StorageUseCase {
         keyedValues["height"] = userData.height
         keyedValues["weight"] = userData.weight
         keyedValues["activityType"] = userData.activityFrequency?.rawValue
-        print(keyedValues)
         storageService.setValuesForKeys(keyedValues)
     }
 
@@ -41,11 +40,15 @@ actor StorageUseCase {
         storageService.save(meal: meal)
     }
 
-    func save(conversation: ConversationViewModel) {
+    func delete(meal: MealViewModel) {
+        storageService.delete(meal: meal)
+    }
+
+    func save(conversation: ConversationHistoryEntry) {
         storageService.save(conversation: conversation)
     }
 
-    func fetchCoversations() -> [ConversationViewModel] {
+    func fetchCoversations() -> [ConversationHistoryEntry] {
         storageService.fetchConversations()
     }
 
@@ -53,8 +56,8 @@ actor StorageUseCase {
         storageService.fetchMeals(with: date)
     }
 
-    func fetchMeals(from daysAgo: Int) -> [MealViewModel] {
-        storageService.fetchMeals(from: daysAgo)
+    func fetchMeals(from timeline: FetchTimeline) -> [MealViewModel] {
+        storageService.fetchMeals(from: timeline)
     }
 
     func fetchNecessaryCalories() -> DailyTarget? {
@@ -76,12 +79,11 @@ actor StorageUseCase {
                 weight: Int(weight),
                 phisicalActivity: phisicalActivity)
 
-        let protein = energyExpenditureService.gramsOfProtein(for: weight)
-        let fat = energyExpenditureService.gramsOfFat(for: calories)
-        let carbs = energyExpenditureService.gramsOfCarbs(for: calories, gramsOfProtein: protein, gramsOfFat: fat)
-        let sodium = energyExpenditureService.milligramsOfSodium()
-        let cholesterol = energyExpenditureService.milligramsOfCholesterol()
-        let potassium = energyExpenditureService.milligramsOfPotassium(for: sex)
+        let protein = energyExpenditureService.gramsOfProtein(for: weight, and: age)
+        let fat = energyExpenditureService.gramsOfFat(for: age, and: calories)
+        let carbs = energyExpenditureService.gramsOfCarbs()
+        let sodium = energyExpenditureService.milligramsOfSodium(for: age)
+        let potassium = energyExpenditureService.milligramsOfPotassium(for: age, and: sex)
         let fiber = energyExpenditureService.gramsOfFiber(for: calories)
         let sugar = energyExpenditureService.gramsOfSugar(for: calories)
 
@@ -90,7 +92,6 @@ actor StorageUseCase {
         nutrients[.fat_total_g] = fat
         nutrients[.carbohydrates_total_g] = carbs
         nutrients[.sodium_mg] = sodium
-        nutrients[.cholesterol_mg] = cholesterol
         nutrients[.potassium_mg] = potassium
         nutrients[.fiber_g] = fiber
         nutrients[.sugar_g] = sugar
@@ -98,8 +99,17 @@ actor StorageUseCase {
         return DailyTarget(calories: calories, nutrients: nutrients)
      }
 
-    func fetchCalories(from daysAgo: Int) -> [(Int, DailyNutrition)] {
-        let meals = storageService.fetchMeals(from: daysAgo)
+    func fetchCalories(for date: Date) -> DailyNutrition? {
+        let meals = storageService.fetchMeals(with: date)
+        var nutrition = DailyNutrition()
+        for meal in meals {
+            nutrition = nutrition.add(meal)
+        }
+        return nutrition
+    }
+
+    func fetchCalories(from timeline: FetchTimeline) -> [(Int, DailyNutrition)] {
+        let meals = storageService.fetchMeals(from: timeline)
 
         /// (Days ago, Calories)
         var caloriesForDaysAgo: [Int: DailyNutrition] = [:]
@@ -125,33 +135,25 @@ actor StorageUseCase {
         return calorieArray
     }
 
-    func printAll() {
-        storageService.print()
-    }
-
-    func deleteAll() {
-        storageService.deleteAll()
-    }
-
     private func userMetric(for key: String) -> Any? {
         storageService.object(for: key)
     }
 
 }
 
-extension StorageUseCase: DependencyKey {
+extension NutritionDataUseCase: DependencyKey {
 
-    static var liveValue: StorageUseCase {
-        StorageUseCase()
+    static var liveValue: NutritionDataUseCase {
+        NutritionDataUseCase()
     }
 
 }
 
 extension DependencyValues {
 
-    var storageUseCase: StorageUseCase {
-        get { self[StorageUseCase.self] }
-        set { self[StorageUseCase.self] = newValue }
+    var nutritionDataUseCase: NutritionDataUseCase {
+        get { self[NutritionDataUseCase.self] }
+        set { self[NutritionDataUseCase.self] = newValue }
     }
 
 }

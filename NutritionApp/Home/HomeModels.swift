@@ -3,6 +3,8 @@ struct DailyTarget {
     let calories: Float
     let nutrients: NutrientValues
 
+    static let empty = DailyTarget(calories: 0, nutrients: .empty)
+
 }
 
 struct DailyCalorieStats {
@@ -11,18 +13,18 @@ struct DailyCalorieStats {
     let targetCalories: Float
     let burnedCalores: Float
 
-    var calorieRatio: Float {
-        ((calories / targetCalories) - 1) * 100
-    }
 
-    var ratioString: String {
-        if calorieRatio < 100 {
-            return "Deficit"
-        } else if calorieRatio > 100 {
-            return "Surplus"
-        } else {
-            return "At target"
-        }
+}
+
+struct SelectedDayViewModel {
+
+    let nutrition: DailyNutrition
+    let meals: [MealViewModel]
+    let dailyTarget: DailyTarget
+    let burnedCalories: Int?
+
+    func update(burnedCalories: Int) -> SelectedDayViewModel {
+        .init(nutrition: nutrition, meals: meals, dailyTarget: dailyTarget, burnedCalories: burnedCalories)
     }
 
 }

@@ -12,7 +12,6 @@ struct Conversation: Equatable {
 
     func add(message: Message) -> Conversation {
         var messages = messages
-//        messages.append(message)
         messages.insert(message, at: 0)
         return Conversation(id: id, assistantId: assistantId, messages: messages)
     }
@@ -53,3 +52,29 @@ extension Message {
     }
 
 }
+
+struct ConversationHistoryEntry: Identifiable {
+
+    let id: String
+    let lastMessage: String
+    let time: Int
+
+}
+
+extension ConversationHistoryEntry {
+
+    init(from model: ConversationStorageViewModel) {
+        id = model.id
+        lastMessage = model.lastMessage
+        time = model.time
+    }
+
+    init(from model: Conversation) {
+        id = model.id
+        /// First is used here because messages are reversed
+        lastMessage = model.messages.first?.text ?? ""
+        time = model.messages.first?.createdAt ?? .zero
+    }
+
+}
+
