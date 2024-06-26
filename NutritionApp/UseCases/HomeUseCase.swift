@@ -30,8 +30,8 @@ class HomeUseCase {
         dailyMealsSubject.eraseToAnyPublisher()
     }
 
-    @Dependency(\.storageUseCase)
-    private var storageUseCase: StorageUseCase
+    @Dependency(\.nutritionDataUseCase)
+    private var nutritionDataUseCase: NutritionDataUseCase
     @Dependency(\.healthKitUseCase)
     private var healthKitUseCase: HealthKitUseCase
 
@@ -45,33 +45,39 @@ class HomeUseCase {
     }
 
     func fetchDailyNutritions() async {
-        let dailyNutritions = await storageUseCase.fetchCalories(from: .daysAgo(30)).sorted { $0.0 > $1.0 }
+        var dailyNutritions = await nutritionDataUseCase.fetchCalories(from: .daysAgo(30)).sorted { $0.0 > $1.0 }
+
+        let isTodayEmpty = !dailyNutritions.map { $0.0 }.contains(0)
+        let shouldInsertToday = isTodayEmpty && dailyNutritions.count > 0
+        if shouldInsertToday {
+            dailyNutritions.insert((0, DailyNutrition()), at: 0)
+        }
+
         dailyNuturitonsSubject.send(dailyNutritions)
     }
 
     func fetchSelectedDay(day: FetchTimeline) async {
         guard let date = day.date else { return }
 
-        print("---2 \(date)")
-
         await changeNutrition(for: date)
         await changeMeals(for: date)
+        healthKitUseCase.reloadBurnedEnergy(for: date)
+    }
+
+    func delete(meal: MealViewModel) async {
+        await nutritionDataUseCase.delete(meal: meal)
     }
 
     private func changeNutrition(for date: Date) async {
-        let nutrition = await storageUseCase.fetchCalories(for: date)
-        let meals = await storageUseCase.fetchMeals(with: date).sorted { $0.date > $1.date }
-        let dailyTarget = await storageUseCase.fetchNecessaryCalories()
-
-        guard let nutrition, let dailyTarget else { return }
-
-        print("---2 \(nutrition.calories)")
+        let nutrition = await nutritionDataUseCase.fetchCalories(for: date) ?? DailyNutrition()
+        let meals = await nutritionDataUseCase.fetchMeals(with: date).sorted { $0.date > $1.date }
+        let dailyTarget = await nutritionDataUseCase.fetchNecessaryCalories() ?? .empty
 
         selectedDaySubject.send(SelectedDayViewModel(nutrition: nutrition, meals: meals, dailyTarget: dailyTarget, burnedCalories: nil))
     }
 
     private func changeMeals(for date: Date) async {
-        let meals = await storageUseCase.fetchMeals(with: date)
+        let meals = await nutritionDataUseCase.fetchMeals(with: date)
         dailyMealsSubject.send(meals)
     }
 

@@ -28,13 +28,11 @@ class ChatsPresenter: ObservableObject {
         bindPublishers()
     }
 
-    func onAppear() {
-        Task {
-            menuConversations = await chatsUseCase.fetchConversations()
-        }
+    @MainActor
+    func onAppear() async {
+        self.menuConversations = await self.chatsUseCase.fetchConversations()
     }
 
-    @MainActor
     func send() {
         guard !query.isEmpty else { return }
 
@@ -46,16 +44,13 @@ class ChatsPresenter: ObservableObject {
     }
 
     func toggleMenuVisibility() {
-        DispatchQueue.main.async { [weak self] in
-            self?.isMenuShown.toggle()
-        }
+        isMenuShown.toggle()
     }
 
     func newConversation() {
         conversation = nil
     }
 
-    @MainActor
     func switchConversation(for id: String) {
         toggleMenuVisibility()
 

@@ -4,11 +4,20 @@ import Foundation
 
 class HomePresenter: ObservableObject {
 
+    enum HomeState {
+
+        case loading
+        case loaded
+        case empty
+
+    }
+
     private let chartHeightOffset: Int = 400
 
     @Published var chartHeight: Int = 0
     @Published var isChartLegendVisible: Bool = false
 
+    @Published var state: HomeState = .loading
     @Published var dailyNutritions: [(Int, DailyNutrition)] = []
     @Published var selectedDay: FetchTimeline = .today
     @Published var selectedDayNutrition: SelectedDayViewModel?
@@ -25,14 +34,18 @@ class HomePresenter: ObservableObject {
 
     func updateDate(with date: Date) {
         Task {
-            let day = FetchTimeline(date: date)
+            guard let day = FetchTimeline(date: date) else { return }
+
+            selectedDay = day
             await homeUseCase.fetchSelectedDay(day: day)
         }
     }
 
     func delete(meal: MealViewModel) {
         Task {
-//            await storageUseCase.delete(meal: meal)
+            await homeUseCase.delete(meal: meal)
+            await homeUseCase.fetchSelectedDay(day: selectedDay)
+            await homeUseCase.fetchDailyNutritions()
         }
     }
 
@@ -50,7 +63,10 @@ class HomePresenter: ObservableObject {
             .dailyNuturitonsPublisher
             .receive(on: RunLoop.main)
             .sink { [weak self] dailyNutritions in
-                self?.dailyNutritions = dailyNutritions
+                guard let self else { return }
+
+                self.state = dailyNutritions.isEmpty ? .empty : .loaded
+                self.dailyNutritions = dailyNutritions
             }
             .store(in: &disposables)
 

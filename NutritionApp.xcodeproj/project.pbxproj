@@ -10,7 +10,7 @@
 		9C0CCBF92C2741620012F37A /* HomeUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C0CCBF82C2741620012F37A /* HomeUseCase.swift */; };
 		9C1FD3C32B445F2E00D8C6FD /* ChatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C1FD3C22B445F2E00D8C6FD /* ChatsView.swift */; };
 		9C1FD3C72B4466D300D8C6FD /* ChatsUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C1FD3C62B4466D300D8C6FD /* ChatsUseCase.swift */; };
-		9C1FD3C92B4467A000D8C6FD /* OpenAIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C1FD3C82B4467A000D8C6FD /* OpenAIClient.swift */; };
+		9C1FD3C92B4467A000D8C6FD /* OpenAIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C1FD3C82B4467A000D8C6FD /* OpenAIService.swift */; };
 		9C1FD3CB2B4484D200D8C6FD /* Date+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C1FD3CA2B4484D200D8C6FD /* Date+Extensions.swift */; };
 		9C1FD3CD2B44930100D8C6FD /* CGFloat+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C1FD3CC2B44930100D8C6FD /* CGFloat+Extensions.swift */; };
 		9C2E3CA32BB992A50099A6E0 /* PreferenceKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C2E3CA22BB992A50099A6E0 /* PreferenceKeys.swift */; };
@@ -33,7 +33,7 @@
 		9C93F96D2B3B048E0033E0BC /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C93F96C2B3B048E0033E0BC /* Colors.swift */; };
 		9C93F96F2B3B05D70033E0BC /* View+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C93F96E2B3B05D70033E0BC /* View+Extensions.swift */; };
 		9C9786182BAECB9E0013C15F /* Secrets.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9C9786172BAECB9D0013C15F /* Secrets.plist */; };
-		9C97861A2BAECD020013C15F /* SecretsClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C9786192BAECD020013C15F /* SecretsClient.swift */; };
+		9C97861A2BAECD020013C15F /* SecretsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C9786192BAECD020013C15F /* SecretsService.swift */; };
 		9C9B56812AFA7F9000A4B2BC /* NutritionApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C9B56802AFA7F9000A4B2BC /* NutritionApp.swift */; };
 		9C9B56852AFA7F9200A4B2BC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9C9B56842AFA7F9200A4B2BC /* Assets.xcassets */; };
 		9C9B56882AFA7F9200A4B2BC /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9C9B56872AFA7F9200A4B2BC /* Preview Assets.xcassets */; };
@@ -54,12 +54,13 @@
 		9CBB0A852B2DC8E50064EFCC /* SearchUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CBB0A842B2DC8E50064EFCC /* SearchUseCase.swift */; };
 		9CBB0A872B2DC9AD0064EFCC /* BaseClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CBB0A862B2DC9AD0064EFCC /* BaseClient.swift */; };
 		9CBB0A892B2DD2FF0064EFCC /* SearchModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CBB0A882B2DD2FF0064EFCC /* SearchModels.swift */; };
-		9CBB0A8B2B2DF9500064EFCC /* StorageUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CBB0A8A2B2DF9500064EFCC /* StorageUseCase.swift */; };
+		9CBB0A8B2B2DF9500064EFCC /* NutritionDataUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CBB0A8A2B2DF9500064EFCC /* NutritionDataUseCase.swift */; };
 		9CBB0A952B2DFC240064EFCC /* StorageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CBB0A942B2DFC240064EFCC /* StorageService.swift */; };
 		9CBB0A972B2DFCB50064EFCC /* StorageModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CBB0A962B2DFCB50064EFCC /* StorageModels.swift */; };
 		9CC04D832C25D29800F02447 /* ActionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CC04D822C25D29800F02447 /* ActionButton.swift */; };
 		9CC04D882C25E5B000F02447 /* Icons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CC04D872C25E5B000F02447 /* Icons.swift */; };
 		9CC04D8A2C25EFD500F02447 /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CC04D892C25EFD500F02447 /* HistoryView.swift */; };
+		9CCF58472C2C0E3100E1F891 /* ProfileUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CCF58462C2C0E3100E1F891 /* ProfileUseCase.swift */; };
 		9CD90C9E2BFCF1D300BF244B /* CircularProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CD90C9D2BFCF1D300BF244B /* CircularProgressView.swift */; };
 		9CD90CA02BFCF1F100BF244B /* MealCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CD90C9F2BFCF1F100BF244B /* MealCell.swift */; };
 		9CD90CA22BFCFB1400BF244B /* CalorieRatioCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CD90CA12BFCFB1400BF244B /* CalorieRatioCell.swift */; };
@@ -72,7 +73,7 @@
 		9C0CCBF82C2741620012F37A /* HomeUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeUseCase.swift; sourceTree = "<group>"; };
 		9C1FD3C22B445F2E00D8C6FD /* ChatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatsView.swift; sourceTree = "<group>"; };
 		9C1FD3C62B4466D300D8C6FD /* ChatsUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatsUseCase.swift; sourceTree = "<group>"; };
-		9C1FD3C82B4467A000D8C6FD /* OpenAIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenAIClient.swift; sourceTree = "<group>"; };
+		9C1FD3C82B4467A000D8C6FD /* OpenAIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenAIService.swift; sourceTree = "<group>"; };
 		9C1FD3CA2B4484D200D8C6FD /* Date+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extensions.swift"; sourceTree = "<group>"; };
 		9C1FD3CC2B44930100D8C6FD /* CGFloat+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGFloat+Extensions.swift"; sourceTree = "<group>"; };
 		9C2E3CA22BB992A50099A6E0 /* PreferenceKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferenceKeys.swift; sourceTree = "<group>"; };
@@ -90,7 +91,7 @@
 		9C93F96C2B3B048E0033E0BC /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
 		9C93F96E2B3B05D70033E0BC /* View+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extensions.swift"; sourceTree = "<group>"; };
 		9C9786172BAECB9D0013C15F /* Secrets.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Secrets.plist; sourceTree = "<group>"; };
-		9C9786192BAECD020013C15F /* SecretsClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecretsClient.swift; sourceTree = "<group>"; };
+		9C9786192BAECD020013C15F /* SecretsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecretsService.swift; sourceTree = "<group>"; };
 		9C9B567D2AFA7F9000A4B2BC /* NutritionApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NutritionApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9C9B56802AFA7F9000A4B2BC /* NutritionApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NutritionApp.swift; sourceTree = "<group>"; };
 		9C9B56842AFA7F9200A4B2BC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -113,12 +114,13 @@
 		9CBB0A842B2DC8E50064EFCC /* SearchUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchUseCase.swift; sourceTree = "<group>"; };
 		9CBB0A862B2DC9AD0064EFCC /* BaseClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseClient.swift; sourceTree = "<group>"; };
 		9CBB0A882B2DD2FF0064EFCC /* SearchModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchModels.swift; sourceTree = "<group>"; };
-		9CBB0A8A2B2DF9500064EFCC /* StorageUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageUseCase.swift; sourceTree = "<group>"; };
+		9CBB0A8A2B2DF9500064EFCC /* NutritionDataUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NutritionDataUseCase.swift; sourceTree = "<group>"; };
 		9CBB0A942B2DFC240064EFCC /* StorageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageService.swift; sourceTree = "<group>"; };
 		9CBB0A962B2DFCB50064EFCC /* StorageModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageModels.swift; sourceTree = "<group>"; };
 		9CC04D822C25D29800F02447 /* ActionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionButton.swift; sourceTree = "<group>"; };
 		9CC04D872C25E5B000F02447 /* Icons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Icons.swift; sourceTree = "<group>"; };
 		9CC04D892C25EFD500F02447 /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
+		9CCF58462C2C0E3100E1F891 /* ProfileUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileUseCase.swift; sourceTree = "<group>"; };
 		9CD90C9D2BFCF1D300BF244B /* CircularProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircularProgressView.swift; sourceTree = "<group>"; };
 		9CD90C9F2BFCF1F100BF244B /* MealCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealCell.swift; sourceTree = "<group>"; };
 		9CD90CA12BFCFB1400BF244B /* CalorieRatioCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalorieRatioCell.swift; sourceTree = "<group>"; };
@@ -186,8 +188,8 @@
 			children = (
 				9C60157F2B249BD9005A62C7 /* NutritionClient.swift */,
 				9CBB0A862B2DC9AD0064EFCC /* BaseClient.swift */,
-				9C1FD3C82B4467A000D8C6FD /* OpenAIClient.swift */,
-				9C9786192BAECD020013C15F /* SecretsClient.swift */,
+				9C1FD3C82B4467A000D8C6FD /* OpenAIService.swift */,
+				9C9786192BAECD020013C15F /* SecretsService.swift */,
 			);
 			path = Clients;
 			sourceTree = "<group>";
@@ -285,9 +287,10 @@
 			children = (
 				9CBB0A842B2DC8E50064EFCC /* SearchUseCase.swift */,
 				9CBB0A882B2DD2FF0064EFCC /* SearchModels.swift */,
-				9CBB0A8A2B2DF9500064EFCC /* StorageUseCase.swift */,
+				9CBB0A8A2B2DF9500064EFCC /* NutritionDataUseCase.swift */,
 				9C1FD3C62B4466D300D8C6FD /* ChatsUseCase.swift */,
 				9C0CCBF82C2741620012F37A /* HomeUseCase.swift */,
+				9CCF58462C2C0E3100E1F891 /* ProfileUseCase.swift */,
 			);
 			path = UseCases;
 			sourceTree = "<group>";
@@ -419,7 +422,7 @@
 				9C48CF172BA722FD00ABA072 /* HomePresenter.swift in Sources */,
 				9CA3E77B2C089CE600F38B16 /* HealthKitService.swift in Sources */,
 				9CA3E78B2C0B676B00F38B16 /* NutritionInformationView.swift in Sources */,
-				9C1FD3C92B4467A000D8C6FD /* OpenAIClient.swift in Sources */,
+				9C1FD3C92B4467A000D8C6FD /* OpenAIService.swift in Sources */,
 				9CA3E77F2C08B08000F38B16 /* HealthKitUseCase.swift in Sources */,
 				9CA3E7852C08B34500F38B16 /* ProfileModels.swift in Sources */,
 				9C93F96D2B3B048E0033E0BC /* Colors.swift in Sources */,
@@ -438,17 +441,18 @@
 				9C34C40E2BE7E4D800BA16F8 /* ChatsModels.swift in Sources */,
 				9C0CCBF92C2741620012F37A /* HomeUseCase.swift in Sources */,
 				9CEA12A32BE415B800178EA1 /* CustomTextField.swift in Sources */,
-				9CBB0A8B2B2DF9500064EFCC /* StorageUseCase.swift in Sources */,
+				9CBB0A8B2B2DF9500064EFCC /* NutritionDataUseCase.swift in Sources */,
 				9CA3E7812C08B11800F38B16 /* HealthKitUserData.swift in Sources */,
 				9C1FD3C72B4466D300D8C6FD /* ChatsUseCase.swift in Sources */,
 				9CEA12A02BE40B7700178EA1 /* ChatsPresenter.swift in Sources */,
 				9CBB0A952B2DFC240064EFCC /* StorageService.swift in Sources */,
 				9CA3E78D2C0B6A8300F38B16 /* Strings.swift in Sources */,
-				9C97861A2BAECD020013C15F /* SecretsClient.swift in Sources */,
+				9C97861A2BAECD020013C15F /* SecretsService.swift in Sources */,
 				9CC04D882C25E5B000F02447 /* Icons.swift in Sources */,
 				9C1FD3C32B445F2E00D8C6FD /* ChatsView.swift in Sources */,
 				9CA3E7772C06367700F38B16 /* RoundedCorner.swift in Sources */,
 				9CA3E7722C04C57600F38B16 /* MealGraphNutrientCell.swift in Sources */,
+				9CCF58472C2C0E3100E1F891 /* ProfileUseCase.swift in Sources */,
 				9C6015782B24874A005A62C7 /* HomeView.swift in Sources */,
 				9CBB0A852B2DC8E50064EFCC /* SearchUseCase.swift in Sources */,
 				9C9B56812AFA7F9000A4B2BC /* NutritionApp.swift in Sources */,

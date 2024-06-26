@@ -1,7 +1,7 @@
 import Foundation
 import Dependencies
 
-actor StorageUseCase {
+actor NutritionDataUseCase {
 
     @Dependency(\.storageService)
     private var storageService: StorageService
@@ -152,19 +152,19 @@ actor StorageUseCase {
 
 }
 
-extension StorageUseCase: DependencyKey {
+extension NutritionDataUseCase: DependencyKey {
 
-    static var liveValue: StorageUseCase {
-        StorageUseCase()
+    static var liveValue: NutritionDataUseCase {
+        NutritionDataUseCase()
     }
 
 }
 
 extension DependencyValues {
 
-    var storageUseCase: StorageUseCase {
-        get { self[StorageUseCase.self] }
-        set { self[StorageUseCase.self] = newValue }
+    var nutritionDataUseCase: NutritionDataUseCase {
+        get { self[NutritionDataUseCase.self] }
+        set { self[NutritionDataUseCase.self] = newValue }
     }
 
 }

@@ -59,13 +59,16 @@ extension StorageService {
     }
 
     func fetchMeals(with date: Date) -> [MealViewModel] {
+        let targetDateComponents = Calendar.current.dateComponents([.day, .month, .year], from: date)
+
         let meals = realm.objects(MealStorageViewModel.self).filter {
             let mealDateComponents = Calendar.current.dateComponents([.day, .month, .year], from: $0.date)
-            let targetDateComponents = Calendar.current.dateComponents([.day, .month, .year], from: date)
 
-            return mealDateComponents.day == targetDateComponents.day &&
-                   mealDateComponents.month == targetDateComponents.month &&
-                   mealDateComponents.year == targetDateComponents.year
+            let isConsumedOnTheSameDay = mealDateComponents.day == targetDateComponents.day &&
+                mealDateComponents.month == targetDateComponents.month &&
+                mealDateComponents.year == targetDateComponents.year
+
+            return isConsumedOnTheSameDay
         }
 
         return meals.map { MealViewModel(from: $0) }

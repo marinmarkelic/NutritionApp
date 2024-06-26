@@ -6,7 +6,13 @@ typealias NutrientValues = [Nutrient: Float]
 
 extension NutrientValues {
 
-    static let empty: NutrientValues = [:]
+    // NutrientValues with all values of 0
+
+    static let empty: NutrientValues = {
+        var values: NutrientValues = [:]
+        Nutrient.allCases.forEach { values[$0] = .zero }
+        return values
+    }()
 
     func sortedByValue(ascending: Bool = true) -> [(Nutrient, Float)] {
         if ascending {

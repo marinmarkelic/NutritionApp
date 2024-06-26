@@ -54,10 +54,11 @@ class HealthKitService {
         store.execute(basalEnergyQuery)
     }
 
-    func readBurnedEnergy() {
+    func readBurnedEnergy(for date: Date = .now) {
         let dispatchGroup = DispatchGroup()
-        let startOfDay = Calendar.current.startOfDay(for: .now)
-        let predicate = HKQuery.predicateForSamples(withStart: startOfDay, end: .now, options: .strictStartDate)
+        let startOfDay = Calendar.current.startOfDay(for: date)
+        let endOfDay = Calendar.current.date(byAdding: .day, value: 1, to: startOfDay)!
+        let predicate = HKQuery.predicateForSamples(withStart: startOfDay, end: endOfDay, options: .strictStartDate)
 
         var basalEnergyBurned: Double?
         var activeEnergyBurned: Double?

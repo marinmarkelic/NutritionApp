@@ -11,9 +11,41 @@ enum QueryStatus {
 
 }
 
-class OpenAIClient {
+enum RunStatus {
 
-    @Dependency(\.secretsClient) private var secretsClient
+    case queued
+    case inProgress
+    case completed
+    case expired
+    case failed
+    case undefined
+
+    init(from string: String) {
+        switch string {
+        case "queued":
+            self = .queued
+        case "in_progress":
+            self = .inProgress
+        case "completed":
+            self = .completed
+        case "expired":
+            self = .expired
+        case "failed", "incomplete", "cancelled":
+            self = .failed
+        default:
+            self = .undefined
+        }
+    }
+
+    var isStillRunning: Bool {
+        self == .queued || self == .inProgress
+    }
+
+}
+
+class LanguageModelInteractionService {
+
+    @Dependency(\.secretsService) private var secretsService
 
     private var queryStatusSubject = CurrentValueSubject<QueryStatus, Never>(.available)
     private var conversationSubject = CurrentValueSubject<Conversation?, Never>(nil)
@@ -27,11 +59,11 @@ class OpenAIClient {
     }
 
     private lazy var service: OpenAIService = {
-        OpenAIServiceFactory.service(apiKey: secretsClient.openAIKey)
+        OpenAIServiceFactory.service(apiKey: secretsService.openAIKey)
     }()
 
     private lazy var nutritionAssistantId: String = {
-        secretsClient.nutritionAssistantId
+        secretsService.nutritionAssistantId
     }()
 
     func sendSingleMessage(text: String) async -> String? {
@@ -110,39 +142,50 @@ class OpenAIClient {
     }
 
     private func observeRun(run: RunObject, threadId: String) async {
-        var counter = 0
-        var runStatus = run.status
-        while runStatus != "completed" {
-            guard counter <= 10 else {
-                queryStatusSubject.send(.failed)
-                return
+        Task.detached { [weak self] in
+            guard let self else { return }
+
+            let counterLimit = 10
+            var counter = 0
+            var runStatus = RunStatus(from: run.status)
+            while runStatus.isStillRunning {
+                guard counter <= counterLimit else {
+                    queryStatusSubject.send(.failed)
+                    return
+                }
+
+                usleep(200000)
+
+                let run = try? await service.retrieveRun(threadID: threadId, runID: run.id)
+                guard let runStatusString = run?.status else {
+                    queryStatusSubject.send(.failed)
+                    return
+                }
+
+                runStatus = RunStatus(from: runStatusString)
+                counter += 1
             }
 
-            let run = try? await service.retrieveRun(threadID: threadId, runID: run.id)
-            runStatus = run?.status ?? ""
-            print("--- \(runStatus)")
-            counter += 1
+            await retreiveMessages(for: threadId)
+            queryStatusSubject.send(.available)
         }
-
-        await retreiveMessages(for: threadId)
-        queryStatusSubject.send(.available)
     }
 
 }
 
-extension OpenAIClient: DependencyKey {
+extension LanguageModelInteractionService: DependencyKey {
 
-    static var liveValue: OpenAIClient {
-        OpenAIClient()
+    static var liveValue: LanguageModelInteractionService {
+        LanguageModelInteractionService()
     }
 
 }
 
 extension DependencyValues {
 
-    var openAIClient: OpenAIClient {
-        get { self[OpenAIClient.self] }
-        set { self[OpenAIClient.self] = newValue }
+    var languageModelInteractionService: LanguageModelInteractionService {
+        get { self[LanguageModelInteractionService.self] }
+        set { self[LanguageModelInteractionService.self] = newValue }
     }
 
 }

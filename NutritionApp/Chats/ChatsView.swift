@@ -4,15 +4,11 @@ struct ChatsView: View {
 
     private let headerHeight: CGFloat = 40
 
-    @ObservedObject private var presenter: ChatsPresenter
+    @ObservedObject private var presenter: ChatsPresenter = ChatsPresenter()
 
     @State private var scrollViewHeight: CGFloat = .zero
     @State private var topSafeArea: CGFloat = .zero
     @State private var path: NavigationPath = .init()
-
-    init(presenter: ChatsPresenter) {
-        self.presenter = presenter
-    }
 
     var body: some View {
         NavigationStack {
@@ -57,7 +53,10 @@ struct ChatsView: View {
             .background(Color.background)
             .toolbarBackground(.hidden, for: .tabBar)
             .animation(.easeInOut, value: presenter.isMenuShown)
-            .onAppear(perform: presenter.onAppear)
+//            .onAppear(perform: presenter.onAppear)
+            .task {
+                await presenter.onAppear()
+            }
         }
     }
 

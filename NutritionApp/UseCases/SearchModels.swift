@@ -236,7 +236,11 @@ Name: \(name)
 
 }
 
-struct GraphViewModelData {
+struct GraphViewModelData: Identifiable {
+    var id: Color {
+        self.color
+    }
+
 
     // rename properties
     let color: Color

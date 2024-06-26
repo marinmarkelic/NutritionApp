@@ -10,9 +10,9 @@ enum FetchTimeline {
     var days: Int {
         switch self {
         case .today:
-            return 1
+            return 0
         case .yesterday:
-            return 2
+            return 1
         case .daysAgo(let days):
             return days
         }
@@ -22,9 +22,32 @@ enum FetchTimeline {
         Calendar.current.date(byAdding: .day, value: -days, to: Date())
     }
 
-    init(date: Date) {
-        let days = Calendar.current.dateComponents([.day], from: date, to: Date()).day ?? 0
-        self = .daysAgo(days)
+    init?(date: Date) {
+        let startOfDay = Calendar.current.startOfDay(for: date)
+        let days = Calendar.current.dateComponents([.day], from: startOfDay, to: Date()).day ?? 0
+        guard days >= 0 else { return nil }
+
+        switch days {
+        case 0:
+            self = .today
+        case 1:
+            self = .yesterday
+        default:
+            self = .daysAgo(days)
+        }
+    }
+
+    var title: String {
+        switch self {
+        case .today:
+            return Strings.today.capitalized
+        case .yesterday:
+            return Strings.yesterday.capitalized
+        case .daysAgo:
+            let formatter = DateFormatter()
+            formatter.dateFormat = "dd MMM"
+            return formatter.string(from: date ?? Date())
+        }
     }
 
 }

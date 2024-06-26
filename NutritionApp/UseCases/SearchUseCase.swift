@@ -4,10 +4,10 @@ actor SearchUseCase {
 
     @Dependency(\.nutritionClient)
     private var nutritionClient: NutritionClient
-    @Dependency(\.openAIClient)
-    private var openAIClient: OpenAIClient
-    @Dependency(\.storageUseCase)
-    private var storageUseCase: StorageUseCase
+    @Dependency(\.languageModelInteractionService)
+    private var languageModelInteractionService: LanguageModelInteractionService
+    @Dependency(\.nutritionDataUseCase)
+    private var nutritionDataUseCase: NutritionDataUseCase
 
     func search(for query: String) async -> MealViewModel {
         let viewModel = await (try? nutritionClient.getNutritionalInformation(for: query)) ?? MealNetworkViewModel(items: [])
@@ -17,12 +17,15 @@ actor SearchUseCase {
 
     func fetchOpinion(for meal: MealViewModel) async -> String? {
         let instructions = await fetchDailyMealsInstructions(with: meal.name)
-        print("--- inst \(instructions)")
-        return await openAIClient.sendSingleMessage(text: instructions)
+        return await languageModelInteractionService.sendSingleMessage(text: instructions)
+    }
+
+    func save(meal: MealViewModel) async {
+        await nutritionDataUseCase.save(meal: meal)
     }
 
     private func fetchDailyMealsInstructions(with newMeal: String) async -> String {
-        let meals = await storageUseCase.fetchMeals(from: .today)
+        let meals = await nutritionDataUseCase.fetchMeals(from: .today)
 
         var instruction = ""
         meals.forEach { meal in

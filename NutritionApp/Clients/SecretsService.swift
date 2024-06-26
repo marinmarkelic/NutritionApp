@@ -1,7 +1,7 @@
 import Foundation
 import Dependencies
 
-struct SecretsClient {
+struct SecretsService {
 
     var nutritionKey: String {
         guard let apiKey = secrets["NutritionApiKey"] as? String else {
@@ -46,19 +46,19 @@ struct SecretsClient {
 
 }
 
-extension SecretsClient: DependencyKey {
+extension SecretsService: DependencyKey {
 
-    static var liveValue: SecretsClient {
-        SecretsClient()
+    static var liveValue: SecretsService {
+        SecretsService()
     }
 
 }
 
 extension DependencyValues {
 
-    var secretsClient: SecretsClient {
-        get { self[SecretsClient.self] }
-        set { self[SecretsClient.self] = newValue }
+    var secretsService: SecretsService {
+        get { self[SecretsService.self] }
+        set { self[SecretsService.self] = newValue }
     }
 
 }

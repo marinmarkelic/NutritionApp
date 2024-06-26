@@ -2,7 +2,7 @@ import SwiftUI
 
 struct CustomTextField: View {
 
-    private let action: (String) -> Void
+    private let action: @MainActor (String) -> Void
     private let placeholder: String
     private let icon: Icon
     private let imageSize: CGFloat = 24
@@ -15,7 +15,7 @@ struct CustomTextField: View {
         placeholder: String,
         icon: Icon,
         isEnabled: Binding<Bool> = .constant(true),
-        action: @escaping (String) -> Void
+        action: @MainActor @escaping (String) -> Void
     ) {
         self.text = text
         self.placeholder = placeholder

@@ -7,17 +7,35 @@ struct NutritionApp: App {
         WindowGroup {
             TabView {
                 HomeView()
-                    .tabItem { Text("Home") }
+                    .accentColor(.none)
+                    .tabItem {
+                        Image(with: .house)
+                        Text("Home")
+                    }
+                    .tableStyle(.inset)
 
                 SearchView()
-                    .tabItem { Text("Search") }
+                    .accentColor(.none)
+                    .tabItem {
+                        Image(with: .magniflyingGlass)
+                        Text("Search")
+                    }
 
-                ChatsView(presenter: ChatsPresenter())
-                    .tabItem { Text("Chats") }
+                ChatsView()
+                    .accentColor(.none)
+                    .tabItem {
+                        Image(with: .chats)
+                        Text("Chats")
+                    }
 
                 ProfileView()
-                    .tabItem { Text("Profile") }
+                    .accentColor(.none)
+                    .tabItem {
+                        Image(with: .profile)
+                        Text("Profile")
+                    }
             }
+            .accentColor(.white)
             .toolbarBackground(.hidden, for: .tabBar)
             .environment(\.colorScheme, .dark)
         }

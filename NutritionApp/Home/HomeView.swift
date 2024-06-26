@@ -10,35 +10,52 @@ struct HomeView: View {
     @ObservedObject var presenter = HomePresenter()
 
     var body: some View {
+        ZStack {
+            switch presenter.state {
+            case .loading:
+                EmptyView()
+            case .loaded:
+                content
+            case .empty:
+                emptyView
+            }
+        }
+        .maxSize()
+        .background(Color.background)
+        .toolbarBackground(.visible, for: .tabBar)
+        .task {
+            await presenter.onAppear()
+        }
+    }
+
+    private var content: some View {
         VStack {
             ScrollView {
-//                if let dailyNutritions = presenter.dailyNutritions {
-                    VStack {
-                        chart(for: presenter.dailyNutritions, isLegendVisible: presenter.isChartLegendVisible)
+                VStack {
+                    chart(for: presenter.dailyNutritions, isLegendVisible: presenter.isChartLegendVisible)
 
-                        HStack {
-                            Text(Strings.legend.capitalized)
-                                .color(emphasis: .medium)
+                    HStack {
+                        Text(Strings.legend.capitalized)
+                            .color(emphasis: .medium)
 
-                            Image(with: presenter.isChartLegendVisible ? .visible : .hidden)
-                                .aspectRatio(contentMode: .fit)
-                                .foregroundColor(Color.icon)
-                                .frame(width: 24, height: 24)
-                        }
-                        .padding(6)
-                        .background(Color.overlay())
-                        .roundCorners(radius: 8)
-                        .onTapGesture {
-                            withAnimation {
-                                presenter.toggleLegendVisibility()
-                            }
-                        }
-                        .shiftRight()
+                        Image(with: presenter.isChartLegendVisible ? .visible : .hidden)
+                            .aspectRatio(contentMode: .fit)
+                            .foregroundColor(Color.icon)
+                            .frame(width: 24, height: 24)
                     }
-//                }
+                    .padding(6)
+                    .background(Color.overlay())
+                    .roundCorners(radius: 8)
+                    .onTapGesture {
+                        withAnimation {
+                            presenter.toggleLegendVisibility()
+                        }
+                    }
+                    .shiftRight()
+                }
 
                 HStack {
-                    Text(Strings.today.capitalized)
+                    Text(presenter.selectedDay.title)
                         .color(emphasis: .high)
                         .font(.title)
 
@@ -50,13 +67,7 @@ struct HomeView: View {
                 mealsCard
             }
         }
-        .maxSize()
         .padding([.leading, .top, .trailing], 8)
-        .background(Color.background)
-        .toolbarBackground(.visible, for: .tabBar)
-        .task {
-            await presenter.onAppear()
-        }
     }
 
     @ViewBuilder
@@ -147,6 +158,16 @@ extension HomeView {
         }
     }
 
+    private var emptyView: some View {
+        ZStack {
+            Text(Strings.enterAMeal)
+                .color(emphasis: .disabled)
+                .multilineTextAlignment(.center)
+                .padding()
+        }
+        .maxSize()
+    }
+
 }
 
 struct DailyCalorieCard: View {
@@ -218,7 +239,7 @@ extension HomeView {
         Chart {
             ForEach(dailyNutrition, id: \.0) { day, nutrition in
                 ForEach(
-                    nutrition.nutrients.sortedByValue(andScaledTo: nutrition.calories), 
+                    nutrition.nutrients.sortedByValue(andScaledTo: nutrition.calories),
                     id: \.0
                 ) { nutrient, value in
                     BarMark(
@@ -226,17 +247,6 @@ extension HomeView {
                         y: .value("Calories", nutrient.baselineValue(for: value)))
                     .foregroundStyle(by: .value(nutrient.title, nutrient))
                 }
-
-                /// The purpose of this is to sort the legend items from highest to lowest
-//                ForEach(
-//                    nutrition.nutrients.sortedByValue(andScaledTo: nutrition.calories, ascending: false), 
-//                    id: \.0
-//                ) { nutrient, value in
-//                    BarMark(
-//                        x: .value("Date", .dateWithAdded(days: day), unit: .day),
-//                        y: .value("Empty", .zero))
-//                    .foregroundStyle(by: .value(nutrient.title, nutrient))
-//                }
             }
         }
         .chartOverlay { proxy in
@@ -251,8 +261,6 @@ extension HomeView {
 
                         guard let date = proxy.value(atX: location.x - origin.x, as: Date.self) else { return }
 
-                        print(" ---1 \(date)")
-
                         presenter.updateDate(with: date)
                     }
             }
@@ -260,7 +268,6 @@ extension HomeView {
         .chartYVisibleDomain(length: chartYDomain)
         .chartXVisibleDomain(length: chartXDomain)
         .chartScrollableAxes(.horizontal)
-//        .chartScrollPosition(initialX: Date.dateWithAdded(days: -1))
         .chartScrollPosition(initialX: Date.dateWithAdded(days: -1))
         .frame(height: chartHeight)
         .frame(maxWidth: .infinity)
