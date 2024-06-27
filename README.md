@@ -3,7 +3,7 @@
 
 ## Overview
 
-Nutrition Tracker App is a mobile application designed to help users track their daily nutrition intake and maintain a healthy lifestyle. By leveraging modern technologies such as HealthKit, large language models, and advanced nutritional formulas, this app provides accurate and valuable insights into daily caloric and nutrient intake.
+NutritionApp is a mobile application designed to help users track their daily nutrition intake and maintain a healthy lifestyle. By leveraging modern technologies such as HealthKit, large language models, and advanced nutritional formulas, this app provides accurate and valuable insights into daily caloric and nutrient intake.
 
 ## Features
 
