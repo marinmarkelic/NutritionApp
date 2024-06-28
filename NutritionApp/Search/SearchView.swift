@@ -25,7 +25,7 @@ struct SearchView: View {
         .animation(.easeInOut, value: presenter.opinion)
         .background(Color.background)
         .toolbarBackground(.hidden, for: .tabBar)
-        .onReceive(presenter.meal.publisher) { meal in
+        .onReceive(presenter.$meal.eraseToAnyPublisher()) { meal in
             self.meal = meal
         }
     }

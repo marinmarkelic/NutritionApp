@@ -13,11 +13,15 @@ class SearchPresenter: ObservableObject {
 
     @MainActor
     func search(query: String) {
+        guard !query.isEmpty else {
+            meal = nil
+            return
+        }
+
         Task { [weak self] in
             guard let self else { return }
 
             meal = await useCase.search(for: query)
-//            self.meal = meal
             opinion = nil
             opinion = await useCase.fetchOpinion(for: meal!)
         }
