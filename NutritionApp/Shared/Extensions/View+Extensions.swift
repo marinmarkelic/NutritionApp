@@ -26,6 +26,17 @@ extension View {
         clipShape(RoundedCorner(radius: radius, corners: corners)).ignoresSafeArea()
     }
 
+    @ViewBuilder
+    func isHidden(_ hidden: Bool, remove: Bool = false) -> some View {
+        if hidden {
+            if !remove {
+                self.hidden()
+            }
+        } else {
+            self
+        }
+    }
+
     func dismissKeyboardOnTap() -> some View {
         onTapGesture {
             UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)

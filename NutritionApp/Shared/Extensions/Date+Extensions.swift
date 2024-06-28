@@ -16,7 +16,11 @@ extension Date {
     }
 
     static func dateWithAdded(days: Int) -> Date {
-        guard let date = Calendar.current.date(byAdding: .day, value: days, to: Date()) else { return .now }
+        let calendar = Calendar.current
+
+        guard
+            let date = calendar.date(byAdding: .day, value: days, to: calendar.startOfDay(for: .now))
+        else { return .now }
 
         return date
     }

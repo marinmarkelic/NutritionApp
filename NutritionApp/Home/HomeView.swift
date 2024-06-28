@@ -3,9 +3,14 @@ import SwiftUI
 
 struct HomeView: View {
 
-    let chartYDomain: Int = 600
-    let chartXDomain: Int = 86400 * 4 /// Number of seconds in a day times number of days
-    let chartHeight: CGFloat? = 200
+    private let daysInChart: Int = 4
+    private let chartYDomain: Int = 600
+    private let chartHeight: CGFloat? = 200
+
+    /// Number of seconds in a day times number of days
+    private var chartXDomain: Int {
+        86400 * daysInChart
+    }
 
     @ObservedObject var presenter = HomePresenter()
 
@@ -121,7 +126,7 @@ extension HomeView {
     func dailyMacros(for dailyTarget: DailyTarget, nutrition: DailyNutrition) -> some View {
         ScrollView(.horizontal) {
             HStack {
-                ForEach(Array(nutrition.nutrients.keys)) { nutrient in
+                ForEach(Array(nutrition.nutrients.sortedByValue(ascending: false)), id: \.0) { nutrient, _ in
                     macrosCard(
                         nutrient: nutrient,
                         currentValue: nutrition.nutrients[nutrient] ?? .zero,
@@ -170,113 +175,71 @@ extension HomeView {
 
 }
 
-struct DailyCalorieCard: View {
-
-    let consumedCalories: Float
-    let targetCalories: Float
-    let burnedCalories: Int?
-
-    private var calorieRatio: Float {
-        ((consumedCalories / targetCalories) - 1) * 100
-    }
-
-    private var ratioString: String {
-        if calorieRatio < 100 {
-            return Strings.deficit.capitalized
-        } else if calorieRatio > 100 {
-            return Strings.surplus.capitalized
-        } else {
-            return Strings.atTarget.rawValue
-        }
-    }
-
-    var body: some View {
-        VStack {
-            Text(Strings.calories.capitalized)
-                .color(emphasis: .medium)
-                .shiftLeft()
-                .padding(.bottom, 8)
-
-            HStack {
-                Spacer()
-                    .overlay {
-                        VStack {
-                            calorieInfoCell(with: consumedCalories.toInt(), title: Strings.consumed.capitalized)
-
-                            calorieInfoCell(with: targetCalories.toInt(), title: Strings.target.capitalized)
-                        }
-                    }
-
-                CalorieRatioCell(title: ratioString, value: calorieRatio.toInt())
-
-                Spacer()
-                    .overlay {
-                        if let burnedCalories {
-                            calorieInfoCell(with: burnedCalories, title: Strings.burned.capitalized)
-                        }
-                    }
-            }
-        }
-    }
-
-    func calorieInfoCell(with value: Int, title: String) -> some View {
-        VStack {
-            Text("\(value)")
-                .color(emphasis: .medium)
-                .bold()
-
-            Text(title)
-                .color(emphasis: .disabled)
-        }
-    }
-
-}
-
 // MARK: - Chart
 extension HomeView {
 
     func chart(for dailyNutrition: [(Int, DailyNutrition)], isLegendVisible: Bool) -> some View {
-        Chart {
-            ForEach(dailyNutrition, id: \.0) { day, nutrition in
-                ForEach(
-                    nutrition.nutrients.sortedByValue(andScaledTo: nutrition.calories),
-                    id: \.0
-                ) { nutrient, value in
-                    BarMark(
-                        x: .value("Date", .dateWithAdded(days: day), unit: .day),
-                        y: .value("Calories", nutrient.baselineValue(for: value)))
-                    .foregroundStyle(by: .value(nutrient.title, nutrient))
+        HStack {
+            Chart {
+                ForEach(dailyNutrition, id: \.0) { day, nutrition in
+                    ForEach(
+                        nutrition.nutrients.sortedByValue(andScaledTo: nutrition.calories),
+                        id: \.0
+                    ) { nutrient, value in
+                        BarMark(
+                            x: .value("Date", .dateWithAdded(days: day), unit: .day),
+                            y: .value("Calories", nutrient.baselineValue(for: value)))
+                        .foregroundStyle(nutrient.color)
+                    }
                 }
             }
-        }
-        .chartOverlay { proxy in
-            GeometryReader { geometry in
-                Rectangle()
-                    .fill(.clear)
-                    .contentShape(Rectangle())
-                    .onTapGesture { location in
-                        guard let frame = proxy.plotFrame else { return }
+            .chartOverlay { proxy in
+                GeometryReader { geometry in
+                    Rectangle()
+                        .fill(.clear)
+                        .contentShape(Rectangle())
+                        .onTapGesture { location in
+                            guard let frame = proxy.plotFrame else { return }
 
-                        let origin = geometry[frame].origin
+                            let origin = geometry[frame].origin
 
-                        guard let date = proxy.value(atX: location.x - origin.x, as: Date.self) else { return }
+                            guard let date = proxy.value(atX: location.x - origin.x, as: Date.self) else { return }
 
-                        presenter.updateDate(with: date)
+                            presenter.updateDate(with: date)
+                        }
+                }
+            }
+            .chartYVisibleDomain(length: chartYDomain)
+            .chartXVisibleDomain(length: chartXDomain)
+            .chartScrollableAxes(.horizontal)
+            .chartScrollPosition(initialX: Date.dateWithAdded(days: -daysInChart + 1))
+            .frame(height: chartHeight)
+            .frame(maxWidth: .infinity)
+            .chartLegend(.hidden)
+            .padding()
+
+            if let selectedDayNutrition = presenter.selectedDayNutrition {
+                VStack(alignment: .leading) {
+                    ForEach(
+                        Array(selectedDayNutrition.nutrition.nutrients.sortedByValue(ascending: false)),
+                        id: \.0
+                    ) { nutrient, _ in
+                        HStack {
+                            Circle()
+                                .fill(nutrient.color)
+                                .frame(width: 10, height: 10)
+
+                            Text("\(nutrient.title)")
+                                .font(.caption)
+                                .color(emphasis: .medium)
+                        }
+                        .animation(.default, value: selectedDayNutrition.nutrition.nutrients)
                     }
+                }
+                .transition(.move(edge: .trailing))
+                .isHidden(!isLegendVisible, remove: true)
             }
         }
-        .chartYVisibleDomain(length: chartYDomain)
-        .chartXVisibleDomain(length: chartXDomain)
-        .chartScrollableAxes(.horizontal)
-        .chartScrollPosition(initialX: Date.dateWithAdded(days: -1))
-        .frame(height: chartHeight)
-        .frame(maxWidth: .infinity)
-        .chartLegend(isLegendVisible ? .visible : .hidden)
-        .chartLegend(position: .trailing, alignment: .leading)
-        .chartForegroundStyleScale { (nutrient: Nutrient) in
-            nutrient.color
-        }
-        .padding()
     }
 
 }

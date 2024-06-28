@@ -5,11 +5,12 @@ struct SearchView: View {
     @ObservedObject private var presenter = SearchPresenter()
 
     @State private var query: String = ""
+    @State private var meal: MealViewModel?
     @FocusState private var focus: String?
 
     var body: some View {
         VStack(spacing: .zero) {
-            if let meal = presenter.meal {
+            if let meal {
                 contentView(for: meal)
             } else {
                 emptyView
@@ -24,6 +25,9 @@ struct SearchView: View {
         .animation(.easeInOut, value: presenter.opinion)
         .background(Color.background)
         .toolbarBackground(.hidden, for: .tabBar)
+        .onReceive(presenter.meal.publisher) { meal in
+            self.meal = meal
+        }
     }
 
     private var emptyView: some View {

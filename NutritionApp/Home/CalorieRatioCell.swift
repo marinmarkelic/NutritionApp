@@ -46,6 +46,7 @@ struct CalorieRatioCell: View {
                     .size(with: markerSize)
                     .offset(markerOffset)
             }
+            .animation(.bouncy(duration: 0.3, extraBounce: 0.1), value: markerOffset)
         }
     }
 
