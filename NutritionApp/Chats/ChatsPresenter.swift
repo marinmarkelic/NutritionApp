@@ -49,6 +49,7 @@ class ChatsPresenter: ObservableObject {
 
     func newConversation() {
         conversation = nil
+        chatsUseCase.cleanConversation()
     }
 
     func switchConversation(for id: String) {

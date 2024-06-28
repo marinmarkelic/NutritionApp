@@ -22,7 +22,11 @@ class ChatsUseCase {
     }
 
     func fetchConversations() async -> [ConversationHistoryEntry] {
-        await nutritionDataUseCase.fetchCoversations()
+        await nutritionDataUseCase.fetchCoversations().reversed()
+    }
+
+    func cleanConversation() {
+        languageModelInteractionService.cleanConversation()
     }
 
     func switchConversation(id: String) async {

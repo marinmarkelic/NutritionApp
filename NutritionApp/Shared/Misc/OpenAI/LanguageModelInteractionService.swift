@@ -85,6 +85,9 @@ class LanguageModelInteractionService {
         return thread?.id
     }
 
+    func cleanConversation() {
+        conversationSubject.send(nil)
+    }
 
     func retreiveMessages(for conversationId: String) async {
         guard
