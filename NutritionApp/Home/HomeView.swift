@@ -3,9 +3,14 @@ import SwiftUI
 
 struct HomeView: View {
 
-    let chartYDomain: Int = 600
-    let chartXDomain: Int = 86400 * 4 /// Number of seconds in a day times number of days
-    let chartHeight: CGFloat? = 200
+    private let daysInChart: Int = 4
+    private let chartYDomain: Int = 600
+    private let chartHeight: CGFloat? = 200
+
+    /// Number of seconds in a day times number of days
+    private var chartXDomain: Int {
+        86400 * daysInChart
+    }
 
     @ObservedObject var presenter = HomePresenter()
 
@@ -236,47 +241,68 @@ struct DailyCalorieCard: View {
 extension HomeView {
 
     func chart(for dailyNutrition: [(Int, DailyNutrition)], isLegendVisible: Bool) -> some View {
-        Chart {
-            ForEach(dailyNutrition, id: \.0) { day, nutrition in
-                ForEach(
-                    nutrition.nutrients.sortedByValue(andScaledTo: nutrition.calories),
-                    id: \.0
-                ) { nutrient, value in
-                    BarMark(
-                        x: .value("Date", .dateWithAdded(days: day), unit: .day),
-                        y: .value("Calories", nutrient.baselineValue(for: value)))
-                    .foregroundStyle(by: .value(nutrient.title, nutrient))
+        HStack {
+            Chart {
+                ForEach(dailyNutrition, id: \.0) { day, nutrition in
+                    ForEach(
+                        nutrition.nutrients.sortedByValue(andScaledTo: nutrition.calories),
+                        id: \.0
+                    ) { nutrient, value in
+                        BarMark(
+                            x: .value("Date", .dateWithAdded(days: day), unit: .day),
+                            y: .value("Calories", nutrient.baselineValue(for: value)))
+                        .foregroundStyle(nutrient.color)
+
+                    }
                 }
             }
-        }
-        .chartOverlay { proxy in
-            GeometryReader { geometry in
-                Rectangle()
-                    .fill(.clear)
-                    .contentShape(Rectangle())
-                    .onTapGesture { location in
-                        guard let frame = proxy.plotFrame else { return }
+            .chartOverlay { proxy in
+                GeometryReader { geometry in
+                    Rectangle()
+                        .fill(.clear)
+                        .contentShape(Rectangle())
+                        .onTapGesture { location in
+                            guard let frame = proxy.plotFrame else { return }
 
-                        let origin = geometry[frame].origin
+                            let origin = geometry[frame].origin
 
-                        guard let date = proxy.value(atX: location.x - origin.x, as: Date.self) else { return }
+                            guard let date = proxy.value(atX: location.x - origin.x, as: Date.self) else { return }
 
-                        presenter.updateDate(with: date)
+                            presenter.updateDate(with: date)
+                        }
+                }
+            }
+            .chartYVisibleDomain(length: chartYDomain)
+            .chartXVisibleDomain(length: chartXDomain)
+            .chartScrollableAxes(.horizontal)
+            .chartScrollPosition(initialX: Date.dateWithAdded(days: -daysInChart + 1))
+            .frame(height: chartHeight)
+            .frame(maxWidth: .infinity)
+            .chartLegend(.hidden)
+            .padding()
+
+            if let selectedDayNutrition = presenter.selectedDayNutrition {
+                VStack(alignment: .leading) {
+                    ForEach(
+                        Array(selectedDayNutrition.nutrition.nutrients.sortedByValue(ascending: false)),
+                        id: \.0
+                    ) { nutrient, _ in
+                        HStack {
+                            Circle()
+                                .fill(nutrient.color)
+                                .frame(width: 10, height: 10)
+
+                            Text("\(nutrient.title)")
+                                .font(.caption)
+                                .color(emphasis: .medium)
+                        }
+                        .animation(.default, value: selectedDayNutrition.nutrition.nutrients)
                     }
+                }
+                .transition(.move(edge: .trailing))
+                .isHidden(!isLegendVisible, remove: true)
             }
         }
-        .chartYVisibleDomain(length: chartYDomain)
-        .chartXVisibleDomain(length: chartXDomain)
-        .chartScrollableAxes(.horizontal)
-        .chartScrollPosition(initialX: Date.dateWithAdded(days: -1))
-        .frame(height: chartHeight)
-        .frame(maxWidth: .infinity)
-        .chartLegend(isLegendVisible ? .visible : .hidden)
-        .chartLegend(position: .trailing, alignment: .leading)
-        .chartForegroundStyleScale { (nutrient: Nutrient) in
-            nutrient.color
-        }
-        .padding()
     }
 
 }

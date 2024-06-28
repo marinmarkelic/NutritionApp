@@ -14,7 +14,6 @@ class HomePresenter: ObservableObject {
 
     private let chartHeightOffset: Int = 400
 
-    @Published var chartHeight: Int = 0
     @Published var isChartLegendVisible: Bool = false
 
     @Published var state: HomeState = .loading
