@@ -173,7 +173,7 @@ enum Nutrient: String, CaseIterable, Identifiable, Plottable {
 
 }
 
-struct DailyNutrition {
+struct DailyNutrition: Equatable {
 
     let calories: Float
     let nutrients: NutrientValues

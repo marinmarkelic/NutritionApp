@@ -63,6 +63,7 @@
 		9CCF584A2C2C468C00E1F891 /* OpenAIModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CCF58492C2C468C00E1F891 /* OpenAIModels.swift */; };
 		9CCF584C2C2C47D200E1F891 /* UserDefaultsKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CCF584B2C2C47D200E1F891 /* UserDefaultsKey.swift */; };
 		9CCF584E2C2C4E9D00E1F891 /* ModelInstructionsService .swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CCF584D2C2C4E9D00E1F891 /* ModelInstructionsService .swift */; };
+		9CCF58502C2EC3CD00E1F891 /* DailyCalorieCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CCF584F2C2EC3CD00E1F891 /* DailyCalorieCard.swift */; };
 		9CD90C9E2BFCF1D300BF244B /* CircularProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CD90C9D2BFCF1D300BF244B /* CircularProgressView.swift */; };
 		9CD90CA02BFCF1F100BF244B /* MealCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CD90C9F2BFCF1F100BF244B /* MealCell.swift */; };
 		9CD90CA22BFCFB1400BF244B /* CalorieRatioCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CD90CA12BFCFB1400BF244B /* CalorieRatioCell.swift */; };
@@ -125,6 +126,7 @@
 		9CCF58492C2C468C00E1F891 /* OpenAIModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenAIModels.swift; sourceTree = "<group>"; };
 		9CCF584B2C2C47D200E1F891 /* UserDefaultsKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsKey.swift; sourceTree = "<group>"; };
 		9CCF584D2C2C4E9D00E1F891 /* ModelInstructionsService .swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ModelInstructionsService .swift"; sourceTree = "<group>"; };
+		9CCF584F2C2EC3CD00E1F891 /* DailyCalorieCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyCalorieCard.swift; sourceTree = "<group>"; };
 		9CD90C9D2BFCF1D300BF244B /* CircularProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircularProgressView.swift; sourceTree = "<group>"; };
 		9CD90C9F2BFCF1F100BF244B /* MealCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealCell.swift; sourceTree = "<group>"; };
 		9CD90CA12BFCFB1400BF244B /* CalorieRatioCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalorieRatioCell.swift; sourceTree = "<group>"; };
@@ -165,6 +167,7 @@
 			isa = PBXGroup;
 			children = (
 				9C6015772B24874A005A62C7 /* HomeView.swift */,
+				9CCF584F2C2EC3CD00E1F891 /* DailyCalorieCard.swift */,
 				9C48CF162BA722FD00ABA072 /* HomePresenter.swift */,
 				9CD90C9F2BFCF1F100BF244B /* MealCell.swift */,
 				9CD90CA12BFCFB1400BF244B /* CalorieRatioCell.swift */,
@@ -432,6 +435,7 @@
 				9C3336042BD15F2D00BC94D0 /* EnergyExpenditureService.swift in Sources */,
 				9CA3E76E2C047AF400F38B16 /* HomeModels.swift in Sources */,
 				9CC04D8A2C25EFD500F02447 /* HistoryView.swift in Sources */,
+				9CCF58502C2EC3CD00E1F891 /* DailyCalorieCard.swift in Sources */,
 				9C48CF172BA722FD00ABA072 /* HomePresenter.swift in Sources */,
 				9CA3E77B2C089CE600F38B16 /* HealthKitService.swift in Sources */,
 				9CA3E78B2C0B676B00F38B16 /* NutritionInformationView.swift in Sources */,
