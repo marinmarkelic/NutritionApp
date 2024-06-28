@@ -19,7 +19,29 @@ NutritionApp is a mobile application designed to help users track their daily nu
 - Xcode 15.0 or later
 - Swift 5.0 or later
 
-# Usage
+## Videos
+
+### Adding a meal
+
+
+https://github.com/marinmarkelic/NutritionApp/assets/101728747/2911c3c6-a6fe-4b9b-adf9-62a08809d792
+
+
+### Setting up user characteristics
+
+
+https://github.com/marinmarkelic/NutritionApp/assets/101728747/cb8f319c-8a21-45b0-9490-9a949bebba06
+
+
+
+### Chatting with the nutritionist
+
+
+https://github.com/marinmarkelic/NutritionApp/assets/101728747/e9f39091-3d33-4d7f-b6c4-bd5d3feb0406
+
+
+
+# Installation
 
 To use core features of the app you will need to obtain CalorieNinjas and OpenAI API keys and create an assistant.
 
