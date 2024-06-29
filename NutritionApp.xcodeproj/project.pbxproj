@@ -19,7 +19,6 @@
 		9C34C4062BE6BDA900BA16F8 /* TextCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C34C4052BE6BDA900BA16F8 /* TextCell.swift */; };
 		9C34C40C2BE7CCBD00BA16F8 /* SwiftOpenAI in Frameworks */ = {isa = PBXBuildFile; productRef = 9C34C40B2BE7CCBD00BA16F8 /* SwiftOpenAI */; };
 		9C34C40E2BE7E4D800BA16F8 /* ChatsModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C34C40D2BE7E4D800BA16F8 /* ChatsModels.swift */; };
-		9C396B112B388A8300FEBC0E /* Realm in Frameworks */ = {isa = PBXBuildFile; productRef = 9C396B102B388A8300FEBC0E /* Realm */; };
 		9C396B132B388A8300FEBC0E /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 9C396B122B388A8300FEBC0E /* RealmSwift */; };
 		9C48CF152BA707D700ABA072 /* SearchPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C48CF142BA707D700ABA072 /* SearchPresenter.swift */; };
 		9C48CF172BA722FD00ABA072 /* HomePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C48CF162BA722FD00ABA072 /* HomePresenter.swift */; };
@@ -144,7 +143,6 @@
 				9C34C40C2BE7CCBD00BA16F8 /* SwiftOpenAI in Frameworks */,
 				9C396B132B388A8300FEBC0E /* RealmSwift in Frameworks */,
 				9C48CF1C2BA723B400ABA072 /* DependenciesMacros in Frameworks */,
-				9C396B112B388A8300FEBC0E /* Realm in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -362,7 +360,6 @@
 			);
 			name = NutritionApp;
 			packageProductDependencies = (
-				9C396B102B388A8300FEBC0E /* Realm */,
 				9C396B122B388A8300FEBC0E /* RealmSwift */,
 				9C48CF192BA723B400ABA072 /* Dependencies */,
 				9C48CF1B2BA723B400ABA072 /* DependenciesMacros */,
@@ -727,11 +724,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 9C34C40A2BE7CCBD00BA16F8 /* XCRemoteSwiftPackageReference "SwiftOpenAI" */;
 			productName = SwiftOpenAI;
-		};
-		9C396B102B388A8300FEBC0E /* Realm */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 9C396B0F2B388A8300FEBC0E /* XCRemoteSwiftPackageReference "realm-swift" */;
-			productName = Realm;
 		};
 		9C396B122B388A8300FEBC0E /* RealmSwift */ = {
 			isa = XCSwiftPackageProductDependency;
